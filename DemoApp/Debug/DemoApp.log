@@ -1,0 +1,12 @@
+﻿  main.cpp
+  DemoScene2.cpp
+  DemoScene.cpp
+c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(120): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(121): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(125): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(126): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(127): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(128): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  DemoGame.cpp
+  Generating Code...
+  DemoApp.vcxproj -> C:\Users\Andrew\Documents\Projects\C++ Projects\AeonEngine\Debug\DemoApp.exe
