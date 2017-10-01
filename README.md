@@ -16,17 +16,17 @@ Has a static object of the Window class and the InputManager. Starts the gameloo
   - Initializes the Engine.
 - void run();
   - The gameloop. Calls the update, render, and draw methods.
-void update();
+- void update();
   - Updates the game.
-void render();
+- void render();
   - Renders the game.
-void draw();
+- void draw();
   - Draws the game (UI elements, etc..).
-Window* getWindow() const
+- Window* getWindow() const
   - **[Getter]** Returns the Window object.
-SDL_Keycode getKeyPressed() const
+- SDL_Keycode getKeyPressed() const
   - **[Getter]** Returns the current key that has been pressed.
-InputManager getInputManager()
+- InputManager getInputManager()
   - **[Getter]** Returns the InputManager object.
 
 *Private Methods*:
