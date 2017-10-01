@@ -1,6 +1,12 @@
 #ifndef SHADER_H
 #define SHADER_H
 
+//***
+//SHADER CLASS:
+//Builds and compiles the shader program based on the Vertex and Frag shaders specified in the constructor.
+//Has defined utility functions allowing to set uniforms for the shader.
+//***
+
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

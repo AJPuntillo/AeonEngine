@@ -1,6 +1,12 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+//***
+//CAMERA CLASS:
+//Creates the LookAt matrix(View). Allows for movement in 3D space.
+//Processes mouse movement and calculates offset, allowing it to rotate on the Yaw and Pitch axis.
+//***
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>

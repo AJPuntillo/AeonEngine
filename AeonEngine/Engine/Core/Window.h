@@ -1,6 +1,17 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+//***
+//WINDOW CLASS:
+//Initializes SDL/GLEW and creates a window.
+//Can specify the type of window and its size in the constructor.
+//***
+
+//***
+//CURRENT TO DO:
+//Make window resizeable.
+//***
+
 #include <GL/glew.h> //Glew must be included first
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>

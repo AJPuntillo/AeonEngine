@@ -1,9 +1,14 @@
 #ifndef GAMEINTERFACE_H
 #define GAMEINTERFACE_H
 
+//***
+//GAME INTERFACE CLASS:
+//Interface class.
+//The "container" of the game. Manages the scenes of the game and processes each active scene's Update, Render, and Input.
+//***
+
 namespace AEON_ENGINE {
 
-	//Interface Class
 	class GameInterface
 	{
 	public:

@@ -3,9 +3,14 @@
 
 #include "EngineCore.h"
 
+//***
+//SCENE INTERFACE CLASS:
+//Interface class.
+//Acts as the "container" for the currently active scene.
+//**
+
 namespace AEON_ENGINE {
 
-	//Interface Class
 	class SceneInterface
 	{
 	public:

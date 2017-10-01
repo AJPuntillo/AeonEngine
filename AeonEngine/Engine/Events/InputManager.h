@@ -1,6 +1,12 @@
 #ifndef INPUTMANAGER_H
 #define INPUTMANAGER_H
 
+//***
+//INPUT MANAGER CLASS::
+//Processes mouse movement/key presses and stores them in a map.
+//Retrieves keys pressed from the map.
+//***
+
 #include <glm/glm.hpp>
 #include <unordered_map>
 

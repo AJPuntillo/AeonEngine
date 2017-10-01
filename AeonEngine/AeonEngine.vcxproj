@@ -151,6 +151,7 @@
     <ClCompile Include="Engine\Rendering\3D\Cube.cpp" />
     <ClCompile Include="Engine\Rendering\3D\Mesh.cpp" />
     <ClCompile Include="Engine\Rendering\3D\PrimitiveMesh.cpp" />
+    <ClCompile Include="Engine\Rendering\3D\Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera\Camera.h" />
@@ -163,6 +164,7 @@
     <ClInclude Include="Engine\Rendering\3D\Cube.h" />
     <ClInclude Include="Engine\Rendering\3D\Mesh.h" />
     <ClInclude Include="Engine\Rendering\3D\PrimitiveMesh.h" />
+    <ClInclude Include="Engine\Rendering\3D\Renderer.h" />
     <ClInclude Include="Engine\Rendering\3D\Vertex.h" />
   </ItemGroup>
   <ItemGroup>

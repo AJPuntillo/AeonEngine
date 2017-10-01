@@ -10,9 +10,19 @@
 #include <memory>
 
 //***
+//ENGINE CORE CLASS:
+//Singleton.
+//Allows for intialization of an instance of the Engine Core.
+//Initializes SDL and GLEW. Creates and initializes the Window class. Contains the Input Manager.
+//Starts the gameloop and initializes the Game class (Game Interface).
+//***
+
+//***
+//CURRENT TO DO:
 //This class needs to be changed for the future
 //Right now it initializes the window and shader but that should not be determined inside this class
-//This class should only initialize engine specific classes and any other user-specific preferences (eg. window size, which shaders to use) should be create somewhere else
+//This class should only initialize engine specific classes and any other user-specific preferences (eg. window size, which shaders to use) should be created somewhere else
+//Process Input method for Game and Scene Interface.
 //***
 
 namespace AEON_ENGINE {

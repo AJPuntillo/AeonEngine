@@ -1,7 +1,5 @@
 #include "InputManager.h"
 
-
-
 using namespace AEON_ENGINE;
 
 InputManager::InputManager()
