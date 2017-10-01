@@ -1,5 +1,5 @@
 # AeonEngine
-Custom C++ engine
+Custom C++ [b]engine[/b]
 
 *** DOCUMENTATION ***
 
