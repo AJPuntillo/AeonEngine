@@ -1,7 +1,7 @@
 # AeonEngine
 Custom C++ engine
 
-###### DOCUMENTATION
+### DOCUMENTATION
 
 **[EngineCore Class]:**
 A singleton class that allows for initialization of an instance of the Engine Core. SDL and Glew are initialized along with the Window.
@@ -34,7 +34,7 @@ Has a static object of the Window class and the InputManager. Starts the gameloo
   - Process and updates input through the InputManager.
 
 
-###### CHANGE LOG
+### CHANGE LOG
 
 **[10/01/17]**
 - Started documentation
@@ -42,7 +42,7 @@ Has a static object of the Window class and the InputManager. Starts the gameloo
 - Renderer class added (But needs proper implementation)
 
 
-##### TO DO
+### TO DO
 
 - Optimization
 - Most optimal place for processing inputs
@@ -52,7 +52,7 @@ Has a static object of the Window class and the InputManager. Starts the gameloo
 - Timing class
 - Scene does not "delete" when switched to another scene
 - Engine Core class should only initialize engine specific classes and any other user-specific preferences (eg. window size, which shaders to use) should be created somewhere else
-- Process Input method for Game and Scene Interface.
+- Process Input method for Game and Scene Interface
 - Resizable window
 - Physics
 - Math
