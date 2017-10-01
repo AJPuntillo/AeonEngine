@@ -3,7 +3,7 @@ Custom C++ engine
 
 ### DOCUMENTATION
 
-####[EngineCore Class]:
+#### [EngineCore Class]:
 
 A singleton class that allows for initialization of an instance of the Engine Core. SDL and Glew are initialized along with the Window.
 Has a static object of the Window class and the InputManager. Starts the gameloop and initializes the Game class (Game Interface).
