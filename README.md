@@ -1,5 +1,5 @@
 # AeonEngine
-Custom C++ [b]engine[/b]
+Custom C++ engine
 
 *** DOCUMENTATION ***
 
@@ -22,7 +22,6 @@ Public Methods:
 Private Methods:
 	void updateInput();			Process and updates input through the InputManager.
 
-**
 
 *** CHANGE LOG ***
 
@@ -31,7 +30,6 @@ Private Methods:
 - Descriptions in the headers of each class
 - Renderer class added (But needs proper implementation)
 
-**
 
 *** TO DO ***
 
@@ -50,5 +48,3 @@ Private Methods:
 - Audio
 - Properly fix the Rendering classes and hook up the Renderer
 - Finish Documentation
-
-**
