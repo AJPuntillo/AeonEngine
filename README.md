@@ -3,30 +3,31 @@ Custom C++ engine
 
 ### DOCUMENTATION
 
-**[EngineCore Class]:**
+####[EngineCore Class]:
+
 A singleton class that allows for initialization of an instance of the Engine Core. SDL and Glew are initialized along with the Window.
 Has a static object of the Window class and the InputManager. Starts the gameloop and initializes the Game class (Game Interface).
 
 *Public Methods*:
-- static EngineCore* getInstance();
+- **static EngineCore* getInstance();**
   - Retrieves the instance of the Engine that can be used to call its other methods.
-- static void TerminateGame();
+- **static void TerminateGame();**
   - Cleans up all the objects contained within the class and sets them to nullptr.
-- bool initialize();
+- **bool initialize();**
   - Initializes the Engine.
-- void run();
+- **void run();**
   - The gameloop. Calls the update, render, and draw methods.
-- void update();
+- **void update();**
   - Updates the game.
-- void render();
+- **void render();**
   - Renders the game.
-- void draw();
+- **void draw();**
   - Draws the game (UI elements, etc..).
-- Window* getWindow() const
+- **Window* getWindow() const**
   - **[Getter]** Returns the Window object.
-- SDL_Keycode getKeyPressed() const
+- **SDL_Keycode getKeyPressed() const**
   - **[Getter]** Returns the current key that has been pressed.
-- InputManager getInputManager()
+- **InputManager getInputManager()**
   - **[Getter]** Returns the InputManager object.
 
 *Private Methods*:
