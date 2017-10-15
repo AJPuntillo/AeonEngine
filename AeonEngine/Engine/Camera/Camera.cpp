@@ -39,9 +39,14 @@ Camera::~Camera()
 	//Empty
 }
 
-glm::mat4 Camera::createViewMatrix()
+void Camera::createProjectionMatrix(int screenWidth, int screenHeight)
 {
-	return glm::lookAt(m_pos, m_pos + m_front, m_up);
+	m_projection = glm::perspective(getFOV(), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
+}
+
+void Camera::createViewMatrix()
+{
+	m_view = glm::lookAt(m_pos, m_pos + m_front, m_up);
 }
 
 glm::vec3 Camera::createRight()

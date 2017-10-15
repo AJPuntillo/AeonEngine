@@ -54,7 +54,6 @@ namespace AEON_ENGINE {
 
 		//Getters
 		Window* getWindow() const			{ return m_window; };
-		Shader* getShader() const			{ return m_shaderProgram;}
 		SDL_Keycode getKeyPressed() const	{ return keyDown; };
 		InputManager getInputManager()		{ return m_inputManager; }
 
@@ -75,8 +74,6 @@ namespace AEON_ENGINE {
 
 		//Window				//Defaults
 		static Window* m_window;
-		//Shader Program
-		Shader* m_shaderProgram	= nullptr;
 		//Game Loop
 		bool m_isRunning = false;
 		//Checking input

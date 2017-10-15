@@ -33,10 +33,11 @@ namespace AEON_ENGINE {
 	class Mesh
 	{
 	public:
+		Mesh(); //Default loads basic cube vertices
 		Mesh(std::vector<Vertex> vertices_, std::vector<unsigned int> indices_, std::vector<Texture> textures_);
-		virtual ~Mesh();
+		~Mesh();
 
-		virtual void render(Shader shader_) = 0;
+		void render();
 
 		//Mesh Data
 		std::vector<Vertex> vertices;
@@ -48,6 +49,7 @@ namespace AEON_ENGINE {
 
 		//Render data
 		unsigned int m_VBO, m_VAO, m_EBO;
+		bool hasIndices = false;
 	};
 
 }

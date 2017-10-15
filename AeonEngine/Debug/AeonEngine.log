@@ -1,13 +1,4 @@
-﻿  PrimitiveMesh.cpp
-  Mesh.cpp
-  Cube.cpp
-c:\users\andrew\documents\projects\c++ projects\aeonengine\aeonengine\engine\rendering\3d\cube.cpp(165): warning C4101: 'index': unreferenced local variable
-  Shader.cpp
-  InputManager.cpp
-  Window.cpp
-  EngineCore.cpp
-  Camera.cpp
-  Generating Code...
+﻿  EngineCore.cpp
 SDL2.lib(SDL2.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR already defined in opengl32.lib(OPENGL32.dll); second definition ignored
 SDL2.lib(SDL2.dll) : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
 SDL2_ttf.lib(SDL2_ttf.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR already defined in opengl32.lib(OPENGL32.dll); second definition ignored

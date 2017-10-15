@@ -148,9 +148,8 @@
     <ClCompile Include="Engine\Core\Window.cpp" />
     <ClCompile Include="Engine\Events\InputManager.cpp" />
     <ClCompile Include="Engine\Graphics\Shader.cpp" />
-    <ClCompile Include="Engine\Rendering\3D\Cube.cpp" />
     <ClCompile Include="Engine\Rendering\3D\Mesh.cpp" />
-    <ClCompile Include="Engine\Rendering\3D\PrimitiveMesh.cpp" />
+    <ClCompile Include="Engine\Rendering\3D\Model.cpp" />
     <ClCompile Include="Engine\Rendering\3D\Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -161,11 +160,10 @@
     <ClInclude Include="Engine\Core\Window.h" />
     <ClInclude Include="Engine\Events\InputManager.h" />
     <ClInclude Include="Engine\Graphics\Shader.h" />
-    <ClInclude Include="Engine\Rendering\3D\Cube.h" />
+    <ClInclude Include="Engine\Rendering\3D\Entity.h" />
     <ClInclude Include="Engine\Rendering\3D\Mesh.h" />
-    <ClInclude Include="Engine\Rendering\3D\PrimitiveMesh.h" />
+    <ClInclude Include="Engine\Rendering\3D\Model.h" />
     <ClInclude Include="Engine\Rendering\3D\Renderer.h" />
-    <ClInclude Include="Engine\Rendering\3D\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Graphics\Shaders\fragShaderTest.glsl" />

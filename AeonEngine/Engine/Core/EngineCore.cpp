@@ -13,10 +13,6 @@ EngineCore::EngineCore()
 
 EngineCore::~EngineCore()
 {
-	//Delete the shaders and null the pointer for proper memory management 
-	delete m_shaderProgram;
-	m_shaderProgram = nullptr;
-
 	//Tell the engine to delete the game on shutdown
 	delete gameInterface;
 	gameInterface = nullptr;
@@ -58,7 +54,6 @@ bool EngineCore::initialize()
 	else {
 		return false;
 	}
-	m_shaderProgram = new Shader("C:/Users/Andrew/Documents/Projects/C++ Projects/AeonEngine/AeonEngine/Engine/Graphics/Shaders/vertShaderTest.glsl", "C:/Users/Andrew/Documents/Projects/C++ Projects/AeonEngine/AeonEngine/Engine/Graphics/Shaders/fragShaderTest.glsl");
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
 	return true;

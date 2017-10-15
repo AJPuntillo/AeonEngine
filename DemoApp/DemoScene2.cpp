@@ -29,7 +29,7 @@ void DemoScene2::update()
 void DemoScene2::render()
 {
 	//**Store shader/window variables -- for convenience
-	GLuint shaderID = EngineCore::getInstance()->getShader()->getShaderProgram();
+	//GLuint shaderID = EngineCore::getInstance()->getShader()->getShaderProgram();
 	int SCREEN_WIDTH = EngineCore::getInstance()->getWindow()->getScreenWidth();
 	int SCREEN_HEIGHT = EngineCore::getInstance()->getWindow()->getScreenHeight();
 
@@ -38,7 +38,7 @@ void DemoScene2::render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Draw our first triangle
-	EngineCore::getInstance()->getShader()->use();
+	//EngineCore::getInstance()->getShader()->use();
 
 
 	//Swap buffers

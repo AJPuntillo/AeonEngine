@@ -28,7 +28,8 @@ namespace AEON_ENGINE {
 		Camera(glm::vec3 pos, glm::vec3 up, float yaw, float pitch, float moveSpeed, float sensitivity, float fov); //Overload for added camera settings
 		~Camera();
 
-		glm::mat4 createViewMatrix(); //Return the lookAt matrix (View matrix)
+		void createProjectionMatrix(int screenWidth, int screenHeight); //Initialize the Projection Matrix
+		void createViewMatrix(); //Return the lookAt matrix (View matrix)
 		glm::vec3 createRight(); //Cross product the up and front vector to create the right vector
 		void processKeyboard(CameraMovement direction, float deltaTime); //Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM
 		void processMouseMovement(float xoffset, float yoffset); //Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
@@ -42,6 +43,8 @@ namespace AEON_ENGINE {
 		float getFOV()			 { return m_fov; }
 		glm::vec3 getPos()		 { return m_pos; }
 		glm::vec3 getFront()	 { return m_front; }
+		glm::mat4& getView()	 { return m_view; }
+		glm::mat4& getProj()	 { return m_projection; }
 
 		//Setters
 		float setYaw(float yaw);
@@ -66,6 +69,9 @@ namespace AEON_ENGINE {
 		float m_movementSpeed	 = 2.5f;
 		float m_mouseSensitivity = 0.1f;
 		float m_fov				 = 45.0f;
+		//Matrices
+		glm::mat4 m_view;
+		glm::mat4 m_projection;
 	};
 
 }

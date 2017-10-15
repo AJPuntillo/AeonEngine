@@ -10,51 +10,6 @@ bool firstMouse = true;
 float deltaTime = 0.0f; //Time between current frame and last frame
 float lastFrame = 0.0f; //Time of last frame
 
-//Vertex structure
-float vertices[] = {
-	-0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	-0.5f,  0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-
-	-0.5f, -0.5f,  0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-	-0.5f, -0.5f,  0.5f,
-
-	-0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-	-0.5f, -0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-
-	 0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-
-	-0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f, -0.5f,  0.5f,
-	-0.5f, -0.5f,  0.5f,
-	-0.5f, -0.5f, -0.5f,
-
-	-0.5f,  0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	 0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f, -0.5f,
-};
-
 DemoScene::DemoScene()
 {
 	//Empty
@@ -62,27 +17,37 @@ DemoScene::DemoScene()
 
 DemoScene::~DemoScene()
 {
-	//Empty
+	delete m_renderer;
+	m_renderer = nullptr;
+
+	delete m_shaderProgram;
+	m_shaderProgram = nullptr;
+
+	delete testModel;
+	testModel = nullptr;
+
+	delete m_camera;
+	m_camera = nullptr;
 }
 
 bool DemoScene::initialize()
 {
 	//**Lock Mouse
-	SDL_SetRelativeMouseMode(SDL_TRUE);
-	SDL_CaptureMouse(SDL_TRUE);
+	//SDL_SetRelativeMouseMode(SDL_TRUE);
+	//SDL_CaptureMouse(SDL_TRUE);
 
-	unsigned int VBO, VAO, EBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
+	//Camera
+	m_camera = new Camera();
 
-	glBindVertexArray(VAO);
+	//Renderer
+	m_renderer = new Renderer();
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	//Shaders
+	m_shaderProgram = new Shader("C:/Users/Andrew/Documents/Projects/C++ Projects/AeonEngine/AeonEngine/Engine/Graphics/Shaders/vertShaderTest.glsl", "C:/Users/Andrew/Documents/Projects/C++ Projects/AeonEngine/AeonEngine/Engine/Graphics/Shaders/fragShaderTest.glsl");
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+	//Meshes
+	testModel = new Model(glm::vec3(0.0f, 0.0f, 0.0f));
+	testModel->loadMesh();
 
 	return true;
 }
@@ -102,16 +67,24 @@ void DemoScene::update()
 	lastFrame = currentFrame;
 
 	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_w))
-		camera.processKeyboard(FORWARD, deltaTime);
+		m_camera->processKeyboard(FORWARD, deltaTime);
 
 	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_s))
-		camera.processKeyboard(BACKWARD, deltaTime);
+		m_camera->processKeyboard(BACKWARD, deltaTime);
 
 	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_a))
-		camera.processKeyboard(LEFT, deltaTime);
+		m_camera->processKeyboard(LEFT, deltaTime);
 
 	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_d))
-		camera.processKeyboard(RIGHT, deltaTime);
+		m_camera->processKeyboard(RIGHT, deltaTime);
+
+	//Moving the cube test--
+	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_g))
+		testModel->translate(glm::vec3(2.5f, 0.0f, 0.0f) * deltaTime);
+
+	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_f))
+		testModel->translate(glm::vec3(-2.5f, 0.0f, 0.0f) * deltaTime);
+	//--
 
 	if (EngineCore::getInstance()->getInputManager().wasMouseMoved()) {
 		//**Might want to calculate mouse offset in the input manager or camera
@@ -127,43 +100,36 @@ void DemoScene::update()
 		lastX = EngineCore::getInstance()->getInputManager().getMouseCoordsX();
 		lastY = EngineCore::getInstance()->getInputManager().getMouseCoordsY();
 
-		camera.processMouseMovement(xoffset, yoffset);
+		m_camera->processMouseMovement(xoffset, yoffset);
+	}
+
+	//Makeshift toggle for capturing the mouse (Change later)
+	if (EngineCore::getInstance()->getInputManager().isKeyPressed(SDLK_ESCAPE)) {
+		if (captureMouse)
+			captureMouse = false;
+		else
+			captureMouse = true;
+	}
+
+	if (captureMouse) {
+		SDL_SetRelativeMouseMode(SDL_TRUE);
+		SDL_CaptureMouse(SDL_TRUE);
+	}
+	if (!captureMouse) {
+		SDL_SetRelativeMouseMode(SDL_FALSE);
+		SDL_CaptureMouse(SDL_FALSE);
 	}
 }
 
 void DemoScene::render()
-{
-	//**Store shader/window variables -- for convenience
-	GLuint shaderID = EngineCore::getInstance()->getShader()->getShaderProgram();
-	int SCREEN_WIDTH = EngineCore::getInstance()->getWindow()->getScreenWidth();
-	int SCREEN_HEIGHT = EngineCore::getInstance()->getWindow()->getScreenHeight();
+{	
+	//Initialize/update View and Projection matrices
+	m_camera->createViewMatrix();
+	m_camera->createProjectionMatrix(EngineCore::getInstance()->getWindow()->getScreenWidth(), EngineCore::getInstance()->getWindow()->getScreenHeight());
 
-	//Rendering
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-	//Draw our first triangle
-	EngineCore::getInstance()->getShader()->use();
-	
-	//Create transformations
-	glm::mat4 model;
-	glm::mat4 view = camera.createViewMatrix();
-	glm::mat4 projection = glm::perspective(camera.getFOV(), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
-	model = glm::rotate(model, ((float)SDL_GetTicks() / 1000) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-	projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
-	// retrieve the matrix uniform locations
-	EngineCore::getInstance()->getShader()->setMat4("model", model);
-	EngineCore::getInstance()->getShader()->setMat4("view", view);
-	// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-	EngineCore::getInstance()->getShader()->setMat4("projection", projection);
-
-	// render container
-	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-	
-	//Swap buffers
-	EngineCore::getInstance()->getWindow()->swapBuffers();
+	//Renderer
+	m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_shaderProgram, testModel); //Change to take in a vector of models
+	testModel->rotate(((float)SDL_GetTicks() / 1000) * glm::radians(50.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 }
 
 void DemoScene::draw()
