@@ -42,12 +42,18 @@ Has a static object of the Window class and the InputManager. Starts the gameloo
 - Descriptions in the headers of each class
 - Renderer class added (But needs proper implementation)
 
+**[10/15/17]**
+- Implemented the Renderer class
+- Created Entity class that acts as the base object for more complex objects (Model, Light, etc)
+- Camera now contains the View and Projection matrix and can be accessed by the Renderer
+- All models contain their own Model matrix (also a translation, scale, and rotation matrix)
+
 
 ### TO DO
 
 - Optimization
 - Most optimal place for processing inputs
-- Model Class (Primitive and assimp)
+- ~~Model Class (Primitive and assimp)~~
 - Lighting
 - Fix Shader class path
 - Timing class
@@ -58,5 +64,10 @@ Has a static object of the Window class and the InputManager. Starts the gameloo
 - Physics
 - Math
 - Audio
-- Properly fix the Rendering classes and hook up the Renderer
+- ~~Properly fix the Rendering classes and hook up the Renderer~~
 - Finish Documentation
+- Implement ResourceManager
+- Components (?)
+- Localize matrices for each model
+- Fix transformations in model class
+- Textures
