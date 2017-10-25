@@ -2,14 +2,6 @@
 
 using namespace AEON_ENGINE;
 
-//**FIX FOR LATER
-float lastX = 800 / 2; //Center of screen x
-float lastY = 600 / 2; //Center of screen y
-bool firstMouse = true;
-//Timing
-float deltaTime = 0.0f; //Time between current frame and last frame
-float lastFrame = 0.0f; //Time of last frame
-
 DemoScene::DemoScene()
 {
 	//Empty

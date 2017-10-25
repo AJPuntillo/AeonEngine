@@ -2,6 +2,7 @@
 
 #include "DemoScene.h"
 #include "DemoScene2.h"
+#include "TutorialScene.h"
 
 using namespace AEON_ENGINE;
 
@@ -18,7 +19,10 @@ DemoGame::~DemoGame()
 
 bool DemoGame::initialize() {
 
-	m_currentScene = new DemoScene();
+	//Default scene you want to load
+	//Change TutorialScene() to which ever scene you want/have created
+	//**Remember that it must be included at the top of this file
+	m_currentScene = new TutorialScene();
 
 	m_currentScene->initialize();
 

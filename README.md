@@ -20,7 +20,7 @@ Custom C++ engine
 - Moved the GL renderer calls and swapbuffers calls outside of the renderer to prevent multiple double buffering calls and flickering
 - Shader paths are fixed and no longer need absolute paths
 - Models use their matrices correctly
-- Added a new DemoScene that contains basic instructions on how to setup one
+- Added a new TutorialScene that contains instructions on how to setup/use
 
 
 ### TO DO

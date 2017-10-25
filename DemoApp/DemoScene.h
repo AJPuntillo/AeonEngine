@@ -44,6 +44,15 @@ private:
 
 	//Makeshift bool to capture mouse, will need to change later (Possibly in its own method of the InputManager)
 	bool captureMouse = true;
+
+	//**These variables are used for a quick timestep and camera movement
+	//**FIX FOR LATER
+	float lastX = 800 / 2; //Center of screen x
+	float lastY = 600 / 2; //Center of screen y
+	bool firstMouse = true;
+	//Timing
+	float deltaTime = 0.0f; //Time between current frame and last frame
+	float lastFrame = 0.0f; //Time of last frame
 };
 
 #endif
