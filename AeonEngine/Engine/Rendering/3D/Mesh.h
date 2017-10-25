@@ -2,6 +2,7 @@
 #define MESH_H
 
 #include <GL/glew.h> //Holds all OpenGL type declarations
+#include <assimp/Importer.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -15,41 +16,40 @@
 
 namespace AEON_ENGINE {
 
-	struct Vertex
-	{
+	struct Vertex {
 		glm::vec3 position;
 		glm::vec3 normal;
 		glm::vec2 texCoords;
-
+		glm::vec3 tangent;
+		glm::vec3 bitangent;
 	};
 
-	struct Texture
-	{
+	struct Texture {
 		unsigned int id;
 		std::string type;
-		std::string path;
+		aiString path;
 	};
 
 	class Mesh
 	{
 	public:
-		Mesh(); //Default loads basic cube vertices
 		Mesh(std::vector<Vertex> vertices_, std::vector<unsigned int> indices_, std::vector<Texture> textures_);
-		~Mesh();
+		//~Mesh(); //Commented out for now, apparently its already defined?
 
-		void render();
+		//Render the mesh
+		void render(Shader* shader_);
 
-		//Mesh Data
+		//Mesh data
 		std::vector<Vertex> vertices;
 		std::vector<unsigned int> indices;
 		std::vector<Texture> textures;
 
 	private:
-		void generateBuffers();
-
 		//Render data
-		unsigned int m_VBO, m_VAO, m_EBO;
-		bool hasIndices = false;
+		unsigned int m_VAO, m_VBO, m_EBO;
+
+		//Initializes all the buffer objects/arrays
+		void generateBuffers();
 	};
 
 }

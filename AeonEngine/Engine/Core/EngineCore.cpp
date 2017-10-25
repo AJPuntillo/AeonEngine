@@ -54,7 +54,6 @@ bool EngineCore::initialize()
 	else {
 		return false;
 	}
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
 	return true;
 }
@@ -120,8 +119,7 @@ void EngineCore::updateInput()
 
 		if (event.type == SDL_MOUSEMOTION) {
 			m_inputManager.setMouseCoords(event.motion.x, event.motion.y);
-			std::cout << event.motion.x << " " << event.motion.y << std::endl;
+			//std::cout << event.motion.x << " " << event.motion.y << std::endl; //Print out to see mouse position on screen
 		}
-
 	}
 }

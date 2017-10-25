@@ -6,7 +6,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "../../Graphics/Shader.h"
-#include "Vertex.h"
 
 #include <string>
 #include <fstream>
@@ -14,28 +13,37 @@
 #include <iostream>
 #include <vector>
 
-
 namespace AEON_ENGINE {
 
-	class PrimitiveMesh {
+	struct PrimitiveVertex
+	{
+		glm::vec3 position;
+		glm::vec3 normal;
+		glm::vec2 texCoords;
 
+	};
+
+	class PrimitiveMesh
+	{
 	public:
-		PrimitiveMesh(std::vector<Vertex> vertices_);
+		PrimitiveMesh(); //Default loads basic cube vertices
+		PrimitiveMesh(std::vector<PrimitiveVertex> vertices_, std::vector<unsigned int> indices_);
 		~PrimitiveMesh();
 
-		void render(Shader* shader_, glm::mat4 modelMatrix_);
+		void render();
 
-		//Mesh Data
-		std::vector<Vertex> vertices;
+		//PrimitiveMesh Data
+		std::vector<PrimitiveVertex> vertices;
 		std::vector<unsigned int> indices;
-		std::vector<Texture> textures;
 
 	private:
 		void generateBuffers();
 
 		//Render data
 		unsigned int m_VBO, m_VAO, m_EBO;
+		bool hasIndices = false;
 	};
+
 }
 
 #endif

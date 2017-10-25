@@ -20,14 +20,26 @@ DemoScene::~DemoScene()
 	delete m_renderer;
 	m_renderer = nullptr;
 
+	delete m_camera;
+	m_camera = nullptr;
+
 	delete m_shaderProgram;
 	m_shaderProgram = nullptr;
+
+	delete m_containerProgram;
+	m_containerProgram = nullptr;
+
+	delete m_skyboxProgram;
+	m_skyboxProgram = nullptr;
 
 	delete testModel;
 	testModel = nullptr;
 
-	delete m_camera;
-	m_camera = nullptr;
+	delete testModel2;
+	testModel2 = nullptr;
+
+	delete skybox;
+	skybox = nullptr;
 }
 
 bool DemoScene::initialize()
@@ -43,11 +55,31 @@ bool DemoScene::initialize()
 	m_renderer = new Renderer();
 
 	//Shaders
-	m_shaderProgram = new Shader("C:/Users/Andrew/Documents/Projects/C++ Projects/AeonEngine/AeonEngine/Engine/Graphics/Shaders/vertShaderTest.glsl", "C:/Users/Andrew/Documents/Projects/C++ Projects/AeonEngine/AeonEngine/Engine/Graphics/Shaders/fragShaderTest.glsl");
+	m_shaderProgram = new Shader("../AeonEngine/Engine/Graphics/Shaders/vertShaderTest.glsl", "../AeonEngine/Engine/Graphics/Shaders/fragShaderTest.glsl");
+	m_containerProgram = new Shader("../AeonEngine/Engine/Graphics/Shaders/primitiveCubeVert.glsl", "../AeonEngine/Engine/Graphics/Shaders/primitiveCubeFrag.glsl");
+	m_skyboxProgram = new Shader("../AeonEngine/Engine/Graphics/Shaders/skyboxVert.glsl", "../AeonEngine/Engine/Graphics/Shaders/skyboxFrag.glsl");
 
-	//Meshes
-	testModel = new Model(glm::vec3(0.0f, 0.0f, 0.0f));
-	testModel->loadMesh();
+	//Models
+	testModel = new PrimitiveModel(glm::vec3(0.0f, 0.0f, 0.0f), "Resources/Textures/container.png");
+	modelList.push_back(testModel);
+
+	testModel2 = new Model(glm::vec3(1.5f, -2.5f, 0.0f), "Resources/Models/Nanosuit/nanosuit.obj");
+	testModel2->scale(glm::vec3(0.25f, 0.25f, 0.25f));
+	modelList.push_back(testModel2);
+
+	//Lights
+	//pointLight = new Light(AEON_ENGINE::Light::LightType::POINT, glm::vec3(0.0f, 0.0f, 0.0f));
+
+	//Skybox
+	skyboxFaces = {
+		"Resources/Cubemaps/Sky/right.jpg",
+		"Resources/Cubemaps/Sky/left.jpg",
+		"Resources/Cubemaps/Sky/top.jpg",
+		"Resources/Cubemaps/Sky/bottom.jpg",
+		"Resources/Cubemaps/Sky/back.jpg",
+		"Resources/Cubemaps/Sky/front.jpg"
+	};
+	skybox = new Skybox(skyboxFaces);
 
 	return true;
 }
@@ -103,7 +135,7 @@ void DemoScene::update()
 		m_camera->processMouseMovement(xoffset, yoffset);
 	}
 
-	//Makeshift toggle for capturing the mouse (Change later)
+	//Makeshift toggle for capturing the mouse (Change later) ---
 	if (EngineCore::getInstance()->getInputManager().isKeyPressed(SDLK_ESCAPE)) {
 		if (captureMouse)
 			captureMouse = false;
@@ -119,17 +151,29 @@ void DemoScene::update()
 		SDL_SetRelativeMouseMode(SDL_FALSE);
 		SDL_CaptureMouse(SDL_FALSE);
 	}
+	//---
 }
 
 void DemoScene::render()
 {	
+	//**Must be outside the renderer to prevent stuttering when making multiple render calls
+	glClearColor(0.1f, 0.1f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	//Initialize/update View and Projection matrices
 	m_camera->createViewMatrix();
 	m_camera->createProjectionMatrix(EngineCore::getInstance()->getWindow()->getScreenWidth(), EngineCore::getInstance()->getWindow()->getScreenHeight());
 
 	//Renderer
-	m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_shaderProgram, testModel); //Change to take in a vector of models
-	testModel->rotate(((float)SDL_GetTicks() / 1000) * glm::radians(50.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_shaderProgram, modelList);
+	m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_skyboxProgram, skybox);
+
+	//Rotation needs to be reset in the model for it to work properly
+	//Will need to look into a fix
+	//testModel2->rotate(((float)SDL_GetTicks() / 1000) * glm::radians(50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+	//**Must be outside the renderer to prevent stuttering when making multiple render calls
+	EngineCore::getInstance()->getWindow()->swapBuffers();
 }
 
 void DemoScene::draw()

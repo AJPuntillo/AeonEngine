@@ -25,7 +25,6 @@ bool DemoGame::initialize() {
 	return true;
 }
 
-
 void DemoGame::update() {
 
 	m_currentScene->update();

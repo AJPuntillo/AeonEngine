@@ -89,7 +89,7 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_ttf.lib;SDL2_mixer.lib;glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_ttf.lib;SDL2_mixer.lib;glew32.lib;glew32s.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -120,7 +120,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_ttf.lib;SDL2_mixer.lib;glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_ttf.lib;SDL2_mixer.lib;glew32.lib;glew32s.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,9 +148,15 @@
     <ClCompile Include="Engine\Core\Window.cpp" />
     <ClCompile Include="Engine\Events\InputManager.cpp" />
     <ClCompile Include="Engine\Graphics\Shader.cpp" />
+    <ClCompile Include="Engine\Graphics\stb_image.cpp" />
+    <ClCompile Include="Engine\Rendering\3D\Light.cpp" />
     <ClCompile Include="Engine\Rendering\3D\Mesh.cpp" />
     <ClCompile Include="Engine\Rendering\3D\Model.cpp" />
+    <ClCompile Include="Engine\Rendering\3D\PrimitiveMesh.cpp" />
+    <ClCompile Include="Engine\Rendering\3D\PrimitiveModel.cpp" />
     <ClCompile Include="Engine\Rendering\3D\Renderer.cpp" />
+    <ClCompile Include="Engine\Rendering\3D\Skybox.cpp" />
+    <ClCompile Include="Engine\Rendering\3D\SkyboxMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera\Camera.h" />
@@ -160,13 +166,25 @@
     <ClInclude Include="Engine\Core\Window.h" />
     <ClInclude Include="Engine\Events\InputManager.h" />
     <ClInclude Include="Engine\Graphics\Shader.h" />
+    <ClInclude Include="Engine\Graphics\stb_image.h" />
     <ClInclude Include="Engine\Rendering\3D\Entity.h" />
+    <ClInclude Include="Engine\Rendering\3D\Light.h" />
     <ClInclude Include="Engine\Rendering\3D\Mesh.h" />
     <ClInclude Include="Engine\Rendering\3D\Model.h" />
+    <ClInclude Include="Engine\Rendering\3D\PrimitiveMesh.h" />
+    <ClInclude Include="Engine\Rendering\3D\PrimitiveModel.h" />
     <ClInclude Include="Engine\Rendering\3D\Renderer.h" />
+    <ClInclude Include="Engine\Rendering\3D\Skybox.h" />
+    <ClInclude Include="Engine\Rendering\3D\SkyboxMesh.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Graphics\Shaders\fragShaderTest.glsl" />
+    <None Include="Engine\Graphics\Shaders\modelShaderFrag.glsl" />
+    <None Include="Engine\Graphics\Shaders\modelShaderVert.glsl" />
+    <None Include="Engine\Graphics\Shaders\primitiveCubeFrag.glsl" />
+    <None Include="Engine\Graphics\Shaders\primitiveCubeVert.glsl" />
+    <None Include="Engine\Graphics\Shaders\skyboxFrag.glsl" />
+    <None Include="Engine\Graphics\Shaders\skyboxVert.glsl" />
     <None Include="Engine\Graphics\Shaders\vertShaderTest.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -3,6 +3,7 @@
 
 #include <AeonEngine/Engine/Core/EngineCore.h>
 #include <AeonEngine/Engine/Core/SceneInterface.h>
+#include <AeonEngine/Engine/Core/GameInterface.h>
 
 class DemoGame : public AEON_ENGINE::GameInterface
 {
