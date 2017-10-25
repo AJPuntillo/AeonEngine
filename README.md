@@ -46,8 +46,8 @@ Custom C++ engine
 - ~~Fix transformations in model class~~
 - ~~Textures~~
 - ~~Asset Importer fix~~
-x ~~Skybox method inside Renderer~~
-x ~~LoadMesh()~~
-x ~~Fix up the model.h/mesh.h~~
-x ~~Look into the alpha problems with model loading~~
+- ~~Skybox method inside Renderer~~
+- ~~LoadMesh()~~
+- ~~Fix up the model.h/mesh.h~~
+- ~~Look into the alpha problems with model loading~~
 - Renderer usability (add/remove buffers, clear color, swap buffers, etc)
