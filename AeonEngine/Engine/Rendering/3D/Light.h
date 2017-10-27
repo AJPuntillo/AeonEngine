@@ -2,6 +2,7 @@
 #define LIGHT_H
 
 #include "Entity.h"
+#include "PrimitiveMesh.h"
 #include "../../Camera/Camera.h"
 
 //***
@@ -15,7 +16,7 @@ namespace AEON_ENGINE {
 	public:
 		enum LightType { NONE, DIRECTIONAL, POINT, SPOT };
 
-		Light(LightType type_, const glm::vec3 pos_);
+		Light(LightType type_, const glm::vec3 pos_, bool hasMesh = false);
 		virtual ~Light();
 
 		//Matrix manipulation
@@ -26,6 +27,9 @@ namespace AEON_ENGINE {
 		//Updating and rendering
 		void update(const float deltaTime) override;
 		void render(Shader* shader_) override;
+
+		//Mesh
+		void loadMesh();
 
 		//Getters
 		LightType getLightType() { return m_lightType; }
@@ -49,6 +53,10 @@ namespace AEON_ENGINE {
 		float m_outerCutOff				= 0.0f;
 		//Light type
 		LightType m_lightType			= NONE;
+		//Has a mesh?
+		bool m_hasMesh					= false;
+		//Mesh
+		PrimitiveMesh* m_mesh;
 	};
 
 }

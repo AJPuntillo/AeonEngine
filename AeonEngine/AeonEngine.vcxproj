@@ -179,6 +179,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Graphics\Shaders\fragShaderTest.glsl" />
+    <None Include="Engine\Graphics\Shaders\lightingShaderFrag.glsl" />
+    <None Include="Engine\Graphics\Shaders\lightingShaderVert.glsl" />
     <None Include="Engine\Graphics\Shaders\modelShaderFrag.glsl" />
     <None Include="Engine\Graphics\Shaders\modelShaderVert.glsl" />
     <None Include="Engine\Graphics\Shaders\primitiveCubeFrag.glsl" />

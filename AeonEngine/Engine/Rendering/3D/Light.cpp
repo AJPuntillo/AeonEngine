@@ -2,15 +2,24 @@
 
 using namespace AEON_ENGINE;
 
-Light::Light(LightType type_, const glm::vec3 pos_)
+Light::Light(LightType type_, const glm::vec3 pos_, bool hasMesh)
 {
-	setLightType(type_);
+	//setLightType(type_);
 	translate(pos_);
+	m_hasMesh = hasMesh;
+
+	if (m_hasMesh) {
+		loadMesh();
+		//For the size of the Mesh
+		scale(glm::vec3(0.25f, 0.25f, 0.25f));
+	}
+
 }
 
 Light::~Light()
 {
-	//Empty
+	delete m_mesh;
+	m_mesh = nullptr;
 }
 
 void Light::setLightType(LightType type_)
@@ -89,15 +98,25 @@ void Light::render(Shader* shader_)
 	shader_->setMat4("model", m_modelMatrix);
 
 	//**FIX THIS LATER**//
-	////Set light uniforms
-	//shader_->setVec3("lightPos", m_pos);
-	//shader_->setVec3("viewPos", camera_->getPos());
-	//shader_->setVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
-	//shader_->setVec3("material.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
-	//shader_->setVec3("material.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+	shader_->setVec3("light.position", m_pos);
+
+	//Light properties
+	shader_->setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+	shader_->setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+	shader_->setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+	//Material properties
+	shader_->setFloat("shininess", 64.0f);
+
+	if (m_hasMesh)
+		m_mesh->render();
 
 	//Currently the rotation and scale matrices are being reset and redrawn to prevent additive adjustents
 	//Not sure if this is extremely inefficient, will have to revisit
-	m_rotationMatrix = glm::mat4();
-	m_scaleMatrix = glm::mat4();
+	//m_rotationMatrix = glm::mat4();
+	//m_scaleMatrix = glm::mat4();
+}
+
+void Light::loadMesh()
+{
+	m_mesh = new PrimitiveMesh();
 }

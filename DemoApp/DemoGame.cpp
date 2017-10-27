@@ -22,7 +22,7 @@ bool DemoGame::initialize() {
 	//Default scene you want to load
 	//Change TutorialScene() to which ever scene you want/have created
 	//**Remember that it must be included at the top of this file
-	m_currentScene = new TutorialScene();
+	m_currentScene = new DemoScene();
 
 	m_currentScene->initialize();
 

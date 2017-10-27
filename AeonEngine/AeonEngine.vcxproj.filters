@@ -123,5 +123,7 @@
     <None Include="Engine\Graphics\Shaders\modelShaderVert.glsl" />
     <None Include="Engine\Graphics\Shaders\skyboxVert.glsl" />
     <None Include="Engine\Graphics\Shaders\skyboxFrag.glsl" />
+    <None Include="Engine\Graphics\Shaders\lightingShaderFrag.glsl" />
+    <None Include="Engine\Graphics\Shaders\lightingShaderVert.glsl" />
   </ItemGroup>
 </Project>

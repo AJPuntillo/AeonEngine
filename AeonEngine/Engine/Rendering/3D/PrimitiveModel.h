@@ -16,9 +16,11 @@ namespace AEON_ENGINE {
 	{
 	public:
 		PrimitiveModel();
-		PrimitiveModel(const glm::vec3 pos_, char const *path);
+		PrimitiveModel(const glm::vec3 pos_, char const* diffusePath_, char const* specularPath_);
+		PrimitiveModel(const glm::vec3 pos_, char const* diffusePath_);
+		PrimitiveModel(char const* diffusePath_, char const* specularPath_);
 		PrimitiveModel(const glm::vec3 pos_);
-		PrimitiveModel(char const *path);
+		PrimitiveModel(char const* diffusePath_);
 
 		virtual ~PrimitiveModel();
 
@@ -30,11 +32,12 @@ namespace AEON_ENGINE {
 		void render(Shader* shader_) override;
 
 		bool loadMesh();
-		void loadTexture(char const *path);
+		unsigned int loadTexture(char const *path_);
 
 	private:
 		std::vector<PrimitiveMesh*> m_meshes;
-		unsigned int textureID;
+		unsigned int texture_diffuse = 0;
+		unsigned int texture_specular = 0;
 	};
 
 }

@@ -30,6 +30,9 @@ DemoScene::~DemoScene()
 	delete testModel2;
 	testModel2 = nullptr;
 
+	delete pointLight;
+	pointLight = nullptr;
+
 	delete skybox;
 	skybox = nullptr;
 }
@@ -47,12 +50,12 @@ bool DemoScene::initialize()
 	m_renderer = new Renderer();
 
 	//Shaders
-	m_shaderProgram = new Shader("../AeonEngine/Engine/Graphics/Shaders/vertShaderTest.glsl", "../AeonEngine/Engine/Graphics/Shaders/fragShaderTest.glsl");
+	m_shaderProgram = new Shader("../AeonEngine/Engine/Graphics/Shaders/lightingShaderVert.glsl", "../AeonEngine/Engine/Graphics/Shaders/lightingShaderFrag.glsl");
 	m_containerProgram = new Shader("../AeonEngine/Engine/Graphics/Shaders/primitiveCubeVert.glsl", "../AeonEngine/Engine/Graphics/Shaders/primitiveCubeFrag.glsl");
 	m_skyboxProgram = new Shader("../AeonEngine/Engine/Graphics/Shaders/skyboxVert.glsl", "../AeonEngine/Engine/Graphics/Shaders/skyboxFrag.glsl");
 
 	//Models
-	testModel = new PrimitiveModel(glm::vec3(0.0f, 0.0f, 0.0f), "Resources/Textures/container.png");
+	testModel = new PrimitiveModel(glm::vec3(0.0f, 0.0f, 0.0f), "Resources/Textures/container.png", "Resources/Textures/container_specular.png");
 	modelList.push_back(testModel);
 
 	testModel2 = new Model(glm::vec3(1.5f, -2.5f, 0.0f), "Resources/Models/Nanosuit/nanosuit.obj");
@@ -60,7 +63,8 @@ bool DemoScene::initialize()
 	modelList.push_back(testModel2);
 
 	//Lights
-	//pointLight = new Light(AEON_ENGINE::Light::LightType::POINT, glm::vec3(0.0f, 0.0f, 0.0f));
+	pointLight = new Light(AEON_ENGINE::Light::LightType::POINT, glm::vec3(0.0f, 0.0f, 2.0f), true);
+	modelList.push_back(pointLight);
 
 	//Skybox
 	skyboxFaces = {
@@ -103,11 +107,17 @@ void DemoScene::update()
 		m_camera->processKeyboard(RIGHT, deltaTime);
 
 	//Moving the cube test--
-	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_g))
-		testModel->translate(glm::vec3(2.5f, 0.0f, 0.0f) * deltaTime);
+	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_RIGHT))
+		pointLight->translate(glm::vec3(2.5f, 0.0f, 0.0f) * deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_f))
-		testModel->translate(glm::vec3(-2.5f, 0.0f, 0.0f) * deltaTime);
+	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_LEFT))
+		pointLight->translate(glm::vec3(-2.5f, 0.0f, 0.0f) * deltaTime);
+
+	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_UP))
+		pointLight->translate(glm::vec3(0.0f, 2.5f, 0.0f) * deltaTime);
+
+	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_DOWN))
+		pointLight->translate(glm::vec3(-0.0f, -2.5f, 0.0f) * deltaTime);
 	//--
 
 	if (EngineCore::getInstance()->getInputManager().wasMouseMoved()) {
@@ -149,16 +159,45 @@ void DemoScene::update()
 void DemoScene::render()
 {	
 	//**Must be outside the renderer to prevent stuttering when making multiple render calls
-	glClearColor(0.1f, 0.1f, 0.3f, 1.0f);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Initialize/update View and Projection matrices
 	m_camera->createViewMatrix();
 	m_camera->createProjectionMatrix(EngineCore::getInstance()->getWindow()->getScreenWidth(), EngineCore::getInstance()->getWindow()->getScreenHeight());
 
+	////Hardcoded Lighting for TESTING
+	//m_shaderProgram->use();
+	//m_shaderProgram->setVec3("light.position", lightPos);
+	//m_shaderProgram->setVec3("viewPos", m_camera->getPos());
+
+	////Light properties
+	//m_shaderProgram->setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+	//m_shaderProgram->setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+	//m_shaderProgram->setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+
+	////Material properties
+	//m_shaderProgram->setFloat("shininess", 64.0f);
+
 	//Renderer
 	m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_shaderProgram, modelList);
-	m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_skyboxProgram, skybox);
+	//m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_skyboxProgram, skybox);
+
+	//HARDCODE MODEL LOADING HERE TO TEST ASSIMP
+	//Rendering
+	//m_shaderProgram->use();
+	//m_shaderProgram->setMat4("view", m_camera->getView());
+	//m_shaderProgram->setMat4("projection", m_camera->getProj());
+	//glm::mat4 model = glm::mat4();
+	//model *= glm::translate(model, glm::vec3(1.5f, -2.5f, 0.0f));
+	//model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));
+	//m_shaderProgram->setMat4("model", model);
+	//testModel2->render(m_shaderProgram);
+
+	//m_shaderProgram->use();
+	//m_shaderProgram->setMat4("view", m_camera->getView());
+	//m_shaderProgram->setMat4("projection", m_camera->getProj());
+	//testModel->render(m_shaderProgram);
 
 	//Rotation needs to be reset in the model for it to work properly
 	//Will need to look into a fix

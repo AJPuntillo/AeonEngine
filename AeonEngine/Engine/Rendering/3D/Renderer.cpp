@@ -24,6 +24,9 @@ void Renderer::render(Camera* camera_, Window* window_, Shader* shader_, std::ve
 	shader_->setMat4("view", camera_->getView());
 	shader_->setMat4("projection", camera_->getProj());
 
+	//Set view position for lighting
+	shader_->setVec3("viewPos", camera_->getPos());
+
 
 	for (Entity* entity : models_) {
 		entity->render(shader_);

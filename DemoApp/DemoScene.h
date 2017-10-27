@@ -34,7 +34,7 @@ private:
 	AEON_ENGINE::PrimitiveModel* testModel;
 	AEON_ENGINE::Model* testModel2;
 	//Light List
-	//AEON_ENGINE::Light* pointLight;
+	AEON_ENGINE::Light* pointLight;
 	//Skybox
 	AEON_ENGINE::Skybox* skybox;
 	std::vector<std::string> skyboxFaces;

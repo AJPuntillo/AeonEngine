@@ -9,12 +9,30 @@ PrimitiveModel::PrimitiveModel()
 	loadMesh();
 }
 
-PrimitiveModel::PrimitiveModel(const glm::vec3 pos_, char const *path)
+PrimitiveModel::PrimitiveModel(const glm::vec3 pos_, char const* diffusePath_, char const* specularPath_)
 {
 	m_pos = pos_;
 	translate(m_pos);
 	loadMesh();
-	loadTexture(path);
+	texture_diffuse = loadTexture(diffusePath_);
+	texture_specular = loadTexture(specularPath_);
+}
+
+PrimitiveModel::PrimitiveModel(const glm::vec3 pos_, char const* diffusePath_)
+{
+	m_pos = pos_;
+	translate(m_pos);
+	loadMesh();
+	texture_diffuse = loadTexture(diffusePath_);
+}
+
+PrimitiveModel::PrimitiveModel(char const* diffusePath_, char const* specularPath_)
+{
+	m_pos = glm::vec3(0.0f, 0.0f, 0.0f);
+	translate(m_pos);
+	loadMesh();
+	texture_diffuse = loadTexture(diffusePath_);
+	texture_specular = loadTexture(specularPath_);
 }
 
 PrimitiveModel::PrimitiveModel(const glm::vec3 pos_)
@@ -24,12 +42,12 @@ PrimitiveModel::PrimitiveModel(const glm::vec3 pos_)
 	loadMesh();
 }
 
-PrimitiveModel::PrimitiveModel(char const *path)
+PrimitiveModel::PrimitiveModel(char const* diffusePath_)
 {
 	m_pos = glm::vec3(0.0f, 0.0f, 0.0f);
 	translate(m_pos);
 	loadMesh();
-	loadTexture(path);
+	texture_diffuse = loadTexture(diffusePath_);
 }
 
 PrimitiveModel::~PrimitiveModel()
@@ -65,9 +83,16 @@ void PrimitiveModel::render(Shader* shader_)
 	shader_->setMat4("model", m_modelMatrix);
 
 	//Set texture (if there is one)
-	if (&textureID != nullptr) {
-		shader_->setInt("texture1", 0);
-		glBindTexture(GL_TEXTURE_2D, textureID);
+	if (&texture_diffuse != nullptr) {
+		shader_->setInt("texture_diffuse1", 0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture_diffuse);
+	}
+
+	if (&texture_specular != nullptr) {
+		shader_->setInt("texture_specular1", 1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture_specular);
 	}
 
 	for (PrimitiveMesh* mesh : m_meshes) {
@@ -86,12 +111,15 @@ bool PrimitiveModel::loadMesh()
 	return true;
 }
 
-void PrimitiveModel::loadTexture(char const* path)
+//Return a texture?
+unsigned int PrimitiveModel::loadTexture(char const* path_)
 {
+	unsigned int textureID;
+	int width, height, nrComponents;
+
 	glGenTextures(1, &textureID);
 
-	int width, height, nrComponents;
-	unsigned char *data = stbi_load(path, &width, &height, &nrComponents, 0);
+	unsigned char *data = stbi_load(path_, &width, &height, &nrComponents, 0);
 	if (data)
 	{
 		GLenum format;
@@ -117,7 +145,9 @@ void PrimitiveModel::loadTexture(char const* path)
 	}
 	else
 	{
-		std::cout << "Texture failed to load at path: " << path << std::endl;
+		std::cout << "Texture failed to load at path: " << path_ << std::endl;
 		stbi_image_free(data);
 	}
+
+	return textureID;
 }

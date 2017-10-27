@@ -22,13 +22,19 @@ Custom C++ engine
 - Models use their matrices correctly
 - Added a new TutorialScene that contains instructions on how to setup/use
 
+**[10/27/17]**
+- Added a basic Lighting class
+- Fixed issues with texture binding for Primitive Models
+- Added specular component to Primitive Models
+
 
 ### TO DO
 
 - Optimization/CPU Usuage
 - Most optimal place for processing inputs
 - ~~Model Class (Primitive and assimp)~~
-- Lighting
+- ~~Lighting~~
+- Advanced Lighting
 - ~~Fix Shader class path~~
 - Timing class
 - Scene does not "delete" when switched to another scene
