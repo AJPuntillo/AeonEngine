@@ -4,7 +4,7 @@ using namespace AEON_ENGINE;
 
 Light::Light(LightType type_, const glm::vec3 pos_, bool hasMesh)
 {
-	//setLightType(type_);
+	setLightType(type_);
 	translate(pos_);
 	m_hasMesh = hasMesh;
 
@@ -18,8 +18,10 @@ Light::Light(LightType type_, const glm::vec3 pos_, bool hasMesh)
 
 Light::~Light()
 {
-	delete m_mesh;
-	m_mesh = nullptr;
+	if (m_hasMesh) {
+		delete m_mesh;
+		m_mesh = nullptr;
+	}
 }
 
 void Light::setLightType(LightType type_)
@@ -32,6 +34,7 @@ void Light::setLightType(LightType type_)
 		m_ambient = glm::vec3(0.0f, 0.0f, 0.0f);
 		m_diffuse = glm::vec3(0.0f, 0.0f, 0.0f);
 		m_specular = glm::vec3(0.0f, 0.0f, 0.0f);
+		m_shininess = 0;
 		m_constant = 0.0f;
 		m_linear = 0.0f;
 		m_quadratic = 0.0f;
@@ -45,6 +48,7 @@ void Light::setLightType(LightType type_)
 		m_ambient = glm::vec3(0.6f, 0.6f, 0.6f);
 		m_diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
 		m_specular = glm::vec3(0.6f, 0.6f, 0.6f);
+		m_shininess = 32.0f;
 		m_direction = glm::vec3(-0.2f, -0.3f, -0.1f);
 		//Reset unused values
 		m_cutOff = 0.0f;
@@ -59,9 +63,10 @@ void Light::setLightType(LightType type_)
 		m_ambient = glm::vec3(0.05f, 0.05f, 0.05f);
 		m_diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
 		m_specular = glm::vec3(1.0f, 1.0f, 1.0f);
+		m_shininess = 32.0f;
 		m_constant = 1.0f;
-		m_linear = 0.09;
-		m_quadratic = 0.032;
+		m_linear = 0.09f;
+		m_quadratic = 0.032f;
 		//Reset unused values
 		m_direction = glm::vec3(0.0f, 0.0f, 0.0f);
 		m_cutOff = 0.0f;
@@ -97,18 +102,17 @@ void Light::render(Shader* shader_)
 	m_modelMatrix = m_translateMatrix * m_rotationMatrix * m_scaleMatrix;
 	shader_->setMat4("model", m_modelMatrix);
 
-	//**FIX THIS LATER**//
-	shader_->setVec3("light.position", m_pos);
+	if (m_hasMesh) {
+		//Preventing previously bound textures to affect the lamp model
+		shader_->setInt("texture_diffuse1", 0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, -1);
+		shader_->setInt("texture_specular1", 1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, -1);
 
-	//Light properties
-	shader_->setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-	shader_->setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
-	shader_->setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-	//Material properties
-	shader_->setFloat("shininess", 64.0f);
-
-	if (m_hasMesh)
 		m_mesh->render();
+	}
 
 	//Currently the rotation and scale matrices are being reset and redrawn to prevent additive adjustents
 	//Not sure if this is extremely inefficient, will have to revisit

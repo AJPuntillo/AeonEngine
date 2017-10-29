@@ -78,7 +78,7 @@ bool Window::initialize(std::string windowName, int screenWidth, int screenHeigh
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	//Tells the GPU to test for depth when rendering
-	glEnable(GL_DEPTH_TEST); //LESSONED LEARNED: Don't enable depth testing unless you plan on clearing the depth buffer in the render loop
+	glEnable(GL_DEPTH_TEST); //LESSON LEARNED: Don't enable depth testing unless you plan on clearing the depth buffer in the render loop
 
 	return true;
 }

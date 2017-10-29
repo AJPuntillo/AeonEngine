@@ -1,8 +1,12 @@
 ﻿  DemoScene.cpp
-c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(133): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(134): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(138): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(139): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(140): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(141): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(128): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(129): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(133): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(134): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(135): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\andrew\documents\projects\c++ projects\aeonengine\demoapp\demoscene.cpp(136): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  TutorialScene.cpp
+  DemoGame.cpp
   DemoApp.vcxproj -> C:\Users\Andrew\Documents\Projects\C++ Projects\AeonEngine\Debug\DemoApp.exe

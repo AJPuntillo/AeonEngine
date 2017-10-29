@@ -34,13 +34,14 @@ private:
 	AEON_ENGINE::PrimitiveModel* testModel;
 	AEON_ENGINE::Model* testModel2;
 	//Light List
+	AEON_ENGINE::Light* spotLight;
 	AEON_ENGINE::Light* pointLight;
 	//Skybox
 	AEON_ENGINE::Skybox* skybox;
 	std::vector<std::string> skyboxFaces;
 	//Model Lists
 	std::vector<AEON_ENGINE::Entity*> modelList;
-	std::vector<AEON_ENGINE::Entity*> lightList;
+	std::vector<AEON_ENGINE::Light*> lightList;
 
 	//Makeshift bool to capture mouse, will need to change later (Possibly in its own method of the InputManager)
 	bool captureMouse = true;
