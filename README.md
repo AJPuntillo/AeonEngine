@@ -27,6 +27,11 @@ Custom C++ engine
 - Fixed issues with texture binding for Primitive Models
 - Added specular component to Primitive Models
 
+**[10/29/17]**
+- Added more lighting types in the Lighting class
+- Changes in the Renderer to render different lighting types, but only Directional light is enabled until Advanced Lighting is further explored
+- Added a post and pre render to the Renderer class to handle buffer calls
+
 
 ### TO DO
 
@@ -38,7 +43,7 @@ Custom C++ engine
 - ~~Fix Shader class path~~
 - Timing class
 - Scene does not "delete" when switched to another scene
-- Engine Core class should only initialize engine specific classes and any other user-specific preferences (eg. window size, which shaders to use) should be created somewhere else
+- Engine Core class should only initialize engine specific classes and any other user-specific preferences (eg. window size, ~~which shaders to use~~) should be created somewhere else
 - Process Input method for Game and Scene Interface
 - Resizable window
 - Physics
@@ -56,4 +61,4 @@ Custom C++ engine
 - ~~LoadMesh()~~
 - ~~Fix up the model.h/mesh.h~~
 - ~~Look into the alpha problems with model loading~~
-- Renderer usability (add/remove buffers, clear color, swap buffers, etc)
+- ~~Renderer usability (add/remove buffers, clear color, swap buffers, etc)~~
