@@ -52,11 +52,11 @@ public:
 	//These methods are virtual because they are inherited from SceneInterface
 	virtual ~TutorialScene();
 
-	virtual bool initialize();		//Initializes the scene; used to setup objects; It returns bool for error checking
-	virtual void processInput();	//Updates all input
-	virtual void update();			//Update everything; good for physics, movement, input, etc..
-	virtual void render();			//Render everything to show up in the window
-	virtual void draw();			//Draw will most likely be used to draw 2D elements, like UI
+	virtual bool initialize();						//Initializes the scene; used to setup objects; It returns bool for error checking
+	virtual void processInput();					//Updates all input
+	virtual void update(float deltaTime_);			//Update everything; good for physics, movement, input, etc..
+	virtual void render();							//Render everything to show up in the window
+	virtual void draw();							//Draw will most likely be used to draw 2D elements, like UI
 
 private:
 	//***Notice that all objects are prefixed with 'AEON_ENGINE'

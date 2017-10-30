@@ -26,7 +26,7 @@ void DemoScene2::processInput()
 
 }
 
-void DemoScene2::update()
+void DemoScene2::update(float deltaTime_)
 {
 
 }

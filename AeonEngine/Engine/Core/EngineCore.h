@@ -48,7 +48,7 @@ namespace AEON_ENGINE {
 
 		bool initialize(std::string windowName = "Untitled", int windowHeight = 800, int windowWidth = 600, int windowFlags = 0); //Default values loaded if none specified
 		void run(int maxFPS_ = 100, bool printTimer_ = false);
-		void update();
+		void update(float deltaTime_);
 		void render();
 		void draw();
 
@@ -66,6 +66,7 @@ namespace AEON_ENGINE {
 		~EngineCore();
 
 		void updateInput();
+		void onResize(int newWidth_, int newHeight_);
 
 		//Hold the instance of itself
 		//Friend function allows automatic cleanup and memory management

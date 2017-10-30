@@ -12,7 +12,7 @@ public:
 
 	virtual bool initialize();
 	virtual void processInput();
-	virtual void update();
+	virtual void update(float deltaTime_);
 	virtual void render();
 	virtual void draw();
 

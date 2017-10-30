@@ -13,7 +13,7 @@ public:
 
 	virtual bool initialize() override;
 	virtual void processInput() override;
-	virtual void update() override;
+	virtual void update(float deltaTime_) override;
 	virtual void render() override;
 	virtual void draw() override;
 

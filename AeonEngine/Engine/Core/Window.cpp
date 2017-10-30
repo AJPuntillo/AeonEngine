@@ -36,7 +36,7 @@ bool Window::initialize(std::string windowName, int screenWidth, int screenHeigh
 		flags |= SDL_WINDOW_BORDERLESS;
 
 	//Create the window -- SDL_WINDOW_CENTERED is a built-in SDL parameter that centers based on the screen width/height
-	m_window = SDL_CreateWindow(windowName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, SDL_WINDOW_OPENGL);
+	m_window = SDL_CreateWindow(windowName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	//Window creation error checking
 	if (!m_window) {
 		std::cout << "Failed to initialize window!" << std::endl;
@@ -100,12 +100,33 @@ void Window::lockMouse()
 {
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	SDL_CaptureMouse(SDL_TRUE);
+	m_isCaptured = true;
 }
 
 void Window::unlockMouse()
 {
 	SDL_SetRelativeMouseMode(SDL_FALSE);
 	SDL_CaptureMouse(SDL_FALSE);
+	m_isCaptured = false;
+}
+
+void Window::toggleMouseCapture()
+{
+	m_isCaptured = !m_isCaptured;
+	SDL_SetRelativeMouseMode((m_isCaptured ? SDL_TRUE : SDL_FALSE));
+	SDL_CaptureMouse((m_isCaptured ? SDL_TRUE : SDL_FALSE));
+}
+
+void Window::toggleFullscreen()
+{
+	m_isFullscreen = !m_isFullscreen;
+	SDL_SetWindowFullscreen(m_window, (m_isFullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_SHOWN));
+}
+
+void Window::setWindowSize(int newWidth, int newHeight)
+{
+	m_screenWidth = newWidth;
+	m_screenHeight = newHeight;
 }
 
 void Window::setAttributes()

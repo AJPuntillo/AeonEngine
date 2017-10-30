@@ -82,51 +82,50 @@ bool DemoScene::initialize()
 
 void DemoScene::processInput()
 {
-	//**Makeshift Timestep -- Will need to create a proper class for it later
-	float currentFrame = SDL_GetTicks() / 1000.0f;
-	deltaTime = currentFrame - lastFrame;
-	lastFrame = currentFrame;
-
-	//std::cout << deltaTime << std::endl;
-
 	//Camera movement with mouse
 	m_camera->processMouse(EngineCore::getInstance()->getInputManager());
 
 	//Camera movement with keys--
 	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_w))
-		m_camera->processKeyboard(FORWARD, deltaTime);
+		m_camera->processKeyboard(FORWARD, m_deltaTime);
 
 	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_s))
-		m_camera->processKeyboard(BACKWARD, deltaTime);
+		m_camera->processKeyboard(BACKWARD, m_deltaTime);
 
 	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_a))
-		m_camera->processKeyboard(LEFT, deltaTime);
+		m_camera->processKeyboard(LEFT, m_deltaTime);
 
 	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_d))
-		m_camera->processKeyboard(RIGHT, deltaTime);
+		m_camera->processKeyboard(RIGHT, m_deltaTime);
 	//--
 
 	//Moving the cube test--
 	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_RIGHT))
-		pointLight->translate(glm::vec3(2.5f, 0.0f, 0.0f) * deltaTime);
+		pointLight->translate(glm::vec3(2.5f, 0.0f, 0.0f) * m_deltaTime);
 
 	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_LEFT))
-		pointLight->translate(glm::vec3(-2.5f, 0.0f, 0.0f) * deltaTime);
+		pointLight->translate(glm::vec3(-2.5f, 0.0f, 0.0f) * m_deltaTime);
 
 	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_UP))
-		pointLight->translate(glm::vec3(0.0f, 2.5f, 0.0f) * deltaTime);
+		pointLight->translate(glm::vec3(0.0f, 2.5f, 0.0f) * m_deltaTime);
 
 	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_DOWN))
-		pointLight->translate(glm::vec3(-0.0f, -2.5f, 0.0f) * deltaTime);
+		pointLight->translate(glm::vec3(-0.0f, -2.5f, 0.0f) * m_deltaTime);
 	//--
 
-	//Unlock Mouse
-	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_ESCAPE))
-		EngineCore::getInstance()->getWindow()->unlockMouse();
+	//Toggle Mouse Capture
+	if (EngineCore::getInstance()->getInputManager()->isKeyPressed(SDLK_ESCAPE))
+		EngineCore::getInstance()->getWindow()->toggleMouseCapture();
+
+	if (EngineCore::getInstance()->getInputManager()->isKeyPressed(SDLK_F1))
+		EngineCore::getInstance()->getWindow()->toggleFullscreen();
 }
 
-void DemoScene::update()
+void DemoScene::update(float deltaTime_)
 {
+	//Update the deltaTime for the processInput
+	m_deltaTime = deltaTime_;
+
 	//**Rotation needs to be reset in the model for it to work properly
 	//Will need to look into a fix
 	//testModel2->rotate(((float)SDL_GetTicks() / 1000) * glm::radians(50.0f), glm::vec3(0.0f, 1.0f, 0.0f));

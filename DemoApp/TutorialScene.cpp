@@ -133,7 +133,7 @@ void TutorialScene::processInput()
 		m_modelContainer->translate(glm::vec3(-2.5f, 0.0f, 0.0f) * deltaTime);
 }
 
-void TutorialScene::update()
+void TutorialScene::update(float deltaTime_)
 {
 	//Update stuff...
 }

@@ -35,26 +35,33 @@ Custom C++ engine
 - Added utility methods in the Window class for locking and unlocking the mouse to the window
 - Added a processInput method in the EngineCore/SceneInterface/GameInterface and moved all the input code from the update
 
+**[10/30/17]**
+- Added Timer class that sets limits to the game loop (solved the CPU Usage problem) and tracks fps/delta time
+- Added utility to the EngineCore's run method, allowing to print out fps/delta time and limiting fps
+- Delta time is now passed from the EngineCore's game loop's timer to the scene's update
+- Added resize methods to the Window class allowing the window to be resized
+- Added a fullscreen method to the Window class allowing to toggle fullscreen
+- Fixed issues with changing window focus; mouse is captured correctly now
+
 ### TO DO
 
-- Optimization/CPU Usuage
+- Optimization~~/CPU Usuage~~
 - ~~Most optimal place for processing inputs~~
 - ~~Model Class (Primitive and assimp)~~
 - ~~Lighting~~
 - Advanced Lighting
 - ~~Fix Shader class path~~
-- Timing class
+- ~~Timing class~~
 - Scene does not "delete" when switched to another scene
 - ~~Engine Core class should only initialize engine specific classes and any other user-specific preferences (eg. window size, which shaders to use) should be created somewhere else~~
 - ~~Process Input method for Game and Scene Interface~~
-- Resizable window/Fullscreen
+- ~~Resizable window/Fullscreen~~
 - Physics
 - Math
 - Audio
 - ~~Properly fix the Rendering classes and hook up the Renderer~~
 - Finish Documentation
 - Implement ResourceManager
-- Components (?)
 - ~~Localize matrices for each model~~
 - ~~Fix transformations in model class~~
 - ~~Textures~~

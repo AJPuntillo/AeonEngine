@@ -36,6 +36,11 @@ namespace AEON_ENGINE {
 		void swapBuffers();
 		void lockMouse();
 		void unlockMouse();
+		void toggleMouseCapture();
+		void toggleFullscreen();
+
+		//Setters
+		void setWindowSize(int newWidth, int newHeight);
 
 		//Getters
 		SDL_Window* getWindow() const	{ return m_window; };
@@ -51,6 +56,10 @@ namespace AEON_ENGINE {
 		//Screen Size
 		int m_screenWidth			= 800;
 		int m_screenHeight			= 600;
+		//Mouse capture
+		bool m_isCaptured			= false;
+		//Fullscreen
+		bool m_isFullscreen			= false;
 	};
 
 }

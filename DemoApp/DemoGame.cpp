@@ -43,9 +43,9 @@ void DemoGame::processInput()
 	}
 }
 
-void DemoGame::update()
+void DemoGame::update(float deltaTime_)
 {
-	m_currentScene->update();
+	m_currentScene->update(deltaTime_);
 }
 
 void DemoGame::render()

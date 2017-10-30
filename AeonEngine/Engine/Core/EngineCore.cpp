@@ -77,7 +77,7 @@ void EngineCore::run(int maxFPS_, bool printTimer_)
 		//Take in Input
 		updateInput();
 		//Update the world
-		update();
+		update(timer.getDeltaTime());
 		//Render the 3D
 		render();
 		//Draw 2D ontop of the 3D
@@ -120,18 +120,29 @@ void EngineCore::updateInput()
 		if (event.type == SDL_MOUSEBUTTONUP)
 			m_inputManager->releaseKey(event.key.keysym.sym);
 
-		if (event.type == SDL_MOUSEMOTION) {
+		if (event.type == SDL_MOUSEMOTION)
 			m_inputManager->setMouseCoords(event.motion.x, event.motion.y);
-			//std::cout << event.motion.x << " " << event.motion.y << std::endl; //Print out to see mouse position on screen
+
+		if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST)
+			m_window->unlockMouse();
+
+		if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED)
+			m_window->lockMouse();
+
+		if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+			onResize(event.window.data1, event.window.data2);
 		}
+
+		//if (event.type == SDL_MOUSEWHEEL)
+		//**Might need to add a mouse wheel function to the Input Manager
 	}
 
 	gameInterface->processInput();
 }
 
-void EngineCore::update()
+void EngineCore::update(float deltaTime_)
 {
-	gameInterface->update();
+	gameInterface->update(deltaTime_);
 }
 
 void EngineCore::render()
@@ -142,4 +153,10 @@ void EngineCore::render()
 void EngineCore::draw()
 {
 	gameInterface->draw();
+}
+
+void EngineCore::onResize(int newWidth_, int newHeight_)
+{
+	m_window->setWindowSize(newWidth_, newHeight_);
+	glViewport(0, 0, m_window->getScreenWidth(), m_window->getScreenHeight());
 }
