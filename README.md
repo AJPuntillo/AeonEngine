@@ -49,9 +49,11 @@ Custom C++ engine
 - Finish Documentation
 - Implement ResourceManager
 - Advanced Lighting
+- Face culling
 - Physics
 - Math
 - Audio
+- Controller support
 - Scene does not "delete" when switched to another scene
 - ~~Most optimal place for processing inputs~~
 - ~~Model Class (Primitive and assimp)~~
