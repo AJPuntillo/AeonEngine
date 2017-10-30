@@ -46,7 +46,7 @@ namespace AEON_ENGINE {
 		static EngineCore* getInstance();
 		static void TerminateGame();
 
-		bool initialize();
+		bool initialize(std::string windowName = "Untitled", int windowHeight = 800, int windowWidth = 600, int windowFlags = 0); //Default values loaded if none specified
 		void run();
 		void update();
 		void render();
@@ -55,7 +55,7 @@ namespace AEON_ENGINE {
 		//Getters
 		Window* getWindow() const			{ return m_window; };
 		SDL_Keycode getKeyPressed() const	{ return keyDown; };
-		InputManager getInputManager()		{ return m_inputManager; }
+		InputManager* getInputManager()		{ return m_inputManager; }
 
 		//This is the pointer to the abstract Game
 		GameInterface* gameInterface = nullptr;
@@ -77,7 +77,7 @@ namespace AEON_ENGINE {
 		//Game Loop
 		bool m_isRunning = false;
 		//Checking input
-		InputManager m_inputManager;
+		InputManager* m_inputManager;
 		SDL_Keycode keyDown;
 	};
 

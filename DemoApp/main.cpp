@@ -11,7 +11,7 @@ int main(int argc, char* args[]) {
 	EngineCore::getInstance()->gameInterface = new DemoGame();
 
 	//Create the first instance of our engine
-	if (EngineCore::getInstance()->initialize()) {
+	if (EngineCore::getInstance()->initialize("Demo App")) {
 		//Start the Game Loop
 		EngineCore::getInstance()->run();
 	}

@@ -11,6 +11,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "../Events/InputManager.h"
+
 namespace AEON_ENGINE {
 
 	enum CameraMovement {
@@ -32,6 +34,7 @@ namespace AEON_ENGINE {
 		void createViewMatrix(); //Return the lookAt matrix (View matrix)
 		glm::vec3 createRight(); //Cross product the up and front vector to create the right vector
 		void processKeyboard(CameraMovement direction, float deltaTime); //Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM
+		void processMouse(InputManager* inputManager_); //If the mouse has been moved, calculate the offset and call ProcessMouseMovement.
 		void processMouseMovement(float xoffset, float yoffset); //Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
 		void processMouseScroll(float yoffset); //Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
 
@@ -72,6 +75,12 @@ namespace AEON_ENGINE {
 		//Matrices
 		glm::mat4 m_view;
 		glm::mat4 m_projection;
+		//Camera Movement
+		double m_mouseCoordsX	 = 0;
+		double m_mouseCoordsY	 = 0;
+		double m_lastX			 = 0; //Might need to set this to Window's width / 2 if "snapping" issue occurs
+		double m_lastY			 = 0; //Might need to set this to Window's height / 2 if "snapping" issue occurs
+		bool m_firstMouse		 = true;
 	};
 
 }

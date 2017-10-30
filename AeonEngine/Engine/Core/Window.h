@@ -32,8 +32,10 @@ namespace AEON_ENGINE {
 		~Window();
 
 		bool initialize(std::string windowName, int screenWidth, int screenHeight, unsigned int currentFlags);
-		void swapBuffers();
 		void shutdown();
+		void swapBuffers();
+		void lockMouse();
+		void unlockMouse();
 
 		//Getters
 		SDL_Window* getWindow() const	{ return m_window; };

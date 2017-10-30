@@ -12,6 +12,7 @@ public:
 	~DemoGame();
 
 	virtual bool initialize() override;
+	virtual void processInput() override;
 	virtual void update() override;
 	virtual void render() override;
 	virtual void draw() override;

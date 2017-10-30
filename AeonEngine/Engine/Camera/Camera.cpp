@@ -68,6 +68,25 @@ void Camera::processKeyboard(CameraMovement direction, float deltaTime)
 		m_pos += m_right * cameraSpeed;
 }
 
+void Camera::processMouse(InputManager* inputManager_)
+{
+	if (inputManager_->wasMouseMoved()) {
+		//Prevents screen from jumping to your mouses initial local
+		if (m_firstMouse) {
+			m_lastX = inputManager_->getMouseCoordsX();
+			m_lastY = inputManager_->getMouseCoordsY();
+			m_firstMouse = false;
+		}
+
+		float xoffset = inputManager_->getMouseCoordsX() - m_lastX;
+		float yoffset = m_lastY - inputManager_->getMouseCoordsY(); //Reversed since y-coords range from bottom to top
+		m_lastX = inputManager_->getMouseCoordsX();
+		m_lastY = inputManager_->getMouseCoordsY();
+
+		processMouseMovement(xoffset, yoffset);
+	}
+}
+
 void Camera::processMouseMovement(float xoffset, float yoffset)
 {
 	xoffset *= m_mouseSensitivity;

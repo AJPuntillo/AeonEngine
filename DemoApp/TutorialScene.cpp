@@ -41,8 +41,7 @@ bool TutorialScene::initialize()
 {
 	//This locks ad captures the mouse
 	//If you want to see your cursor then comment out these two lines
-	SDL_SetRelativeMouseMode(SDL_TRUE);
-	SDL_CaptureMouse(SDL_TRUE);
+	EngineCore::getInstance()->getWindow()->lockMouse();
 
 	//Initialize all your pointer objects
 	//All pointer objects must be initialized using a 'new'... but remember the 'new' rule mentioned above
@@ -98,65 +97,51 @@ bool TutorialScene::initialize()
 	return true;
 }
 
-void TutorialScene::update()
+void TutorialScene::processInput()
 {
 	//**Makeshift Timestep -- Will need to create a proper class for it later
 	float currentFrame = SDL_GetTicks() / 1000.0f;
 	deltaTime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
 
+	//Camera movement with mouse
+	//This is for calculating offset of the camera, so that you can look around with the camera using your mouse
+	m_camera->processMouse(EngineCore::getInstance()->getInputManager());
+
 	//This is tracking input, the camera moves with W, A, S, D
 	//Later on this will be implemented in its own method, but for testing purposes this will do just fine
 	//You can add more keys to be tracks by copying and pasting the if statement and changing the key to be pressed
-	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_w))
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_w))
 		m_camera->processKeyboard(FORWARD, deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_s))
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_s))
 		m_camera->processKeyboard(BACKWARD, deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_a))
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_a))
 		m_camera->processKeyboard(LEFT, deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_d))
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_d))
 		m_camera->processKeyboard(RIGHT, deltaTime);
 
 	//When the left/right key is pressed, called the model's translate method and move it by 2.5units * deltatime --
 	//This is for testing movement of models
 	//Feel free to play around with these controls for your own testing
-	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_RIGHT))
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_RIGHT))
 		m_modelContainer->translate(glm::vec3(2.5f, 0.0f, 0.0f) * deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_LEFT))
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_LEFT))
 		m_modelContainer->translate(glm::vec3(-2.5f, 0.0f, 0.0f) * deltaTime);
-	//--
+}
 
-	//***This is for calculating offset of the camera, so that you can look around with the camera using your mouse
-	//This will also be moved with the rest of the input to a more cleanerer method, but this works perfectly right now for testing
-	//No need to alter this.
-	if (EngineCore::getInstance()->getInputManager().wasMouseMoved()) {
-		//Prevents screen from jumping to your mouses initial local
-		if (firstMouse) {
-			lastX = EngineCore::getInstance()->getInputManager().getMouseCoordsX();
-			lastY = EngineCore::getInstance()->getInputManager().getMouseCoordsY();
-			firstMouse = false;
-		}
-
-		float xoffset = EngineCore::getInstance()->getInputManager().getMouseCoordsX() - lastX;
-		float yoffset = lastY - EngineCore::getInstance()->getInputManager().getMouseCoordsY(); //Reversed since y-coords range from bottom to top
-		lastX = EngineCore::getInstance()->getInputManager().getMouseCoordsX();
-		lastY = EngineCore::getInstance()->getInputManager().getMouseCoordsY();
-
-		m_camera->processMouseMovement(xoffset, yoffset);
-	}
+void TutorialScene::update()
+{
+	//Update stuff...
 }
 
 void TutorialScene::render()
 {
-	//**Must be outside the renderer to prevent stuttering when making multiple render calls
-	//ClearColor is the background colour of the window
-	//Clear are the buffers to be cleared (Best to leave these as is)
-	glClearColor(0.1f, 0.1f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//Clear buffers (and clear the background colour); Must be before render is called
+	m_renderer->clearBuffers();
 
 	//Initialize/update View and Projection matrices
 	//The camera contains both the view and projection matrix for rendering
@@ -174,9 +159,8 @@ void TutorialScene::render()
 	m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_modelShader, m_modelList);
 	m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_skyboxShader, m_skybox); //The 'render' method is overloaded to take in a skybox instead of a list of Entity's
 
-	//**Must be outside the renderer to prevent stuttering when making multiple render calls
-	//Allows for double buffering
-	EngineCore::getInstance()->getWindow()->swapBuffers();
+	//Swap buffers for double buffering; Must be after render is called
+	m_renderer->swapBuffers(EngineCore::getInstance()->getWindow());
 }
 
 void TutorialScene::draw()

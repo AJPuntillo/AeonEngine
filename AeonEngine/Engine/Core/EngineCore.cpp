@@ -40,10 +40,12 @@ EngineCore* EngineCore::getInstance()
 	return engineCoreInstance.get();
 }
 
-bool EngineCore::initialize()
+bool EngineCore::initialize(std::string windowName, int windowHeight, int windowWidth, int windowFlags)
 {
 	m_window = new Window();
-	m_window->initialize("Demo", 800, 600, 0);
+	m_window->initialize(windowName, windowHeight, windowWidth, windowFlags);
+
+	m_inputManager = new InputManager();
 
 	//Check if the game interface exists
 	if (gameInterface != nullptr) {
@@ -65,8 +67,6 @@ void EngineCore::run()
 
 	//Maintain the game loop while this engine is running
 	while (m_isRunning) {
-		//Update the InputManager
-		m_inputManager.update(); //**Pointer?
 		//Take in Input
 		updateInput();
 		//Update the world
@@ -76,6 +76,42 @@ void EngineCore::run()
 		//Draw 2D ontop of the 3D
 		draw();
 	}
+}
+
+void EngineCore::updateInput()
+{
+	//Update the InputManager
+	m_inputManager->update();
+
+	SDL_Event event;
+
+	//We toss in the event as a reference so that SDL_PollEvent will modifiy it internally and
+	//then leave it for us to look at.
+	while (SDL_PollEvent(&event)) {
+
+		//If we click on the [ X ] in the top corner, then we want the Gameloop to end
+		if (event.type == SDL_QUIT)
+			m_isRunning = false;
+
+		if (event.type == SDL_KEYDOWN)
+			m_inputManager->pressKey(event.key.keysym.sym);
+
+		if (event.type == SDL_KEYUP)
+			m_inputManager->releaseKey(event.key.keysym.sym);
+
+		if (event.type == SDL_MOUSEBUTTONDOWN)
+			m_inputManager->pressKey(event.key.keysym.sym);
+
+		if (event.type == SDL_MOUSEBUTTONUP)
+			m_inputManager->releaseKey(event.key.keysym.sym);
+
+		if (event.type == SDL_MOUSEMOTION) {
+			m_inputManager->setMouseCoords(event.motion.x, event.motion.y);
+			//std::cout << event.motion.x << " " << event.motion.y << std::endl; //Print out to see mouse position on screen
+		}
+	}
+
+	gameInterface->processInput();
 }
 
 void EngineCore::update()
@@ -91,35 +127,4 @@ void EngineCore::render()
 void EngineCore::draw()
 {
 	gameInterface->draw();
-}
-
-void EngineCore::updateInput()
-{
-	SDL_Event event;
-
-	//We toss in the event as a reference so that SDL_PollEvent will modifiy it internally and
-	//then leave it for us to look at.
-	while (SDL_PollEvent(&event)) {
-
-		//If we click on the [ X ] in the top corner, then we want the Gameloop to end
-		if (event.type == SDL_QUIT)
-			m_isRunning = false;
-
-		if (event.type == SDL_KEYDOWN)
-			m_inputManager.pressKey(event.key.keysym.sym);
-
-		if (event.type == SDL_KEYUP)
-			m_inputManager.releaseKey(event.key.keysym.sym);
-
-		if (event.type == SDL_MOUSEBUTTONDOWN)
-			m_inputManager.pressKey(event.key.keysym.sym);
-
-		if (event.type == SDL_MOUSEBUTTONUP)
-			m_inputManager.releaseKey(event.key.keysym.sym);
-
-		if (event.type == SDL_MOUSEMOTION) {
-			m_inputManager.setMouseCoords(event.motion.x, event.motion.y);
-			//std::cout << event.motion.x << " " << event.motion.y << std::endl; //Print out to see mouse position on screen
-		}
-	}
 }

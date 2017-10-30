@@ -17,6 +17,7 @@ namespace AEON_ENGINE {
 
 		//By saying virtual and = 0 we delete the method and force the inherited classes to create these and flush them out
 		virtual bool initialize() = 0;
+		virtual void processInput() = 0;
 		virtual void update() = 0;
 		virtual void render() = 0;
 		virtual void draw() = 0;

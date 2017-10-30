@@ -21,6 +21,11 @@ bool DemoScene2::initialize()
 	return true;
 }
 
+void DemoScene2::processInput()
+{
+
+}
+
 void DemoScene2::update()
 {
 

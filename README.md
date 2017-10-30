@@ -31,21 +31,23 @@ Custom C++ engine
 - Added more lighting types in the Lighting class
 - Changes in the Renderer to render different lighting types, but only Directional light is enabled until Advanced Lighting is further explored
 - Added a post and pre render to the Renderer class to handle buffer calls
-
+- Changes to the EngineCore initialize() to take in window parameters
+- Added utility methods in the Window class for locking and unlocking the mouse to the window
+- Added a processInput method in the EngineCore/SceneInterface/GameInterface and moved all the input code from the update
 
 ### TO DO
 
 - Optimization/CPU Usuage
-- Most optimal place for processing inputs
+- ~~Most optimal place for processing inputs~~
 - ~~Model Class (Primitive and assimp)~~
 - ~~Lighting~~
 - Advanced Lighting
 - ~~Fix Shader class path~~
 - Timing class
 - Scene does not "delete" when switched to another scene
-- Engine Core class should only initialize engine specific classes and any other user-specific preferences (eg. window size, ~~which shaders to use~~) should be created somewhere else
-- Process Input method for Game and Scene Interface
-- Resizable window
+- ~~Engine Core class should only initialize engine specific classes and any other user-specific preferences (eg. window size, which shaders to use) should be created somewhere else~~
+- ~~Process Input method for Game and Scene Interface~~
+- Resizable window/Fullscreen
 - Physics
 - Math
 - Audio

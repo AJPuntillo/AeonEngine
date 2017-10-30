@@ -53,6 +53,7 @@ public:
 	virtual ~TutorialScene();
 
 	virtual bool initialize();		//Initializes the scene; used to setup objects; It returns bool for error checking
+	virtual void processInput();	//Updates all input
 	virtual void update();			//Update everything; good for physics, movement, input, etc..
 	virtual void render();			//Render everything to show up in the window
 	virtual void draw();			//Draw will most likely be used to draw 2D elements, like UI

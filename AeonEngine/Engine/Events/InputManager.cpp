@@ -38,23 +38,6 @@ void InputManager::releaseKey(unsigned int keyID_)
 	m_keyMap[keyID_] = false;
 }
 
-void InputManager::setMouseCoords(double x_, double y_)
-{
-	m_lastX = m_mouseCoordsX;
-	m_lastY = m_mouseCoordsY;
-
-	m_mouseCoordsX = x_;
-	m_mouseCoordsY = y_;
-}
-
-bool InputManager::wasMouseMoved() {
-	if (m_lastX == m_mouseCoordsX && m_lastY == m_mouseCoordsY) {
-		return false;
-	}
-
-	return true;
-}
-
 bool InputManager::isKeyDown(unsigned int keyID_)
 {
 	auto it = m_keyMap.find(keyID_);
@@ -83,3 +66,21 @@ bool InputManager::wasKeyDown(unsigned int keyID_)
 	else
 		return false;
 }
+
+void InputManager::setMouseCoords(double x_, double y_)
+{
+	m_lastX = m_mouseCoordsX;
+	m_lastY = m_mouseCoordsY;
+
+	m_mouseCoordsX = x_;
+	m_mouseCoordsY = y_;
+}
+
+bool InputManager::wasMouseMoved() {
+	if (m_lastX == m_mouseCoordsX && m_lastY == m_mouseCoordsY) {
+		return false;
+	}
+
+	return true;
+}
+

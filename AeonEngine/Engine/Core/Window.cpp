@@ -83,17 +83,29 @@ bool Window::initialize(std::string windowName, int screenWidth, int screenHeigh
 	return true;
 }
 
-void Window::swapBuffers()
-{
-	SDL_GL_SwapWindow(m_window); //Swapping the window for double bufferring
-}
-
 void Window::shutdown()
 {
 	//Clean up the window
 	SDL_GL_DeleteContext(m_context);
 	SDL_DestroyWindow(m_window);
 	m_window = nullptr;
+}
+
+void Window::swapBuffers()
+{
+	SDL_GL_SwapWindow(m_window); //Swapping the window for double bufferring
+}
+
+void Window::lockMouse()
+{
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+	SDL_CaptureMouse(SDL_TRUE);
+}
+
+void Window::unlockMouse()
+{
+	SDL_SetRelativeMouseMode(SDL_FALSE);
+	SDL_CaptureMouse(SDL_FALSE);
 }
 
 void Window::setAttributes()

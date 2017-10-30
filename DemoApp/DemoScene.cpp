@@ -39,9 +39,8 @@ DemoScene::~DemoScene()
 
 bool DemoScene::initialize()
 {
-	//**Lock Mouse
-	//SDL_SetRelativeMouseMode(SDL_TRUE);
-	//SDL_CaptureMouse(SDL_TRUE);
+	//Lock Mouse
+	EngineCore::getInstance()->getWindow()->lockMouse();
 
 	//Camera
 	m_camera = new Camera();
@@ -81,80 +80,54 @@ bool DemoScene::initialize()
 	return true;
 }
 
-void DemoScene::update()
+void DemoScene::processInput()
 {
-	//**Maybe create a proper method for JUST processing inputs
-	//**Deltatime
-	//**Might need a different location for processing input
-	//		- It checks what keycode was used from the inputmanager that's updating in the EngineCore class
-	//		- How will individual objects track their inputs?
-	//		- Should the camera be processed here in the scene as well? or in the Game/EngineCore class
-
 	//**Makeshift Timestep -- Will need to create a proper class for it later
 	float currentFrame = SDL_GetTicks() / 1000.0f;
 	deltaTime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
 
-	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_w))
+	//Camera movement with mouse
+	m_camera->processMouse(EngineCore::getInstance()->getInputManager());
+
+	//Camera movement with keys--
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_w))
 		m_camera->processKeyboard(FORWARD, deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_s))
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_s))
 		m_camera->processKeyboard(BACKWARD, deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_a))
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_a))
 		m_camera->processKeyboard(LEFT, deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_d))
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_d))
 		m_camera->processKeyboard(RIGHT, deltaTime);
+	//--
 
 	//Moving the cube test--
-	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_RIGHT))
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_RIGHT))
 		pointLight->translate(glm::vec3(2.5f, 0.0f, 0.0f) * deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_LEFT))
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_LEFT))
 		pointLight->translate(glm::vec3(-2.5f, 0.0f, 0.0f) * deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_UP))
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_UP))
 		pointLight->translate(glm::vec3(0.0f, 2.5f, 0.0f) * deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager().isKeyDown(SDLK_DOWN))
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_DOWN))
 		pointLight->translate(glm::vec3(-0.0f, -2.5f, 0.0f) * deltaTime);
 	//--
 
-	if (EngineCore::getInstance()->getInputManager().wasMouseMoved()) {
-		//**Might want to calculate mouse offset in the input manager or camera
-		//Prevents screen from jumping to your mouses initial local
-		if (firstMouse) {
-			lastX = EngineCore::getInstance()->getInputManager().getMouseCoordsX();
-			lastY = EngineCore::getInstance()->getInputManager().getMouseCoordsY();
-			firstMouse = false;
-		}
+	//Unlock Mouse
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_ESCAPE))
+		EngineCore::getInstance()->getWindow()->unlockMouse();
+}
 
-		float xoffset = EngineCore::getInstance()->getInputManager().getMouseCoordsX() - lastX;
-		float yoffset = lastY - EngineCore::getInstance()->getInputManager().getMouseCoordsY(); //Reversed since y-coords range from bottom to top
-		lastX = EngineCore::getInstance()->getInputManager().getMouseCoordsX();
-		lastY = EngineCore::getInstance()->getInputManager().getMouseCoordsY();
-
-		m_camera->processMouseMovement(xoffset, yoffset);
-	}
-
-	//Makeshift toggle for capturing the mouse (Change later) ---
-	if (EngineCore::getInstance()->getInputManager().isKeyPressed(SDLK_ESCAPE)) {
-		if (captureMouse)
-			captureMouse = false;
-		else
-			captureMouse = true;
-	}
-
-	if (captureMouse) {
-		SDL_SetRelativeMouseMode(SDL_TRUE);
-		SDL_CaptureMouse(SDL_TRUE);
-	}
-	if (!captureMouse) {
-		SDL_SetRelativeMouseMode(SDL_FALSE);
-		SDL_CaptureMouse(SDL_FALSE);
-	}
-	//---
+void DemoScene::update()
+{
+	//**Rotation needs to be reset in the model for it to work properly
+	//Will need to look into a fix
+	//testModel2->rotate(((float)SDL_GetTicks() / 1000) * glm::radians(50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 void DemoScene::render()
@@ -169,10 +142,6 @@ void DemoScene::render()
 	//Renderer
 	m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_shaderProgram, modelList, lightList);
 	//m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_skyboxProgram, skybox);
-
-	//**Rotation needs to be reset in the model for it to work properly
-	//Will need to look into a fix
-	//testModel2->rotate(((float)SDL_GetTicks() / 1000) * glm::radians(50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	//Swap buffers for double buffering; Must be after render is called
 	m_renderer->swapBuffers(EngineCore::getInstance()->getWindow());

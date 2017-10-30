@@ -11,6 +11,7 @@ public:
 	virtual ~DemoScene2();
 
 	virtual bool initialize();
+	virtual void processInput();
 	virtual void update();
 	virtual void render();
 	virtual void draw();
