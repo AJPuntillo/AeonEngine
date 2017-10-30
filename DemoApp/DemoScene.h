@@ -22,7 +22,6 @@ public:
 	virtual void draw();
 
 private:
-	unsigned int VBO, VAO;
 	//Camera
 	AEON_ENGINE::Camera* m_camera;
 	//Shader Program

@@ -45,23 +45,23 @@ Custom C++ engine
 
 ### TO DO
 
-- Optimization~~/CPU Usuage~~
-- ~~Most optimal place for processing inputs~~
-- ~~Model Class (Primitive and assimp)~~
-- ~~Lighting~~
+- Optimization
+- Finish Documentation
+- Implement ResourceManager
 - Advanced Lighting
-- ~~Fix Shader class path~~
-- ~~Timing class~~
-- Scene does not "delete" when switched to another scene
-- ~~Engine Core class should only initialize engine specific classes and any other user-specific preferences (eg. window size, which shaders to use) should be created somewhere else~~
-- ~~Process Input method for Game and Scene Interface~~
-- ~~Resizable window/Fullscreen~~
 - Physics
 - Math
 - Audio
+- Scene does not "delete" when switched to another scene
+- ~~Most optimal place for processing inputs~~
+- ~~Model Class (Primitive and assimp)~~
+- ~~Lighting~~
+- ~~Fix Shader class path~~
+- ~~Timing class~~
+- ~~Engine Core class should only initialize engine specific classes and any other user-specific preferences (eg. window size, which shaders to use) should be created somewhere else~~
+- ~~Process Input method for Game and Scene Interface~~
+- ~~Resizable window/Fullscreen~~
 - ~~Properly fix the Rendering classes and hook up the Renderer~~
-- Finish Documentation
-- Implement ResourceManager
 - ~~Localize matrices for each model~~
 - ~~Fix transformations in model class~~
 - ~~Textures~~
