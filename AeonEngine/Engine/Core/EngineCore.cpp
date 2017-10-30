@@ -1,4 +1,5 @@
 #include "EngineCore.h"
+#include "Timer.h"
 
 using namespace AEON_ENGINE;
 
@@ -60,13 +61,19 @@ bool EngineCore::initialize(std::string windowName, int windowHeight, int window
 	return true;
 }
 
-void EngineCore::run()
+void EngineCore::run(int maxFPS_, bool printTimer_)
 {
 	//Set the isRunning state to true the first time this method is called
 	m_isRunning = true;
 
+	//Timestep/FPS Limiter
+	Timer timer;
+	timer.startTimer();
+
 	//Maintain the game loop while this engine is running
 	while (m_isRunning) {
+		//Begin getting frameticks; Must be at the start of the loop
+		timer.updateFrameTicks();
 		//Take in Input
 		updateInput();
 		//Update the world
@@ -75,6 +82,14 @@ void EngineCore::run()
 		render();
 		//Draw 2D ontop of the 3D
 		draw();
+		//FPS Limiter; limits the frames per second and keeps the main loop running at a specified pace
+		SDL_Delay(timer.getSleepTime(maxFPS_));
+
+		//If FPS/Delta Time need to be printed out for debugging
+		if (printTimer_) {
+			std::cout << "FPS: " << (1.0f / timer.getDeltaTime()) << std::endl;
+			std::cout << "Delta Time: " << timer.getDeltaTime() << std::endl;
+		}
 	}
 }
 

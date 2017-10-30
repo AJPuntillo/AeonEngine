@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="Engine\Camera\Camera.cpp" />
     <ClCompile Include="Engine\Core\EngineCore.cpp" />
+    <ClCompile Include="Engine\Core\Timer.cpp" />
     <ClCompile Include="Engine\Core\Window.cpp" />
     <ClCompile Include="Engine\Events\InputManager.cpp" />
     <ClCompile Include="Engine\Graphics\Shader.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="Engine\Core\EngineCore.h" />
     <ClInclude Include="Engine\Core\GameInterface.h" />
     <ClInclude Include="Engine\Core\SceneInterface.h" />
+    <ClInclude Include="Engine\Core\Timer.h" />
     <ClInclude Include="Engine\Core\Window.h" />
     <ClInclude Include="Engine\Events\InputManager.h" />
     <ClInclude Include="Engine\Graphics\Shader.h" />

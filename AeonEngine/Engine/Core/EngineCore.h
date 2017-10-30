@@ -47,7 +47,7 @@ namespace AEON_ENGINE {
 		static void TerminateGame();
 
 		bool initialize(std::string windowName = "Untitled", int windowHeight = 800, int windowWidth = 600, int windowFlags = 0); //Default values loaded if none specified
-		void run();
+		void run(int maxFPS_ = 100, bool printTimer_ = false);
 		void update();
 		void render();
 		void draw();

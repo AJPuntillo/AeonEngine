@@ -87,6 +87,8 @@ void DemoScene::processInput()
 	deltaTime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
 
+	//std::cout << deltaTime << std::endl;
+
 	//Camera movement with mouse
 	m_camera->processMouse(EngineCore::getInstance()->getInputManager());
 
