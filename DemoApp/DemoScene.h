@@ -8,6 +8,7 @@
 #include <AeonEngine/Engine/Rendering/3D/PrimitiveModel.h>
 #include <AeonEngine/Engine/Rendering/3D/Light.h>
 #include <AeonEngine/Engine/Rendering/3D/Skybox.h>
+#include <AeonEngine/Engine/Rendering/3D/Framebuffer.h>
 
 class DemoScene : public AEON_ENGINE::SceneInterface
 {
@@ -28,6 +29,7 @@ private:
 	AEON_ENGINE::Shader* m_shaderProgram = nullptr;
 	AEON_ENGINE::Shader* m_containerProgram = nullptr;
 	AEON_ENGINE::Shader* m_skyboxProgram = nullptr;
+	AEON_ENGINE::Shader* m_framebufferProgram = nullptr;
 	//Renderer
 	AEON_ENGINE::Renderer* m_renderer;
 	//Models
@@ -39,6 +41,8 @@ private:
 	//Skybox
 	AEON_ENGINE::Skybox* skybox;
 	std::vector<std::string> skyboxFaces;
+	//Framebuffer
+	AEON_ENGINE::Framebuffer* framebuffer;
 	//Model Lists
 	std::vector<AEON_ENGINE::Entity*> modelList;
 	std::vector<AEON_ENGINE::Light*> lightList;

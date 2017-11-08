@@ -6,48 +6,55 @@ PrimitiveModel::PrimitiveModel()
 {
 	m_pos = glm::vec3(0.0f, 0.0f, 0.0f);
 	translate(m_pos);
-	loadMesh();
+	loadMesh(PRIM_TYPE_CUBE);
 }
 
-PrimitiveModel::PrimitiveModel(const glm::vec3 pos_, char const* diffusePath_, char const* specularPath_)
+PrimitiveModel::PrimitiveModel(const int primitiveType_, const glm::vec3 pos_, char const* diffusePath_, char const* specularPath_)
 {
 	m_pos = pos_;
 	translate(m_pos);
-	loadMesh();
+	loadMesh(primitiveType_);
 	texture_diffuse = loadTexture(diffusePath_);
 	texture_specular = loadTexture(specularPath_);
 }
 
-PrimitiveModel::PrimitiveModel(const glm::vec3 pos_, char const* diffusePath_)
+PrimitiveModel::PrimitiveModel(const int primitiveType_, const glm::vec3 pos_, char const* diffusePath_)
 {
 	m_pos = pos_;
 	translate(m_pos);
-	loadMesh();
+	loadMesh(primitiveType_);
 	texture_diffuse = loadTexture(diffusePath_);
 }
 
-PrimitiveModel::PrimitiveModel(char const* diffusePath_, char const* specularPath_)
+PrimitiveModel::PrimitiveModel(const int primitiveType_, char const* diffusePath_, char const* specularPath_)
 {
 	m_pos = glm::vec3(0.0f, 0.0f, 0.0f);
 	translate(m_pos);
-	loadMesh();
+	loadMesh(primitiveType_);
 	texture_diffuse = loadTexture(diffusePath_);
 	texture_specular = loadTexture(specularPath_);
 }
 
-PrimitiveModel::PrimitiveModel(const glm::vec3 pos_)
+PrimitiveModel::PrimitiveModel(const int primitiveType_, const glm::vec3 pos_)
 {
 	m_pos = pos_;
 	translate(m_pos);
-	loadMesh();
+	loadMesh(primitiveType_);
 }
 
-PrimitiveModel::PrimitiveModel(char const* diffusePath_)
+PrimitiveModel::PrimitiveModel(const int primitiveType_, char const* diffusePath_)
 {
 	m_pos = glm::vec3(0.0f, 0.0f, 0.0f);
 	translate(m_pos);
-	loadMesh();
+	loadMesh(primitiveType_);
 	texture_diffuse = loadTexture(diffusePath_);
+}
+
+PrimitiveModel::PrimitiveModel(const int primitiveType_)
+{
+	m_pos = glm::vec3(0.0f, 0.0f, 0.0f);
+	translate(m_pos);
+	loadMesh(primitiveType_);
 }
 
 PrimitiveModel::~PrimitiveModel()
@@ -105,9 +112,9 @@ void PrimitiveModel::render(Shader* shader_)
 	//m_rotationMatrix = glm::mat4();
 }
 
-bool PrimitiveModel::loadMesh()
+bool PrimitiveModel::loadMesh(const int primitiveType_)
 {
-	m_meshes.push_back(new PrimitiveMesh());
+	m_meshes.push_back(new PrimitiveMesh(primitiveType_));
 	return true;
 }
 

@@ -58,6 +58,9 @@ void Renderer::render(Camera* camera_, Window* window_, Shader* shader_, std::ve
 	shader_->setVec3("dirLight.specular", lights_[0]->getSpecular());
 	shader_->setFloat("shininess", lights_[0]->getShininess());
 
+	//Enable face culling (Default set to CCW)
+	glEnable(GL_CULL_FACE);
+
 	for (Entity* entity : models_) {
 		entity->render(shader_);
 	}
@@ -65,9 +68,11 @@ void Renderer::render(Camera* camera_, Window* window_, Shader* shader_, std::ve
 	for (Light* light : lights_) {
 		light->render(shader_);
 	}
+
+	glDisable(GL_CULL_FACE);
 }
 
-void Renderer::render(Camera* camera_, Window* window_, Shader* shader_, std::vector<Entity*> models_) //Change to take in a vector of models/entity
+void Renderer::render(Camera* camera_, Window* window_, Shader* shader_, std::vector<Entity*> models_)
 {
 	shader_->use();
 
@@ -78,9 +83,13 @@ void Renderer::render(Camera* camera_, Window* window_, Shader* shader_, std::ve
 	//Set view position for lighting
 	shader_->setVec3("viewPos", camera_->getPos());
 
+	glEnable(GL_CULL_FACE);
+
 	for (Entity* entity : models_) {
 		entity->render(shader_);
 	}
+
+	glDisable(GL_CULL_FACE);
 }
 
 void Renderer::render(Camera* camera_, Window* window_, Shader* shader_, Entity* skybox_)
@@ -94,6 +103,19 @@ void Renderer::render(Camera* camera_, Window* window_, Shader* shader_, Entity*
 	shader_->setMat4("projection", camera_->getProj());
 
 	skybox_->render(shader_);
+}
+
+void Renderer::render(Window* window_, Shader* shader_, Framebuffer* framebuffer_)
+{
+	shader_->use();
+
+	//Disable depth testing so that the plane is properly rendered and not culled
+	glDisable(GL_DEPTH_TEST);
+
+	framebuffer_->render(shader_);
+
+	//Enable depth testing after the plane is rendered
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Renderer::clearBuffers(glm::vec4 clearColour_)

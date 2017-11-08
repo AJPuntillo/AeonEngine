@@ -63,6 +63,9 @@
     <ClCompile Include="Engine\Core\Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Rendering\3D\Framebuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera\Camera.h">
@@ -119,6 +122,9 @@
     <ClInclude Include="Engine\Core\Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Rendering\3D\Framebuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Graphics\Shaders\fragShaderTest.glsl" />
@@ -131,5 +137,7 @@
     <None Include="Engine\Graphics\Shaders\skyboxFrag.glsl" />
     <None Include="Engine\Graphics\Shaders\lightingShaderFrag.glsl" />
     <None Include="Engine\Graphics\Shaders\lightingShaderVert.glsl" />
+    <None Include="Engine\Graphics\Shaders\framebuffersFrag.glsl" />
+    <None Include="Engine\Graphics\Shaders\framebuffersVert.glsl" />
   </ItemGroup>
 </Project>

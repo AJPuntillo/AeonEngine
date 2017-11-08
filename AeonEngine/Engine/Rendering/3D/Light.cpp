@@ -122,5 +122,5 @@ void Light::render(Shader* shader_)
 
 void Light::loadMesh()
 {
-	m_mesh = new PrimitiveMesh();
+	m_mesh = new PrimitiveMesh(PRIM_TYPE_CUBE);
 }

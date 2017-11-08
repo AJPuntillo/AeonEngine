@@ -1,6 +1,12 @@
 #ifndef SKYBOX_H
 #define SKYBOX_H
 
+//***
+//Skybox Class:
+//The skybox class is a specific entity used to render a cubemap/skybox.
+//Inherits from Entity and needs a SkyboxMesh
+//***
+
 #include <glm/glm.hpp>
 
 #include "Entity.h"

@@ -150,6 +150,7 @@
     <ClCompile Include="Engine\Events\InputManager.cpp" />
     <ClCompile Include="Engine\Graphics\Shader.cpp" />
     <ClCompile Include="Engine\Graphics\stb_image.cpp" />
+    <ClCompile Include="Engine\Rendering\3D\Framebuffer.cpp" />
     <ClCompile Include="Engine\Rendering\3D\Light.cpp" />
     <ClCompile Include="Engine\Rendering\3D\Mesh.cpp" />
     <ClCompile Include="Engine\Rendering\3D\Model.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="Engine\Graphics\Shader.h" />
     <ClInclude Include="Engine\Graphics\stb_image.h" />
     <ClInclude Include="Engine\Rendering\3D\Entity.h" />
+    <ClInclude Include="Engine\Rendering\3D\Framebuffer.h" />
     <ClInclude Include="Engine\Rendering\3D\Light.h" />
     <ClInclude Include="Engine\Rendering\3D\Mesh.h" />
     <ClInclude Include="Engine\Rendering\3D\Model.h" />
@@ -181,6 +183,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Graphics\Shaders\fragShaderTest.glsl" />
+    <None Include="Engine\Graphics\Shaders\framebuffersFrag.glsl" />
+    <None Include="Engine\Graphics\Shaders\framebuffersVert.glsl" />
     <None Include="Engine\Graphics\Shaders\lightingShaderFrag.glsl" />
     <None Include="Engine\Graphics\Shaders\lightingShaderVert.glsl" />
     <None Include="Engine\Graphics\Shaders\modelShaderFrag.glsl" />

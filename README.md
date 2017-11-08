@@ -43,18 +43,23 @@ Custom C++ engine
 - Added a fullscreen method to the Window class allowing to toggle fullscreen
 - Fixed issues with changing window focus; mouse is captured correctly now
 
+**[11/08/17]**
+- Added a Framebuffer class that allows the user to render the scene to a plane (Good for post-processing effects)
+- PrimtiveModel now takes in a parameter to determine if it is rendering a Cube or a Plane
+
 ### TO DO
 
 - Optimization
 - Finish Documentation
 - Implement ResourceManager
 - Advanced Lighting
-- Face culling
-- Physics
-- Math
-- Audio
-- Controller support
 - Scene does not "delete" when switched to another scene
+- Physics (Adid)
+- Math (Adid)
+- Audio (Haifeng)
+- 2D Graphics/HUD (Haifeng)
+- Controller support (Fabio)
+- ~~Face culling~~
 - ~~Most optimal place for processing inputs~~
 - ~~Model Class (Primitive and assimp)~~
 - ~~Lighting~~

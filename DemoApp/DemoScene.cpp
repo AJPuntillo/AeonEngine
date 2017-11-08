@@ -24,6 +24,9 @@ DemoScene::~DemoScene()
 	delete m_skyboxProgram;
 	m_skyboxProgram = nullptr;
 
+	delete m_framebufferProgram;
+	m_framebufferProgram = nullptr;
+
 	delete testModel;
 	testModel = nullptr;
 
@@ -35,6 +38,9 @@ DemoScene::~DemoScene()
 
 	delete skybox;
 	skybox = nullptr;
+
+	delete framebuffer;
+	framebuffer = nullptr;
 }
 
 bool DemoScene::initialize()
@@ -52,9 +58,10 @@ bool DemoScene::initialize()
 	m_shaderProgram = new Shader("../AeonEngine/Engine/Graphics/Shaders/lightingShaderVert.glsl", "../AeonEngine/Engine/Graphics/Shaders/lightingShaderFrag.glsl");
 	m_containerProgram = new Shader("../AeonEngine/Engine/Graphics/Shaders/primitiveCubeVert.glsl", "../AeonEngine/Engine/Graphics/Shaders/primitiveCubeFrag.glsl");
 	m_skyboxProgram = new Shader("../AeonEngine/Engine/Graphics/Shaders/skyboxVert.glsl", "../AeonEngine/Engine/Graphics/Shaders/skyboxFrag.glsl");
+	m_framebufferProgram = new Shader("../AeonEngine/Engine/Graphics/Shaders/framebuffersVert.glsl", "../AeonEngine/Engine/Graphics/Shaders/framebuffersFrag.glsl");
 
 	//Models
-	testModel = new PrimitiveModel(glm::vec3(0.0f, 0.0f, 0.0f), "Resources/Textures/container.png", "Resources/Textures/container_specular.png");
+	testModel = new PrimitiveModel(PRIM_TYPE_CUBE, glm::vec3(0.0f, 0.0f, 0.0f), "Resources/Textures/container.png", "Resources/Textures/container_specular.png");
 	modelList.push_back(testModel);
 	testModel2 = new Model(glm::vec3(1.5f, -2.5f, 0.0f), "Resources/Models/Nanosuit/nanosuit.obj");
 	testModel2->scale(glm::vec3(0.25f, 0.25f, 0.25f));
@@ -76,6 +83,9 @@ bool DemoScene::initialize()
 		"Resources/Cubemaps/Sky/front.jpg"
 	};
 	skybox = new Skybox(skyboxFaces);
+
+	//Framebuffer
+	framebuffer = new Framebuffer(EngineCore::getInstance()->getWindow());
 
 	return true;
 }
@@ -101,16 +111,16 @@ void DemoScene::processInput()
 
 	//Moving the cube test--
 	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_RIGHT))
-		pointLight->translate(glm::vec3(2.5f, 0.0f, 0.0f) * m_deltaTime);
+		testModel->translate(glm::vec3(2.5f, 0.0f, 0.0f) * m_deltaTime);
 
 	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_LEFT))
-		pointLight->translate(glm::vec3(-2.5f, 0.0f, 0.0f) * m_deltaTime);
+		testModel->translate(glm::vec3(-2.5f, 0.0f, 0.0f) * m_deltaTime);
 
 	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_UP))
-		pointLight->translate(glm::vec3(0.0f, 2.5f, 0.0f) * m_deltaTime);
+		testModel->translate(glm::vec3(0.0f, 2.5f, 0.0f) * m_deltaTime);
 
 	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_DOWN))
-		pointLight->translate(glm::vec3(-0.0f, -2.5f, 0.0f) * m_deltaTime);
+		testModel->translate(glm::vec3(-0.0f, -2.5f, 0.0f) * m_deltaTime);
 	//--
 
 	//Toggle Mouse Capture
@@ -126,6 +136,9 @@ void DemoScene::update(float deltaTime_)
 	//Update the deltaTime for the processInput
 	m_deltaTime = deltaTime_;
 
+	//Update the framebuffer incase of screen size changes (Might not want to check every update, rather only check when screensize changes)
+	framebuffer->updateFramebufferSize(EngineCore::getInstance()->getWindow());
+
 	//**Rotation needs to be reset in the model for it to work properly
 	//Will need to look into a fix
 	//testModel2->rotate(((float)SDL_GetTicks() / 1000) * glm::radians(50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -133,6 +146,9 @@ void DemoScene::update(float deltaTime_)
 
 void DemoScene::render()
 {	
+	//Bind to the framebuffer and draw a scene as we normally would to colour texture; Must be called at the start of render
+	framebuffer->bindBuffer();
+
 	//Clear buffers (and clear the background colour); Must be before render is called
 	m_renderer->clearBuffers();
 
@@ -142,7 +158,10 @@ void DemoScene::render()
 
 	//Renderer
 	m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_shaderProgram, modelList, lightList);
-	//m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_skyboxProgram, skybox);
+	m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_skyboxProgram, skybox);
+
+	//Must render the framebuffer last
+	m_renderer->render(EngineCore::getInstance()->getWindow(), m_framebufferProgram, framebuffer);
 
 	//Swap buffers for double buffering; Must be after render is called
 	m_renderer->swapBuffers(EngineCore::getInstance()->getWindow());

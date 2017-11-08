@@ -67,7 +67,7 @@ bool TutorialScene::initialize()
 	//PrimitiveModels have a few overloaded constructors, they can be loaded with a position and a texture.. or not
 	//I would check out the class to see your options on intialize them
 	//I am providing the contructor with a Vec3 that will serve as the container's position, and a path the texture I want to load
-	m_modelContainer = new PrimitiveModel(glm::vec3(0.0f, 0.0f, 0.0f), "Resources/Textures/container.png");
+	m_modelContainer = new PrimitiveModel(PRIM_TYPE_CUBE, glm::vec3(0.0f, 0.0f, 0.0f), "Resources/Textures/container.png");
 	//Now we push the newly intialized model into the model list we created in the header file
 	//Because they are pure virtual, they are able to be pushed into a list of type 'Entity'
 	m_modelList.push_back(m_modelContainer);
