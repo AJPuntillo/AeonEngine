@@ -30,14 +30,16 @@ private:
 	AEON_ENGINE::Shader* m_containerProgram = nullptr;
 	AEON_ENGINE::Shader* m_skyboxProgram = nullptr;
 	AEON_ENGINE::Shader* m_framebufferProgram = nullptr;
+	AEON_ENGINE::Shader* m_instanceProgram = nullptr;
 	//Renderer
 	AEON_ENGINE::Renderer* m_renderer;
 	//Models
 	AEON_ENGINE::PrimitiveModel* testModel;
 	AEON_ENGINE::Model* testModel2;
 	//Light List
-	AEON_ENGINE::Light* spotLight;
+	AEON_ENGINE::Light* dirLight;
 	AEON_ENGINE::Light* pointLight;
+	AEON_ENGINE::Light* pointLight2;
 	//Skybox
 	AEON_ENGINE::Skybox* skybox;
 	std::vector<std::string> skyboxFaces;
@@ -47,11 +49,12 @@ private:
 	std::vector<AEON_ENGINE::Entity*> modelList;
 	std::vector<AEON_ENGINE::Light*> lightList;
 
-	//Makeshift bool to capture mouse, will need to change later (Possibly in its own method of the InputManager)
-	bool captureMouse = true;
-
 	//Timing
 	float m_deltaTime = 0.0f; //Time between current frame and last frame
+
+	std::vector<AEON_ENGINE::Light*> m_pointList;
+	std::vector<AEON_ENGINE::Light*> m_directionalList;
+	unsigned int lightListSize = 0;
 };
 
 #endif

@@ -73,6 +73,7 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)deps/include/;$(SolutionDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)deps/lib/;$(SolutionDir)Debug/;$(LibraryPath)</LibraryPath>
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -92,6 +93,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>
+      </MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

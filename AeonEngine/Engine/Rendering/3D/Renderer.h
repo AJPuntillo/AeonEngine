@@ -36,6 +36,11 @@ namespace AEON_ENGINE {
 
 		//Post-Render; Must be after render is called
 		void swapBuffers(Window* window_);
+
+	private:
+		std::vector<Light*> m_pointList;
+		std::vector<Light*> m_directionalList;
+		unsigned int lightListSize = 0;
 	};
 
 }

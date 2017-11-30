@@ -33,8 +33,8 @@ DemoScene::~DemoScene()
 	delete testModel2;
 	testModel2 = nullptr;
 
-	delete spotLight;
-	spotLight = nullptr;
+	delete dirLight;
+	dirLight = nullptr;
 
 	delete skybox;
 	skybox = nullptr;
@@ -59,6 +59,7 @@ bool DemoScene::initialize()
 	m_containerProgram = new Shader("../AeonEngine/Engine/Graphics/Shaders/primitiveCubeVert.glsl", "../AeonEngine/Engine/Graphics/Shaders/primitiveCubeFrag.glsl");
 	m_skyboxProgram = new Shader("../AeonEngine/Engine/Graphics/Shaders/skyboxVert.glsl", "../AeonEngine/Engine/Graphics/Shaders/skyboxFrag.glsl");
 	m_framebufferProgram = new Shader("../AeonEngine/Engine/Graphics/Shaders/framebuffersVert.glsl", "../AeonEngine/Engine/Graphics/Shaders/framebuffersFrag.glsl");
+	m_instanceProgram = new Shader("../AeonEngine/Engine/Graphics/Shaders/instancingModelVert.glsl", "../AeonEngine/Engine/Graphics/Shaders/lightingShaderFrag.glsl");
 
 	//Models
 	testModel = new PrimitiveModel(PRIM_TYPE_CUBE, glm::vec3(0.0f, 0.0f, 0.0f), "Resources/Textures/container.png", "Resources/Textures/container_specular.png");
@@ -68,10 +69,12 @@ bool DemoScene::initialize()
 	modelList.push_back(testModel2);
 
 	//Lights
-	//pointLight = new Light(AEON_ENGINE::Light::LightType::POINT, glm::vec3(0.0f, 0.0f, 2.0f), true);
-	//lightList.push_back(pointLight);
-	spotLight = new Light(AEON_ENGINE::Light::LightType::DIRECTIONAL, glm::vec3(0.0f, 0.0f, 0.0f), false);
-	lightList.push_back(spotLight);
+	pointLight = new Light(LIGHT_POINT, glm::vec3(0.0f, 0.0f, 2.0f), true);
+	lightList.push_back(pointLight);
+	pointLight2 = new Light(LIGHT_POINT, glm::vec3(3.0f, 0.0f, 0.0f), true);
+	lightList.push_back(pointLight2);
+	dirLight = new Light(LIGHT_DIRECTIONAL, glm::vec3(0.0f, 0.0f, 0.0f), false);
+	lightList.push_back(dirLight);
 
 	//Skybox
 	skyboxFaces = {
@@ -110,17 +113,23 @@ void DemoScene::processInput()
 	//--
 
 	//Moving the cube test--
-	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_RIGHT))
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_x))
 		testModel->translate(glm::vec3(2.5f, 0.0f, 0.0f) * m_deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_LEFT))
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_z))
 		testModel->translate(glm::vec3(-2.5f, 0.0f, 0.0f) * m_deltaTime);
 
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_RIGHT))
+		pointLight->translate(glm::vec3(2.5f, 0.0f, 0.0f) * m_deltaTime);
+
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_LEFT))
+		pointLight->translate(glm::vec3(-2.5f, 0.0f, 0.0f) * m_deltaTime);
+
 	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_UP))
-		testModel->translate(glm::vec3(0.0f, 2.5f, 0.0f) * m_deltaTime);
+		pointLight->translate(glm::vec3(0.0f, 2.5f, 0.0f) * m_deltaTime);
 
 	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_DOWN))
-		testModel->translate(glm::vec3(-0.0f, -2.5f, 0.0f) * m_deltaTime);
+		pointLight->translate(glm::vec3(-0.0f, -2.5f, 0.0f) * m_deltaTime);
 	//--
 
 	//Toggle Mouse Capture
@@ -158,7 +167,7 @@ void DemoScene::render()
 
 	//Renderer
 	m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_shaderProgram, modelList, lightList);
-	m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_skyboxProgram, skybox);
+	//m_renderer->render(m_camera, EngineCore::getInstance()->getWindow(), m_skyboxProgram, skybox);
 
 	//Must render the framebuffer last
 	m_renderer->render(EngineCore::getInstance()->getWindow(), m_framebufferProgram, framebuffer);

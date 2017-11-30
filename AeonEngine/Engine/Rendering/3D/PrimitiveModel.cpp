@@ -90,13 +90,13 @@ void PrimitiveModel::render(Shader* shader_)
 	shader_->setMat4("model", m_modelMatrix);
 
 	//Set texture (if there is one)
-	if (&texture_diffuse != nullptr) {
+	if (&texture_diffuse != 0) {
 		shader_->setInt("texture_diffuse1", 0);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture_diffuse);
 	}
 
-	if (&texture_specular != nullptr) {
+	if (&texture_specular != 0) {
 		shader_->setInt("texture_specular1", 1);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture_specular);
@@ -105,6 +105,8 @@ void PrimitiveModel::render(Shader* shader_)
 	for (PrimitiveMesh* mesh : m_meshes) {
 		mesh->render();
 	}
+
+	glBindTexture(GL_TEXTURE_2D, 0); //Unbind the texture as a precaution
 
 	//Currently the rotation and scale matrices are being reset and redrawn to prevent additive adjustents
 	//Not sure if this is extremely inefficient, will have to revisit
@@ -156,5 +158,6 @@ unsigned int PrimitiveModel::loadTexture(char const* path_)
 		stbi_image_free(data);
 	}
 
+	glBindTexture(GL_TEXTURE_2D, 0); //As a precaution, unbind the texture after it has been created
 	return textureID;
 }

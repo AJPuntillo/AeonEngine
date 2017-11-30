@@ -3,11 +3,12 @@ out vec4 FragColour;
 
 in vec2 TexCoords;
 
-uniform sampler2D texture_diffuse1;
+uniform sampler2D screenTexture;
 
 void main()
 {    
-	FragColour = texture(texture_diffuse1, TexCoords);
+	vec3 col = texture(screenTexture, TexCoords).rgb;
+    FragColour = vec4(col, 1.0);
 }
 
 /* Kernal for various post processing effects

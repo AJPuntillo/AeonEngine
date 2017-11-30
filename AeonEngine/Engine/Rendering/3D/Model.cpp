@@ -51,6 +51,8 @@ void Model::render(Shader* shader_)
 	for (unsigned int i = 0; i < meshes.size(); i++)
 		meshes[i].render(shader_);
 
+	glBindTexture(GL_TEXTURE_2D, 0); //Unbind the texture as a precaution
+
 	//Currently the rotation and scale matrices are being reset and redrawn to prevent additive adjustents
 	//Not sure if this is extremely inefficient, will have to revisit
 	//***The matrices need to be reset when constantly updated
@@ -206,6 +208,7 @@ unsigned int Model::loadTextureFromFile(const char* path_, const std::string& di
 		stbi_image_free(data);
 	}
 
+	glBindTexture(GL_TEXTURE_2D, 0); //As a precaution, unbind the texture after it has been created
 	return textureID;
 }
 

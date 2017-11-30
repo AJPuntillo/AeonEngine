@@ -25,7 +25,7 @@ namespace AEON_ENGINE {
 
 	class PrimitiveMesh
 	{
-	//Primitive type defines (Might want to chane to enum later)
+	//Primitive type defines (Might want to change to enum later)
 	#define PRIM_TYPE_CUBE 0
 	#define PRIM_TYPE_PLANE 1
 

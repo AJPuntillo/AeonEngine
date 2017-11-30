@@ -45,7 +45,7 @@ Framebuffer::~Framebuffer()
 
 void Framebuffer::render(Shader* shader_)
 {
-	shader_->setInt("texture_diffuse1", 0);
+	shader_->setInt("screenTexture", 0);
 
 	//Bind to the default framebuffer and draw a plane with the attached framebuffer colour texture
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -57,6 +57,8 @@ void Framebuffer::render(Shader* shader_)
 	glBindTexture(GL_TEXTURE_2D, m_texColourBuffer);
 
 	m_mesh->render();
+
+	glBindTexture(GL_TEXTURE_2D, 0); //Unbind the texture as a precaution
 }
 
 bool Framebuffer::loadMesh()

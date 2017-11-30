@@ -139,5 +139,7 @@
     <None Include="Engine\Graphics\Shaders\lightingShaderVert.glsl" />
     <None Include="Engine\Graphics\Shaders\framebuffersFrag.glsl" />
     <None Include="Engine\Graphics\Shaders\framebuffersVert.glsl" />
+    <None Include="Engine\Graphics\Shaders\instancingModelFrag.glsl" />
+    <None Include="Engine\Graphics\Shaders\instancingModelVert.glsl" />
   </ItemGroup>
 </Project>

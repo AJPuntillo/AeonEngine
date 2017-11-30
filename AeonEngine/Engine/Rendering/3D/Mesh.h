@@ -44,6 +44,9 @@ namespace AEON_ENGINE {
 		std::vector<unsigned int> indices;
 		std::vector<Texture> textures;
 
+		//Getters
+		unsigned int getVAO() { return m_VAO; }
+
 	private:
 		//Render data
 		unsigned int m_VAO, m_VBO, m_EBO;

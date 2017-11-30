@@ -47,6 +47,9 @@ Custom C++ engine
 - Added a Framebuffer class that allows the user to render the scene to a plane (Good for post-processing effects)
 - PrimtiveModel now takes in a parameter to determine if it is rendering a Cube or a Plane
 
+**[11/30/17]**
+- Fixed the elusive texture binding bug
+
 ### TO DO
 
 - Optimization
@@ -56,7 +59,7 @@ Custom C++ engine
 - Scene does not "delete" when switched to another scene
 - Physics (Adid)
 - Math (Adid)
-- Audio (Haifeng)
+- ~~Audio~~ (Haifeng)
 - 2D Graphics/HUD (Haifeng)
 - Controller support (Fabio)
 - ~~Face culling~~
