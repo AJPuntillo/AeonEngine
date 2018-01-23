@@ -16,34 +16,6 @@
 
 namespace AEON_ENGINE {
 
-	//class Model
-	//{
-	//public:
-	//	Model(const glm::vec3 pos_);
-	//	virtual ~Model();
-
-	//	//Matrix manipulation
-	//	void rotate(const float angle_, const glm::vec3& vec_);
-	//	void translate(const glm::vec3& vec_);
-	//	void scale(const glm::vec3& vec_);
-
-	//	//Updating and rendering
-	//	void update(const float deltaTime);
-	//	void render(Shader* shader_);
-
-	//	//Loading the model/textures through assimp
-	//	void loadMesh(std::string path_);
-	//	void processNode(aiNode* node_, const aiScene* scene_);
-	//	Mesh processMesh(aiMesh* mesh_, const aiScene* scene_);
-	//	std::vector<Texture> loadMaterialTextures(aiMaterial* mat_, aiTextureType type_, std::string typeName_);
-	//	unsigned int loadTextureFromFile(char const* path_, const std::string& directory_);
-
-	//private:
-	//	std::vector<Mesh> m_meshes;
-	//	std::vector<Texture> m_textures_loaded;
-	//	std::string m_directory;
-	//};
-
 	class Model : public Entity
 	{
 	public:

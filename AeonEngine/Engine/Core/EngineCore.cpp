@@ -87,8 +87,8 @@ void EngineCore::run(int maxFPS_, bool printTimer_)
 
 		//If FPS/Delta Time need to be printed out for debugging
 		if (printTimer_) {
-			std::cout << "FPS: " << (1.0f / timer.getDeltaTime()) << std::endl;
-			std::cout << "Delta Time: " << timer.getDeltaTime() << std::endl;
+			//std::cout << "FPS: " << (1.0f / timer.getDeltaTime()) << std::endl;
+			//std::cout << "Delta Time: " << timer.getDeltaTime() << std::endl;
 		}
 	}
 }

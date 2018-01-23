@@ -7,6 +7,7 @@
 #include "PrimitiveMesh.h"
 #include "../../Camera/Camera.h"
 #include "../../Graphics/stb_image.h"
+#include "../../Physics/AABB.h"
 
 #include <vector>
 
@@ -16,11 +17,13 @@ namespace AEON_ENGINE {
 	{
 	public:
 		PrimitiveModel();
-		PrimitiveModel(const glm::vec3 pos_, char const* diffusePath_, char const* specularPath_);
-		PrimitiveModel(const glm::vec3 pos_, char const* diffusePath_);
-		PrimitiveModel(char const* diffusePath_, char const* specularPath_);
-		PrimitiveModel(const glm::vec3 pos_);
-		PrimitiveModel(char const* diffusePath_);
+		PrimitiveModel(const int primitiveType_, const glm::vec3 pos_, char const* diffusePath_, char const* specularPath_);
+		PrimitiveModel(const int primitiveType_, const glm::vec3 pos_, char const* diffusePath_);
+		PrimitiveModel(const int primitiveType_, char const* diffusePath_, char const* specularPath_);
+		PrimitiveModel(const int primitiveType_, const glm::vec3 pos_);
+		PrimitiveModel(const int primitiveType_, char const* diffusePath_);
+		PrimitiveModel(const int primitiveType_);
+		void setupVolume();
 
 		virtual ~PrimitiveModel();
 
@@ -31,8 +34,12 @@ namespace AEON_ENGINE {
 		void update(const float deltaTime) override;
 		void render(Shader* shader_) override;
 
-		bool loadMesh();
+		bool loadMesh(const int primitiveType_);
 		unsigned int loadTexture(char const *path_);
+		PrimitiveMesh* getMesh();
+
+		AABB BoundingBox;
+
 
 	private:
 		std::vector<PrimitiveMesh*> m_meshes;

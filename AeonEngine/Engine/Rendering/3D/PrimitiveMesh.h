@@ -25,10 +25,15 @@ namespace AEON_ENGINE {
 
 	class PrimitiveMesh
 	{
+	//Primitive type defines (Might want to change to enum later)
+	#define PRIM_TYPE_CUBE 0
+	#define PRIM_TYPE_PLANE 1
+
 	public:
-		PrimitiveMesh(); //Default loads basic cube vertices
+		PrimitiveMesh(const int primitiveType_); //Default loads basic cube vertices
 		PrimitiveMesh(std::vector<PrimitiveVertex> vertices_, std::vector<unsigned int> indices_);
 		~PrimitiveMesh();
+		std::vector<PrimitiveVertex>* getVerticies();
 
 		void render();
 

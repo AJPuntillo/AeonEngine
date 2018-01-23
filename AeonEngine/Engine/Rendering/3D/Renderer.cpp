@@ -20,43 +20,53 @@ void Renderer::render(Camera* camera_, Window* window_, Shader* shader_, std::ve
 	shader_->setMat4("view", camera_->getView());
 	shader_->setMat4("projection", camera_->getProj());
 
-	//***Temporarily disabled until advanced lgihting is explored
-	////Current bug that blends the different lights together to strongly
-	////Lighting
-	////Set view position for lighting
-	//shader_->setVec3("viewPos", camera_->getPos());
-	////Set the number of point lights in the scene
-	//shader_->setInt("NumOfLights", lights_.size());
-	////Loop through all the lights in the list and set their uniforms based on the Light Type
-	//for (int i = 0; i < lights_.size(); i++) {
-	//	switch (lights_[i]->getLightType()) {
-	//	case Light::LightType::DIRECTIONAL:
-	//		shader_->setVec3("dirLight.direction", lights_[i]->getDirection());
-	//		shader_->setVec3("dirLight.ambient", lights_[i]->getAmbient());
-	//		shader_->setVec3("dirLight.diffuse", lights_[i]->getDiffuse());
-	//		shader_->setVec3("dirLight.specular", lights_[i]->getSpecular());
-	//		shader_->setFloat("shininess", lights_[i]->getShininess());
-	//		break;
+	//Set view position for lighting
+	shader_->setVec3("viewPos", camera_->getPos());
+	//Set the number of point lights in the scene
+	shader_->setInt("NumOfLights", lights_.size());
 
-	//	case Light::LightType::POINT:
-	//		shader_->setVec3("pointLights[" + std::to_string(i) + "].position", lights_[i]->getPos());
-	//		shader_->setVec3("pointLights[" + std::to_string(i) + "].ambient", lights_[i]->getAmbient());
-	//		shader_->setVec3("pointLights[" + std::to_string(i) + "].diffuse", lights_[i]->getDiffuse());
-	//		shader_->setVec3("pointLights[" + std::to_string(i) + "].specular", lights_[i]->getSpecular());
-	//		shader_->setFloat("pointLights[" + std::to_string(i) + "].constant", lights_[i]->getConstant());
-	//		shader_->setFloat("pointLights[" + std::to_string(i) + "].linear", lights_[i]->getLinear());
-	//		shader_->setFloat("pointLights[" + std::to_string(i) + "].quadratic", lights_[i]->getQuadratic());
-	//		shader_->setFloat("shininess", lights_[i]->getShininess());
-	//		break;
-	//	}
-	//}
-	
-	//Temporary lighting; setting the direcitonal light
-	shader_->setVec3("dirLight.direction", lights_[0]->getDirection());
-	shader_->setVec3("dirLight.ambient", lights_[0]->getAmbient());
-	shader_->setVec3("dirLight.diffuse", lights_[0]->getDiffuse());
-	shader_->setVec3("dirLight.specular", lights_[0]->getSpecular());
-	shader_->setFloat("shininess", lights_[0]->getShininess());
+	//Check to see if the light vector has been increased/decreased in size, so that lights are constantly being pushed
+	if (lightListSize != lights_.size()) {
+		//Loop through all the lights and sort them in their own type-specific vector list
+		//This is to prevent the lights from being in the incorrect order in the shader's vector light lists
+		for (int i = 0; i < lights_.size(); i++) {
+			switch (lights_[i]->getLightType()) {
+			case LIGHT_DIRECTIONAL:
+				m_directionalList.push_back(lights_[i]);
+				break;
+
+			case LIGHT_POINT:
+				m_pointList.push_back(lights_[i]);
+			}
+		}
+
+		//If the light vector has changed, update the size value for the next comparison
+		lightListSize = lights_.size();
+	}
+
+	//Set the uniforms for each directional light in the vector list
+	for (int i = 0; i < m_directionalList.size(); i++) {
+		shader_->setVec3("dirLight.direction", m_directionalList[i]->getDirection());
+		shader_->setVec3("dirLight.ambient", m_directionalList[i]->getAmbient());
+		shader_->setVec3("dirLight.diffuse", m_directionalList[i]->getDiffuse());
+		shader_->setVec3("dirLight.specular", m_directionalList[i]->getSpecular());
+		shader_->setFloat("shininess", m_directionalList[i]->getShininess());
+	}
+
+	//Set the uniforms for each point light in the vector list
+	for (int i = 0; i < m_pointList.size(); i++) {
+		shader_->setVec3("pointLights[" + std::to_string(i) + "].position", m_pointList[i]->getPos());
+		shader_->setVec3("pointLights[" + std::to_string(i) + "].ambient", m_pointList[i]->getAmbient());
+		shader_->setVec3("pointLights[" + std::to_string(i) + "].diffuse", m_pointList[i]->getDiffuse());
+		shader_->setVec3("pointLights[" + std::to_string(i) + "].specular", m_pointList[i]->getSpecular());
+		shader_->setFloat("pointLights[" + std::to_string(i) + "].constant", m_pointList[i]->getConstant());
+		shader_->setFloat("pointLights[" + std::to_string(i) + "].linear", m_pointList[i]->getLinear());
+		shader_->setFloat("pointLights[" + std::to_string(i) + "].quadratic", m_pointList[i]->getQuadratic());
+		shader_->setFloat("shininess", m_pointList[i]->getShininess());
+	}
+
+	//Enable face culling (Default set to CCW)
+	glEnable(GL_CULL_FACE);
 
 	for (Entity* entity : models_) {
 		entity->render(shader_);
@@ -65,9 +75,11 @@ void Renderer::render(Camera* camera_, Window* window_, Shader* shader_, std::ve
 	for (Light* light : lights_) {
 		light->render(shader_);
 	}
+
+	glDisable(GL_CULL_FACE);
 }
 
-void Renderer::render(Camera* camera_, Window* window_, Shader* shader_, std::vector<Entity*> models_) //Change to take in a vector of models/entity
+void Renderer::render(Camera* camera_, Window* window_, Shader* shader_, std::vector<Entity*> models_)
 {
 	shader_->use();
 
@@ -78,9 +90,13 @@ void Renderer::render(Camera* camera_, Window* window_, Shader* shader_, std::ve
 	//Set view position for lighting
 	shader_->setVec3("viewPos", camera_->getPos());
 
+	glEnable(GL_CULL_FACE);
+
 	for (Entity* entity : models_) {
 		entity->render(shader_);
 	}
+
+	glDisable(GL_CULL_FACE);
 }
 
 void Renderer::render(Camera* camera_, Window* window_, Shader* shader_, Entity* skybox_)
@@ -94,6 +110,19 @@ void Renderer::render(Camera* camera_, Window* window_, Shader* shader_, Entity*
 	shader_->setMat4("projection", camera_->getProj());
 
 	skybox_->render(shader_);
+}
+
+void Renderer::render(Window* window_, Shader* shader_, Framebuffer* framebuffer_)
+{
+	shader_->use();
+
+	//Disable depth testing so that the plane is properly rendered and not culled
+	glDisable(GL_DEPTH_TEST);
+
+	framebuffer_->render(shader_);
+
+	//Enable depth testing after the plane is rendered
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Renderer::clearBuffers(glm::vec4 clearColour_)

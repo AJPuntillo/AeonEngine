@@ -4,50 +4,87 @@ using namespace AEON_ENGINE;
 
 PrimitiveModel::PrimitiveModel()
 {
+	//setup AABB bounding box
+	BoundingBox = AABB();
 	m_pos = glm::vec3(0.0f, 0.0f, 0.0f);
 	translate(m_pos);
-	loadMesh();
+	loadMesh(PRIM_TYPE_CUBE);
 }
 
-PrimitiveModel::PrimitiveModel(const glm::vec3 pos_, char const* diffusePath_, char const* specularPath_)
+PrimitiveModel::PrimitiveModel(const int primitiveType_, const glm::vec3 pos_, char const* diffusePath_, char const* specularPath_)
 {
+	//setup AABB bounding box
+	BoundingBox = AABB();
 	m_pos = pos_;
 	translate(m_pos);
-	loadMesh();
+	loadMesh(primitiveType_);
 	texture_diffuse = loadTexture(diffusePath_);
 	texture_specular = loadTexture(specularPath_);
+	//setup Volume
+	setupVolume();
+
 }
 
-PrimitiveModel::PrimitiveModel(const glm::vec3 pos_, char const* diffusePath_)
+PrimitiveModel::PrimitiveModel(const int primitiveType_, const glm::vec3 pos_, char const* diffusePath_)
 {
+	//setup AABB bounding box
+	BoundingBox = AABB();
 	m_pos = pos_;
 	translate(m_pos);
-	loadMesh();
+	loadMesh(primitiveType_);
 	texture_diffuse = loadTexture(diffusePath_);
+	//setup Volume
+	setupVolume();
+
 }
 
-PrimitiveModel::PrimitiveModel(char const* diffusePath_, char const* specularPath_)
+PrimitiveModel::PrimitiveModel(const int primitiveType_, char const* diffusePath_, char const* specularPath_)
 {
+	//setup AABB bounding box
+	BoundingBox = AABB();
 	m_pos = glm::vec3(0.0f, 0.0f, 0.0f);
 	translate(m_pos);
-	loadMesh();
+	loadMesh(primitiveType_);
 	texture_diffuse = loadTexture(diffusePath_);
 	texture_specular = loadTexture(specularPath_);
+	//setup Volume
+	setupVolume();
 }
 
-PrimitiveModel::PrimitiveModel(const glm::vec3 pos_)
+PrimitiveModel::PrimitiveModel(const int primitiveType_, const glm::vec3 pos_)
 {
+
+	//setup AABB bounding box
+	BoundingBox = AABB();
 	m_pos = pos_;
 	translate(m_pos);
-	loadMesh();
+	loadMesh(primitiveType_);
+	//setup Volume
+	setupVolume();
 }
 
-PrimitiveModel::PrimitiveModel(char const* diffusePath_)
+PrimitiveModel::PrimitiveModel(const int primitiveType_, char const* diffusePath_)
+{
+	//setup AABB bounding box
+	BoundingBox = AABB();
+	m_pos = glm::vec3(0.0f, 0.0f, 0.0f);
+	translate(m_pos);
+	loadMesh(primitiveType_);
+	texture_diffuse = loadTexture(diffusePath_);
+	//setup AABB bounding box
+	BoundingBox = AABB();
+	setupVolume();
+}
+
+PrimitiveModel::PrimitiveModel(const int primitiveType_)
 {
 	m_pos = glm::vec3(0.0f, 0.0f, 0.0f);
 	translate(m_pos);
-	loadMesh();
-	texture_diffuse = loadTexture(diffusePath_);
+	loadMesh(primitiveType_);
+
+	//setup AABB bounding box
+	BoundingBox = AABB();
+	setupVolume();
 }
 
 PrimitiveModel::~PrimitiveModel()
@@ -64,6 +101,8 @@ void PrimitiveModel::translate(const glm::vec3& vec_)
 {
 	m_translateMatrix = glm::translate(m_translateMatrix, vec_);
 	m_pos += vec_;
+	BoundingBox.max += vec_;
+	BoundingBox.min += vec_;
 }
 
 void PrimitiveModel::scale(const glm::vec3& vec_)
@@ -83,13 +122,13 @@ void PrimitiveModel::render(Shader* shader_)
 	shader_->setMat4("model", m_modelMatrix);
 
 	//Set texture (if there is one)
-	if (&texture_diffuse != nullptr) {
+	if (&texture_diffuse != 0) {
 		shader_->setInt("texture_diffuse1", 0);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture_diffuse);
 	}
 
-	if (&texture_specular != nullptr) {
+	if (&texture_specular != 0) {
 		shader_->setInt("texture_specular1", 1);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture_specular);
@@ -99,15 +138,17 @@ void PrimitiveModel::render(Shader* shader_)
 		mesh->render();
 	}
 
+	glBindTexture(GL_TEXTURE_2D, 0); //Unbind the texture as a precaution
+
 	//Currently the rotation and scale matrices are being reset and redrawn to prevent additive adjustents
 	//Not sure if this is extremely inefficient, will have to revisit
 	//***The matrices need to be reset when constantly updated
 	//m_rotationMatrix = glm::mat4();
 }
 
-bool PrimitiveModel::loadMesh()
+bool PrimitiveModel::loadMesh(const int primitiveType_)
 {
-	m_meshes.push_back(new PrimitiveMesh());
+	m_meshes.push_back(new PrimitiveMesh(primitiveType_));
 	return true;
 }
 
@@ -149,5 +190,49 @@ unsigned int PrimitiveModel::loadTexture(char const* path_)
 		stbi_image_free(data);
 	}
 
+	glBindTexture(GL_TEXTURE_2D, 0); //As a precaution, unbind the texture after it has been created
 	return textureID;
+}
+
+PrimitiveMesh *PrimitiveModel::getMesh()
+{
+	return m_meshes[0];
+}
+
+
+void PrimitiveModel::setupVolume() {
+
+	PrimitiveMesh *temp = getMesh();
+	std::vector<PrimitiveVertex> vertexList = *temp->getVerticies();
+
+
+	bool firstSet = true;
+
+	int componentListSize = vertexList.size();
+
+	BoundingBox.min = vertexList[0].position;
+	BoundingBox.max = vertexList[0].position;
+	for (int i = 0; i < componentListSize; i++) {
+		if (vertexList[i].position.x < BoundingBox.min.x) {
+			BoundingBox.min.x = vertexList[i].position.x;
+		}
+		if (vertexList[i].position.y < BoundingBox.min.y) {
+			BoundingBox.min.y = vertexList[i].position.y;
+		}
+		if (vertexList[i].position.z < BoundingBox.min.z) {
+			BoundingBox.min.z = vertexList[i].position.z;
+		}
+		if (vertexList[i].position.x > BoundingBox.max.x) {
+			BoundingBox.max.x = vertexList[i].position.x;
+		}
+		if (vertexList[i].position.y > BoundingBox.max.y) {
+			BoundingBox.max.y = vertexList[i].position.y;
+		}
+		if (vertexList[i].position.z > BoundingBox.max.z) {
+			BoundingBox.max.z = vertexList[i].position.z;
+		}
+
+	}
+
+	//place the bounding box around the current position of the object
 }

@@ -79,6 +79,8 @@ bool Window::initialize(std::string windowName, int screenWidth, int screenHeigh
 
 	//Tells the GPU to test for depth when rendering
 	glEnable(GL_DEPTH_TEST); //LESSON LEARNED: Don't enable depth testing unless you plan on clearing the depth buffer in the render loop
+	//Enable Multisampling for anti-aliasing
+	glEnable(GL_MULTISAMPLE);
 
 	return true;
 }
@@ -140,4 +142,7 @@ void Window::setAttributes()
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	//Depth buffer
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
+	//Multisampling
+	//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+	//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 }

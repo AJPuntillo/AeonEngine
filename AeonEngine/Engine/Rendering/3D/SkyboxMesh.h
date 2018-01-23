@@ -1,6 +1,12 @@
 #ifndef SKYBOXMESH_H
 #define SKYBOXMESH_H
 
+//***
+//SkyboxMesh Class:
+//The skybox mesh functions similiarly to the primitive mesh class but only contains position attributes
+//***
+
+
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
