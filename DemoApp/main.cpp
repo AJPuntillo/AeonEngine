@@ -13,7 +13,7 @@ int main(int argc, char* args[]) {
 	//Create the first instance of our engine
 	if (EngineCore::getInstance()->initialize("Demo App")) {
 		//Start the Game Loop
-		EngineCore::getInstance()->run(100, true);
+		EngineCore::getInstance()->run(100, false);
 	}
 
 	return 0;

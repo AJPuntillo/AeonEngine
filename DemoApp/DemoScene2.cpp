@@ -31,6 +31,11 @@ void DemoScene2::update(float deltaTime_)
 
 }
 
+void DemoScene2::prerender()
+{
+
+}
+
 void DemoScene2::render()
 {
 	//**Store shader/window variables -- for convenience
@@ -48,6 +53,11 @@ void DemoScene2::render()
 
 	//Swap buffers
 	EngineCore::getInstance()->getWindow()->swapBuffers();
+}
+
+void DemoScene2::postrender()
+{
+
 }
 
 void DemoScene2::draw()

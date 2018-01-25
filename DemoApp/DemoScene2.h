@@ -13,7 +13,9 @@ public:
 	virtual bool initialize();
 	virtual void processInput();
 	virtual void update(float deltaTime_);
+	virtual void prerender();
 	virtual void render();
+	virtual void postrender();
 	virtual void draw();
 
 private:

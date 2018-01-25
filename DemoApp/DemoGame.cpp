@@ -48,15 +48,25 @@ void DemoGame::update(float deltaTime_)
 	m_currentScene->update(deltaTime_);
 }
 
+void DemoGame::prerender()
+{
+	m_currentScene->prerender();
+}
+
+
 void DemoGame::render()
 {
-
 	m_currentScene->render();
 }
 
+void DemoGame::postrender()
+{
+	m_currentScene->postrender();
+}
+
+
 void DemoGame::draw()
 {
-
 	m_currentScene->draw();
 }
 

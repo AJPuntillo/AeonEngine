@@ -13,6 +13,7 @@
 #include "SkyboxMesh.h"
 #include "../../Camera/Camera.h"
 #include "../../Graphics/stb_image.h"
+#include "../../DataStructures/ShaderManager.h"
 
 #include <vector>
 
@@ -21,22 +22,25 @@ namespace AEON_ENGINE {
 	class Skybox : public Entity
 	{
 	public:
-		Skybox(std::vector<std::string> faces_);
+		Skybox(std::vector<std::string> faces_, ShaderManager::HandleType shaderHandle_);
 		virtual ~Skybox();
 
-		void rotate(const float angle_, const glm::vec3& vec_) {}
-		void translate(const glm::vec3& vec_) {}
-		void scale(const glm::vec3& vec_) {}
-
-		void update(const float deltaTime) {}
+		void update(const float deltaTime) override {}
 		void render(Shader* shader_) override;
 
 		bool loadMesh();
 		void loadSkybox(std::vector<std::string> faces_);
 
+		//Getters
+		Shader* getAttachedShader() const {
+			Shader* temp = ShaderManager::getInstance()->getShader(m_shader);
+			return temp;
+		}
+
 	private:
 		SkyboxMesh* m_mesh;
 		unsigned int textureID;
+		ShaderManager::HandleType m_shader;
 	};
 
 }

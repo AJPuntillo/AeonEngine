@@ -3,8 +3,10 @@
 
 #include "Entity.h"
 #include "PrimitiveMesh.h"
+#include "Transform.h"
 #include "../../Camera/Camera.h"
 #include "../../Graphics/stb_image.h"
+#include "../../DataStructures/ShaderManager.h"
 
 //***
 //Only has hardcoded values in for the light settings. Will need to add functionality later.
@@ -19,13 +21,8 @@ namespace AEON_ENGINE {
 	#define LIGHT_POINT 1
 
 	public:
-		Light(unsigned int type_, const glm::vec3 pos_, bool hasMesh = false);
+		Light(unsigned int type_, bool hasMesh = false);
 		virtual ~Light();
-
-		//Matrix manipulation
-		void rotate(const float angle_, const glm::vec3& vec_) override;
-		void translate(const glm::vec3& vec_) override;
-		void scale(const glm::vec3& vec_) override;
 
 		//Updating and rendering
 		void update(const float deltaTime) override;
@@ -36,7 +33,6 @@ namespace AEON_ENGINE {
 
 		//Getters
 		unsigned int getLightType() { return m_lightType; }
-		glm::vec3 getPos() { return m_pos; }
 		glm::vec3 getDirection() { return m_direction; }
 		glm::vec3 getAmbient() { return m_ambient; }
 		glm::vec3 getDiffuse() { return m_diffuse; }
@@ -52,6 +48,9 @@ namespace AEON_ENGINE {
 		void setLightIntensity(glm::vec3 ambient_, glm::vec3 diffuse_, glm::vec3 specular_);
 		void setAttenuation(float constant_, float linear_, float quadratic_);
 		void setShininess(float shininess_);
+
+		//Transform
+		Transform transform;
 
 	private:
 		//Light intensity				//Defaults
@@ -74,8 +73,6 @@ namespace AEON_ENGINE {
 		bool m_hasMesh					= false;
 		//Mesh
 		PrimitiveMesh* m_mesh;
-		unsigned int texture_diffuse = 0;
-		unsigned int texture_specular = 0;
 	};
 
 }

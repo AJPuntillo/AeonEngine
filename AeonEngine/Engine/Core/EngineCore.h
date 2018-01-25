@@ -17,14 +17,6 @@
 //Starts the gameloop and initializes the Game class (Game Interface).
 //***
 
-//***
-//CURRENT TO DO:
-//This class needs to be changed for the future
-//Right now it initializes the window and shader but that should not be determined inside this class
-//This class should only initialize engine specific classes and any other user-specific preferences (eg. window size, which shaders to use) should be created somewhere else
-//Process Input method for Game and Scene Interface.
-//***
-
 namespace AEON_ENGINE {
 
 	class EngineCore 
@@ -49,7 +41,9 @@ namespace AEON_ENGINE {
 		bool initialize(std::string windowName = "Untitled", int windowHeight = 800, int windowWidth = 600, int windowFlags = 0); //Default values loaded if none specified
 		void run(int maxFPS_ = 100, bool printTimer_ = false);
 		void update(float deltaTime_);
+		void prerender();
 		void render();
+		void postrender();
 		void draw();
 
 		//Getters

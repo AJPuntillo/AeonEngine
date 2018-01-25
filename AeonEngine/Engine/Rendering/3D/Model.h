@@ -24,11 +24,6 @@ namespace AEON_ENGINE {
 		Model(std::string const& path_, bool gamma = false);
 		~Model();
 
-		//Matrix manipulation
-		void rotate(const float angle_, const glm::vec3& vec_) override;
-		void translate(const glm::vec3& vec_) override;
-		void scale(const glm::vec3& vec_) override;
-
 		//Updating and rendering
 		void update(const float deltaTime_) override;
 		void render(Shader* shader_) override;

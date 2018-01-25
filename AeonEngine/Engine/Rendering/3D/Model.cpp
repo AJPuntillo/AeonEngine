@@ -5,36 +5,16 @@ using namespace AEON_ENGINE;
 Model::Model(const glm::vec3 pos_, std::string const &path_, bool gamma) : gammaCorrection(gamma)
 {
 	loadModel(path_);
-	m_pos = pos_;
-	translate(m_pos);
 }
 
 Model::Model(std::string const& path_, bool gamma) : gammaCorrection(gamma)
 {
 	loadModel(path_);
-	m_pos = glm::vec3(0.0f, 0.0f, 0.0f);
-	translate(m_pos);
 }
 
 Model::~Model()
 {
 	//Empty
-}
-
-void Model::rotate(const float angle_, const glm::vec3& vec_)
-{
-	m_rotationMatrix = glm::rotate(m_rotationMatrix, angle_, vec_);
-}
-
-void Model::translate(const glm::vec3& vec_)
-{
-	m_translateMatrix = glm::translate(m_translateMatrix, vec_);
-	m_pos += vec_;
-}
-
-void Model::scale(const glm::vec3& vec_)
-{
-	m_scaleMatrix = glm::scale(m_scaleMatrix, vec_);
 }
 
 void Model::update(const float deltaTime)
@@ -44,19 +24,8 @@ void Model::update(const float deltaTime)
 
 void Model::render(Shader* shader_)
 {
-	//Set the Model matrix	
-	m_modelMatrix = m_translateMatrix * m_rotationMatrix * m_scaleMatrix;
-	shader_->setMat4("model", m_modelMatrix);
-
 	for (unsigned int i = 0; i < meshes.size(); i++)
 		meshes[i].render(shader_);
-
-	glBindTexture(GL_TEXTURE_2D, 0); //Unbind the texture as a precaution
-
-	//Currently the rotation and scale matrices are being reset and redrawn to prevent additive adjustents
-	//Not sure if this is extremely inefficient, will have to revisit
-	//***The matrices need to be reset when constantly updated
-	//m_rotationMatrix = glm::mat4();
 }
 
 void Model::loadModel(std::string const& path_)

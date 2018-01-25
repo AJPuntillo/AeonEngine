@@ -14,7 +14,13 @@
 #include "../../Graphics/Shader.h"
 #include "Entity.h"
 #include "Light.h"
+#include "Skybox.h"
 #include "Framebuffer.h"
+#include "GameObject.h"
+//Resource Managers
+#include "../../DataStructures/ShaderManager.h"
+#include "../../DataStructures/ModelManager.h"
+#include "../../DataStructures/MaterialManager.h"
 
 #include <vector>
 
@@ -26,10 +32,11 @@ namespace AEON_ENGINE {
 		Renderer();
 		~Renderer();
 
-		void render(Camera* camera_, Window* window_, Shader* shader_, std::vector<Entity*> models_, std::vector<Light*> lights_);
-		void render(Camera* camera_, Window* window_, Shader* shader_, std::vector<Entity*> models_); //Overload for no lights or framebuffer
-		void render(Camera* camera_, Window* window_, Shader* shader_, Entity* skybox_); //Overload for skybox
-		void render(Window* window_, Shader* shader_, Framebuffer* framebuffer_); //Overload for framebuffer
+		void render(Camera* camera_, ShaderManager::HandleType shaderHandle_, std::vector<GameObject*> objects_, std::vector<Light*> lights_);
+		void render(Camera* camera_, ShaderManager::HandleType shaderHandle_, std::vector<GameObject*> objects_);
+		void renderLightMeshes(Camera* camera_, ShaderManager::HandleType shaderHandle_, std::vector<Light*> lights_);
+		void renderSkybox(Camera* camera_, Skybox* skybox_);
+		void renderFramebuffer(ShaderManager::HandleType shaderHandle_, Framebuffer* framebuffer_);
 
 		//Pre-Render; Must be before render is called
 		void clearBuffers(glm::vec4 clearColour = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f)); //Optional clearColour

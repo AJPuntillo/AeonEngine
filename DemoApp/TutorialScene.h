@@ -44,6 +44,7 @@
 #include <AeonEngine/Engine/Rendering/3D/Model.h>			//Model uses ASSIMP to load more complex models (Like the Nanosuit/Miku)
 #include <AeonEngine/Engine/Rendering/3D/PrimitiveModel.h>	//Loads a primitive cube; main use is for testing... will probably be the most important object
 #include <AeonEngine/Engine/Rendering/3D/Skybox.h>			//Skybox creates the a skybox... yeah
+#include <AeonEngine/Engine/Rendering/3D/GameObject.h>		//Gameobjects are going to be the main focus of everything seen in a scene; They contain models, transforms, (and optionally shaders); Think of them like Unity GameObjects
 
 class TutorialScene : public AEON_ENGINE::SceneInterface //Must inherit from the Engine's 'SceneInterface' as explained above
 {
@@ -55,7 +56,9 @@ public:
 	virtual bool initialize();						//Initializes the scene; used to setup objects; It returns bool for error checking
 	virtual void processInput();					//Updates all input
 	virtual void update(float deltaTime_);			//Update everything; good for physics, movement, input, etc..
+	virtual void prerender();						//Handles Pre-render calls such as clearing the buffers
 	virtual void render();							//Render everything to show up in the window
+	virtual void postrender();						//Handles Post-render calls such as swapping buffers; Allows UI elements to not be left out of render calls
 	virtual void draw();							//Draw will most likely be used to draw 2D elements, like UI
 
 private:
@@ -68,18 +71,22 @@ private:
 	//Camera
 	AEON_ENGINE::Camera* m_camera;
 	//Shader Program
-	AEON_ENGINE::Shader* m_modelShader = nullptr;	//I default them to nullptr, not very important but good practice.
-	AEON_ENGINE::Shader* m_skyboxShader = nullptr;
+	AEON_ENGINE::ShaderManager::HandleType m_shaderModel;
+	AEON_ENGINE::ShaderManager::HandleType m_shaderContainer;
+	AEON_ENGINE::ShaderManager::HandleType m_shaderLamp;
+	AEON_ENGINE::ShaderManager::HandleType m_shaderSkybox;
+	AEON_ENGINE::ShaderManager::HandleType m_shaderFramebuffer;
 	//Renderer
 	AEON_ENGINE::Renderer* m_renderer;				//Takes in a list of objects to be rendered and a shader
-	//Models
-	AEON_ENGINE::PrimitiveModel* m_modelContainer;
-	AEON_ENGINE::Model* m_modelNanosuit;
+	//Gameobjects
+	AEON_ENGINE::GameObject* m_modelContainer;
+	AEON_ENGINE::GameObject* m_modelNanosuit;
 	//Skybox
 	AEON_ENGINE::Skybox* m_skybox;
 	std::vector<std::string> m_skyboxFaces;			//A skybox object needs a vector of path locations to the faces used in the skybox
 	//Model Lists
-	std::vector<AEON_ENGINE::Entity*> m_modelList;	//A vector of Entity's are needed to be passed to the Renderer so that it knows which objects to render; More about Entity in the .cpp
+	std::vector<AEON_ENGINE::GameObject*> m_modelList;	//A vector of Entity's are needed to be passed to the Renderer so that it knows which objects to render; More about Entity in the .cpp
+	std::vector<AEON_ENGINE::GameObject*> m_containerList;
 
 	//**These variables are used for a quick timestep and camera movement
 	//**Do not alter these, they will be changed and properly implemented later on

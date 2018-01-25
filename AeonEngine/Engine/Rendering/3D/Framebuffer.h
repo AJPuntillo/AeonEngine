@@ -25,13 +25,10 @@ namespace AEON_ENGINE {
 		Framebuffer(Window* window_);
 		virtual ~Framebuffer();
 
-		void rotate(const float angle_, const glm::vec3& vec_) {}
-		void translate(const glm::vec3& vec_) {}
-		void scale(const glm::vec3& vec_) {}
-
-		void update(const float deltaTime) {}
+		void update(const float deltaTime) override {}
 		void render(Shader* shader_) override;
 
+		void setFramebuffer(Window* window_);
 		bool loadMesh();
 
 		void updateFramebufferSize(Window* window_); //Checks to see if thw windowsize has changed, if so then adjust the framebuffer

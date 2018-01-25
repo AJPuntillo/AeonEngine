@@ -2,10 +2,11 @@
 
 using namespace AEON_ENGINE;
 
-Skybox::Skybox(std::vector<std::string> faces_)
+Skybox::Skybox(std::vector<std::string> faces_, ShaderManager::HandleType shaderHandle_)
 {
 	loadMesh();
 	loadSkybox(faces_);
+	m_shader = shaderHandle_;
 }
 
 Skybox::~Skybox()
@@ -21,6 +22,7 @@ void Skybox::render(Shader* shader_)
 
 	m_mesh->render();
 
+	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 	glDepthFunc(GL_LESS);  //Set depth function back to default
 }
 
@@ -57,4 +59,6 @@ void Skybox::loadSkybox(std::vector<std::string> faces_)
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }

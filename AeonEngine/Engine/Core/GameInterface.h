@@ -19,7 +19,9 @@ namespace AEON_ENGINE {
 		virtual bool initialize() = 0;
 		virtual void processInput() = 0;
 		virtual void update(float deltaTime_) = 0;
+		virtual void prerender() = 0;
 		virtual void render() = 0;
+		virtual void postrender() = 0;
 		virtual void draw() = 0;
 	};
 

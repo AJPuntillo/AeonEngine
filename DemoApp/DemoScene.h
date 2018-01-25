@@ -9,6 +9,7 @@
 #include <AeonEngine/Engine/Rendering/3D/Light.h>
 #include <AeonEngine/Engine/Rendering/3D/Skybox.h>
 #include <AeonEngine/Engine/Rendering/3D/Framebuffer.h>
+#include <AeonEngine/Engine/Rendering/3D/GameObject.h>
 
 class DemoScene : public AEON_ENGINE::SceneInterface
 {
@@ -19,23 +20,26 @@ public:
 	virtual bool initialize();
 	virtual void processInput();
 	virtual void update(float deltaTime_);
+	virtual void prerender();
 	virtual void render();
+	virtual void postrender();
 	virtual void draw();
 
 private:
 	//Camera
 	AEON_ENGINE::Camera* m_camera;
-	//Shader Program
-	AEON_ENGINE::Shader* m_shaderProgram = nullptr;
-	AEON_ENGINE::Shader* m_containerProgram = nullptr;
-	AEON_ENGINE::Shader* m_skyboxProgram = nullptr;
-	AEON_ENGINE::Shader* m_framebufferProgram = nullptr;
-	AEON_ENGINE::Shader* m_instanceProgram = nullptr;
 	//Renderer
 	AEON_ENGINE::Renderer* m_renderer;
-	//Models
-	AEON_ENGINE::PrimitiveModel* testModel;
-	AEON_ENGINE::Model* testModel2;
+	//Shader Program
+	AEON_ENGINE::ShaderManager::HandleType m_shaderLighting;
+	AEON_ENGINE::ShaderManager::HandleType m_shaderContainer;
+	AEON_ENGINE::ShaderManager::HandleType m_shaderLamp;
+	AEON_ENGINE::ShaderManager::HandleType m_shaderSkybox;
+	AEON_ENGINE::ShaderManager::HandleType m_shaderFramebuffer;
+	AEON_ENGINE::ShaderManager::HandleType m_shaderInstancing;
+	//GameObjects
+	AEON_ENGINE::GameObject* model_cube;
+	AEON_ENGINE::GameObject* model_nanosuit;
 	//Light List
 	AEON_ENGINE::Light* dirLight;
 	AEON_ENGINE::Light* pointLight;
@@ -46,15 +50,12 @@ private:
 	//Framebuffer
 	AEON_ENGINE::Framebuffer* framebuffer;
 	//Model Lists
-	std::vector<AEON_ENGINE::Entity*> modelList;
+	std::vector<AEON_ENGINE::GameObject*> objectList;
+	std::vector<AEON_ENGINE::GameObject*> objectList2;
 	std::vector<AEON_ENGINE::Light*> lightList;
 
 	//Timing
 	float m_deltaTime = 0.0f; //Time between current frame and last frame
-
-	std::vector<AEON_ENGINE::Light*> m_pointList;
-	std::vector<AEON_ENGINE::Light*> m_directionalList;
-	unsigned int lightListSize = 0;
 };
 
 #endif

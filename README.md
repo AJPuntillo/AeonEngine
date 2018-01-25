@@ -50,11 +50,20 @@ Custom C++ engine
 **[11/30/17]**
 - Fixed the elusive texture binding bug
 
+**[01/25/18]**
+- Added a GameObject class (Meant to contain Entity-type classes like Models)
+- Added a Transform class that now handles all transformations and stores them into the model matrix
+- Reworked the Renderer to use GameObjects
+- Added a Resource Manager and Hashtable class that allows for quick storage and searching
+- Added a Shader, Model, and Material Manager that inherits from the Resoure Manager class
+- Most shader calls are handled with Shader Handles for quick retrieval and optimization
+- Added Pre/Post render methods to the Engine Core, Scene/Game Interface
+- Updated the Tutorial Scene to reflect the recent changes
+
 ### TO DO
 
 - Optimization
 - Finish Documentation
-- Implement ResourceManager
 - Advanced Lighting
 - Scene does not "delete" when switched to another scene
 - Physics (Adid)
@@ -62,6 +71,11 @@ Custom C++ engine
 - ~~Audio~~ (Haifeng)
 - 2D Graphics/HUD (Haifeng)
 - Controller support (Fabio)
+- Particle Engine
+- ~~GameObject class~~
+- ~~Pre/Post Render~~
+- ~~Model Matrix check optimization~~
+- ~~Implement ResourceManager~~
 - ~~Face culling~~
 - ~~Most optimal place for processing inputs~~
 - ~~Model Class (Primitive and assimp)~~

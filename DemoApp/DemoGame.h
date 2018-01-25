@@ -14,7 +14,9 @@ public:
 	virtual bool initialize() override;
 	virtual void processInput() override;
 	virtual void update(float deltaTime_) override;
+	virtual void prerender() override;
 	virtual void render() override;
+	virtual void postrender() override;
 	virtual void draw() override;
 
 

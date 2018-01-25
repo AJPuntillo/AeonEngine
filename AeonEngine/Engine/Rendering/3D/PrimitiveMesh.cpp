@@ -2,10 +2,10 @@
 
 using namespace AEON_ENGINE;
 
-PrimitiveMesh::PrimitiveMesh(const int primitiveType_)
+PrimitiveMesh::PrimitiveMesh(PrimitiveType primitiveType_)
 {
 	PrimitiveVertex v;
-	if (primitiveType_ == PRIM_TYPE_CUBE) {
+	if (primitiveType_ == PrimitiveType::CUBE) {
 		v.position = glm::vec3(-0.5f, -0.5f, -0.5f);
 		v.normal = glm::vec3(0.0f, 0.0f, -1.0f);
 		v.texCoords = glm::vec2(0.0f, 0.0f);
@@ -156,7 +156,7 @@ PrimitiveMesh::PrimitiveMesh(const int primitiveType_)
 		v.texCoords = glm::vec2(0.0f, 0.0f);
 		vertices.push_back(v);
 	} 
-	else if (primitiveType_ == PRIM_TYPE_PLANE) {
+	else if (primitiveType_ == PrimitiveType::PLANE) {
 		v.position = glm::vec3(-1.0f, 1.0f, 0.0f);
 		v.normal = glm::vec3(0.0f, 0.0f, 0.0f);
 		v.texCoords = glm::vec2(0.0f, 1.0f);

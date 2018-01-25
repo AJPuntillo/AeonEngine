@@ -4,6 +4,33 @@ using namespace AEON_ENGINE;
 
 Framebuffer::Framebuffer(Window* window_)
 {
+	setFramebuffer(window_);
+}
+
+Framebuffer::~Framebuffer()
+{
+	//Empty
+}
+
+void Framebuffer::render(Shader* shader_)
+{
+	shader_->setInt("screenTexture", 0);
+
+	//Bind to the default framebuffer and draw a plane with the attached framebuffer colour texture
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//Clear all relevant buffers
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glBindTexture(GL_TEXTURE_2D, m_texColourBuffer);
+
+	m_mesh->render();
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0); //Unbind the framebuffer as a precaution
+}
+
+void Framebuffer::setFramebuffer(Window* window_) {
 	//Framebuffer
 	glGenFramebuffers(1, &m_framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
@@ -38,32 +65,9 @@ Framebuffer::Framebuffer(Window* window_)
 	loadMesh();
 }
 
-Framebuffer::~Framebuffer()
-{
-	//Empty
-}
-
-void Framebuffer::render(Shader* shader_)
-{
-	shader_->setInt("screenTexture", 0);
-
-	//Bind to the default framebuffer and draw a plane with the attached framebuffer colour texture
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	//Clear all relevant buffers
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	glBindTexture(GL_TEXTURE_2D, m_texColourBuffer);
-
-	m_mesh->render();
-
-	glBindTexture(GL_TEXTURE_2D, 0); //Unbind the texture as a precaution
-}
-
 bool Framebuffer::loadMesh()
 {
-	m_mesh = new PrimitiveMesh(PRIM_TYPE_PLANE);
+	m_mesh = new PrimitiveMesh(PrimitiveMesh::PrimitiveType::PLANE);
 
 	return true;
 }
@@ -71,8 +75,7 @@ bool Framebuffer::loadMesh()
 void Framebuffer::updateFramebufferSize(Window* window_)
 {
 	if (m_screenWidth != window_->getScreenWidth() || m_screenHeight != window_->getScreenHeight()) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, window_->getScreenWidth(), window_->getScreenHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, window_->getScreenWidth(), window_->getScreenHeight());
+		setFramebuffer(window_);
 	
 		//Set the class variables to the new screen width and height for next comparison
 		m_screenWidth = window_->getScreenWidth();

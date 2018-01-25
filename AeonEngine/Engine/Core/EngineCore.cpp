@@ -78,10 +78,14 @@ void EngineCore::run(int maxFPS_, bool printTimer_)
 		updateInput();
 		//Update the world
 		update(timer.getDeltaTime());
+		//Prerender
+		prerender();
 		//Render the 3D
 		render();
 		//Draw 2D ontop of the 3D
 		draw();
+		//Postrender; So that objects in draw will not be left out at the end of a render call
+		postrender();
 		//FPS Limiter; limits the frames per second and keeps the main loop running at a specified pace
 		SDL_Delay(timer.getSleepTime(maxFPS_));
 
@@ -145,9 +149,19 @@ void EngineCore::update(float deltaTime_)
 	gameInterface->update(deltaTime_);
 }
 
+void EngineCore::prerender()
+{
+	gameInterface->prerender();
+}
+
 void EngineCore::render()
 {
 	gameInterface->render();
+}
+
+void EngineCore::postrender()
+{
+	gameInterface->postrender();
 }
 
 void EngineCore::draw()

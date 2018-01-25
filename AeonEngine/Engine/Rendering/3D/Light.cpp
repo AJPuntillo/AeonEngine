@@ -2,16 +2,14 @@
 
 using namespace AEON_ENGINE;
 
-Light::Light(unsigned int type_, const glm::vec3 pos_, bool hasMesh)
+Light::Light(unsigned int type_, bool hasMesh)
 {
 	setLightType(type_);
-	translate(pos_);
 	m_hasMesh = hasMesh;
 
 	if (m_hasMesh) {
 		loadMesh();
-		//For the size of the Mesh
-		scale(glm::vec3(0.25f, 0.25f, 0.25f));
+		transform.scaleBy(0.1f, 0.1f, 0.1f);
 	}
 
 }
@@ -93,22 +91,6 @@ void Light::setShininess(float shininess_)
 	m_shininess = shininess_;
 }
 
-void Light::rotate(const float angle_, const glm::vec3& vec_)
-{
-	m_rotationMatrix = glm::rotate(m_rotationMatrix, angle_, vec_);
-}
-
-void Light::translate(const glm::vec3& vec_)
-{
-	m_translateMatrix = glm::translate(m_translateMatrix, vec_);
-	m_pos += vec_;
-}
-
-void Light::scale(const glm::vec3& vec_)
-{
-	m_scaleMatrix = glm::scale(m_scaleMatrix, vec_);
-}
-
 void Light::update(const float deltaTime)
 {
 	//Empty
@@ -116,35 +98,14 @@ void Light::update(const float deltaTime)
 
 void Light::render(Shader* shader_)
 {
-	//Set the Model matrix	
-	m_modelMatrix = m_translateMatrix * m_rotationMatrix * m_scaleMatrix;
-	shader_->setMat4("model", m_modelMatrix);
+	transform.updateModelMatrix();
+	shader_->setMat4("model", transform.modelMatrix);
 
-	if (m_hasMesh) {
-
-		//Set texture (if there is one)
-		//if (&texture_diffuse != nullptr) {
-		//	shader_->setInt("texture_diffuse1", 0);
-		//	glActiveTexture(GL_TEXTURE0);
-		//	glBindTexture(GL_TEXTURE_2D, texture_diffuse);
-		//}
-
-		//if (&texture_specular != nullptr) {
-		//	shader_->setInt("texture_specular1", 1);
-		//	glActiveTexture(GL_TEXTURE1);
-		//	glBindTexture(GL_TEXTURE_2D, texture_specular);
-		//}
-
+	if (m_hasMesh)
 		m_mesh->render();
-	}
-
-	//Currently the rotation and scale matrices are being reset and redrawn to prevent additive adjustents
-	//Not sure if this is extremely inefficient, will have to revisit
-	//m_rotationMatrix = glm::mat4();
-	//m_scaleMatrix = glm::mat4();
 }
 
 void Light::loadMesh()
 {
-	m_mesh = new PrimitiveMesh(PRIM_TYPE_CUBE);
+	m_mesh = new PrimitiveMesh(PrimitiveMesh::PrimitiveType::CUBE);
 }
