@@ -3,7 +3,6 @@
 
 #include "Window.h"
 #include "GameInterface.h"
-#include "../Graphics/Shader.h"
 #include "../Camera/Camera.h"
 #include "../Events/InputManager.h"
 

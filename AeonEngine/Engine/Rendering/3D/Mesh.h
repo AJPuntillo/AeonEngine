@@ -33,26 +33,34 @@ namespace AEON_ENGINE {
 	class Mesh
 	{
 	public:
-		Mesh(std::vector<Vertex> vertices_, std::vector<unsigned int> indices_, std::vector<Texture> textures_);
-		//~Mesh(); //Commented out for now, apparently its already defined?
+		//Primitive type enum
+		enum PrimitiveType { CUBE, PLANE };
+
+		Mesh(std::vector<Vertex> vertices_, std::vector<unsigned int> indices_, std::vector<Texture> textures_); //For loading mesh files through Assimp
+		Mesh(PrimitiveType primitiveType_); //For loading primitive meshes (Cube or Plane)
+		~Mesh();
 
 		//Render the mesh
 		void render(Shader* shader_);
+
+		//Getters
+		unsigned int getVAO() { return m_VAO; }
+		std::vector<Vertex> getVertices() { return vertices; }
+
+	private:
+		//Render data
+		unsigned int m_VAO, m_VBO, m_EBO;
 
 		//Mesh data
 		std::vector<Vertex> vertices;
 		std::vector<unsigned int> indices;
 		std::vector<Texture> textures;
 
-		//Getters
-		unsigned int getVAO() { return m_VAO; }
-
-	private:
-		//Render data
-		unsigned int m_VAO, m_VBO, m_EBO;
-
 		//Initializes all the buffer objects/arrays
 		void generateBuffers();
+
+		//Check what type of mesh should be loaded
+		bool m_isPrimitive = false;
 	};
 
 }

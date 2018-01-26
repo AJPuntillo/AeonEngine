@@ -2,7 +2,7 @@
 #define LIGHT_H
 
 #include "Entity.h"
-#include "PrimitiveMesh.h"
+#include "Mesh.h"
 #include "Transform.h"
 #include "../../Camera/Camera.h"
 #include "../../Graphics/stb_image.h"
@@ -72,7 +72,7 @@ namespace AEON_ENGINE {
 		//Has a mesh?
 		bool m_hasMesh					= false;
 		//Mesh
-		PrimitiveMesh* m_mesh;
+		Mesh* m_mesh;
 	};
 
 }

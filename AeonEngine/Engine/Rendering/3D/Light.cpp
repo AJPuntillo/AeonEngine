@@ -102,10 +102,10 @@ void Light::render(Shader* shader_)
 	shader_->setMat4("model", transform.modelMatrix);
 
 	if (m_hasMesh)
-		m_mesh->render();
+		m_mesh->render(shader_);
 }
 
 void Light::loadMesh()
 {
-	m_mesh = new PrimitiveMesh(PrimitiveMesh::PrimitiveType::CUBE);
+	m_mesh = new Mesh(Mesh::PrimitiveType::CUBE);
 }

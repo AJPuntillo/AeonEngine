@@ -48,17 +48,23 @@ Custom C++ engine
 - PrimtiveModel now takes in a parameter to determine if it is rendering a Cube or a Plane
 
 **[11/30/17]**
-- Fixed the elusive texture binding bug
+- Fixed the elusive texture binding bug (Was using Bind instead of Active)
 
 **[01/25/18]**
 - Added a GameObject class (Meant to contain Entity-type classes like Models)
 - Added a Transform class that now handles all transformations and stores them into the model matrix
 - Reworked the Renderer to use GameObjects
 - Added a Resource Manager and Hashtable class that allows for quick storage and searching
-- Added a Shader, Model, and Material Manager that inherits from the Resoure Manager class
+- Added a Shader, Model, and Material Manager that inherits from the Resource Manager class
 - Most shader calls are handled with Shader Handles for quick retrieval and optimization
 - Added Pre/Post render methods to the Engine Core, Scene/Game Interface
 - Updated the Tutorial Scene to reflect the recent changes
+
+**[01/26/18]**
+- Added BoundingVolumes class that detects AABB collisions
+- Successfully merged the Model and PrimitiveModel class, allowing ease of use for other components (like BoundingVolumes)
+- Removed PrimitiveModel and PrimitiveMesh classes
+- GameObjects now all contain a BoundingVolume that can be set up when a model is attached to it
 
 ### TO DO
 

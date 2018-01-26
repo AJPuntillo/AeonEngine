@@ -2,6 +2,18 @@
 
 using namespace AEON_ENGINE;
 
+Model::Model()
+{
+	m_type = Mesh::PrimitiveType::CUBE;
+	loadModel(m_type);
+}
+
+Model::Model(Mesh::PrimitiveType primitiveType_)
+{
+	m_type = primitiveType_;
+	loadModel(primitiveType_);
+}
+
 Model::Model(const glm::vec3 pos_, std::string const &path_, bool gamma) : gammaCorrection(gamma)
 {
 	loadModel(path_);
@@ -26,6 +38,11 @@ void Model::render(Shader* shader_)
 {
 	for (unsigned int i = 0; i < meshes.size(); i++)
 		meshes[i].render(shader_);
+}
+
+void Model::loadModel(Mesh::PrimitiveType primitiveType_)
+{
+	meshes.push_back(Mesh(primitiveType_));
 }
 
 void Model::loadModel(std::string const& path_)

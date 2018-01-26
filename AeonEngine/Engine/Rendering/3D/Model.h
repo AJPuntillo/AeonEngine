@@ -19,6 +19,8 @@ namespace AEON_ENGINE {
 	class Model : public Entity
 	{
 	public:
+		Model();
+		Model(Mesh::PrimitiveType primitiveType_);
 		//Expects a filepath to a 3D model.
 		Model(const glm::vec3 pos_, std::string const& path_, bool gamma = false);
 		Model(std::string const& path_, bool gamma = false);
@@ -35,6 +37,8 @@ namespace AEON_ENGINE {
 		bool gammaCorrection;
 
 	private:
+		//Loads the model using a Primitive type
+		void loadModel(Mesh::PrimitiveType primitiveType_);
 		//Loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
 		void loadModel(std::string const& path_);
 		//Processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
@@ -44,6 +48,8 @@ namespace AEON_ENGINE {
 		//Checks all material textures of a given type and loads the textures if they're not loaded yet
 		//The required info is returned as a Texture struct
 		std::vector<Texture> loadMaterialTextures(aiMaterial* mat_, aiTextureType type_, std::string typeName_);
+		//The type of model it is IF it's a primitive
+		Mesh::PrimitiveType m_type;
 	};
 
 }

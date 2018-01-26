@@ -39,9 +39,13 @@ bool DemoScene::initialize()
 	model_nanosuit = new GameObject("Resources/Models/Nanosuit/nanosuit.obj");
 	model_nanosuit->transform.translateBy(-1.0f, -2.5f, 0.0f);
 	model_nanosuit->transform.scaleBy(0.25f, 0.25f, 0.25f);
+	model_nanosuit->setupVolume();
 	objectList.push_back(model_nanosuit);
+	//Testing the bounding volume values of the model
+	std::cout << model_nanosuit->boundingVolume->getMaxCorner().x << " " << model_nanosuit->boundingVolume->getMaxCorner().y << " " << model_nanosuit->boundingVolume->getMaxCorner().z << std::endl;
+	std::cout << model_nanosuit->boundingVolume->getMinCorner().x << " " << model_nanosuit->boundingVolume->getMinCorner().y << " " << model_nanosuit->boundingVolume->getMinCorner().z << std::endl;
 
-	model_cube = new GameObject(PrimitiveMesh::PrimitiveMesh::CUBE);
+	model_cube = new GameObject(Mesh::PrimitiveType::CUBE);
 	model_cube->transform.translateBy(1.0f, 0.0f, 0.0f);
 	objectList2.push_back(model_cube);
 
@@ -173,7 +177,7 @@ void DemoScene::render()
 	m_camera->createProjectionMatrix(EngineCore::getInstance()->getWindow()->getScreenWidth(), EngineCore::getInstance()->getWindow()->getScreenHeight());
 	
 	//Renderer
-	//m_renderer->render(m_camera, m_shaderLighting, objectList, lightList);
+	m_renderer->render(m_camera, m_shaderLighting, objectList, lightList);
 	m_renderer->render(m_camera, m_shaderContainer, objectList2, lightList);
 	m_renderer->renderLightMeshes(m_camera, m_shaderLamp, lightList);
 	m_renderer->renderSkybox(m_camera, skybox);

@@ -25,7 +25,7 @@ void Framebuffer::render(Shader* shader_)
 
 	glBindTexture(GL_TEXTURE_2D, m_texColourBuffer);
 
-	m_mesh->render();
+	m_mesh->render(shader_);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0); //Unbind the framebuffer as a precaution
 }
@@ -67,7 +67,7 @@ void Framebuffer::setFramebuffer(Window* window_) {
 
 bool Framebuffer::loadMesh()
 {
-	m_mesh = new PrimitiveMesh(PrimitiveMesh::PrimitiveType::PLANE);
+	m_mesh = new Mesh(Mesh::PrimitiveType::PLANE);
 
 	return true;
 }

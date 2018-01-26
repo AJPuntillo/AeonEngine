@@ -90,7 +90,7 @@ bool TutorialScene::initialize()
 	//The reason for having a Gameobject class is similar for Unity having a Gameobject class. We can now choose to put different components on the objects
 	//So if we want our Gameobject to contain a model, it can. If we want object to also contain a BoundingVolume, it can. It just adds more flexibility to our Engine
 	//To create a Gameobject, you must initialize it with a either a path to a .obj file (Which creates and attaches a model to it) or give it a PrimitiveMesh type (Which creates and attachs a PrimitiveModel to it)
-	m_modelContainer = new GameObject(PrimitiveMesh::PrimitiveMesh::CUBE);
+	m_modelContainer = new GameObject(Mesh::PrimitiveType::CUBE);
 	m_containerList.push_back(m_modelContainer);
 
 	m_modelNanosuit = new GameObject("Resources/Models/Nanosuit/nanosuit.obj");

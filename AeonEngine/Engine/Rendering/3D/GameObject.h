@@ -3,9 +3,9 @@
 
 #include "Entity.h"
 #include "Model.h"
-#include "PrimitiveModel.h"
 #include "Transform.h"
 #include "../../DataStructures/ShaderManager.h"
+#include "../../Physics/BoundingVolume.h"
 
 namespace AEON_ENGINE {
 
@@ -14,7 +14,7 @@ namespace AEON_ENGINE {
 	public:
 		GameObject(glm::vec3 pos_ = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 scale_ = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4 rot_ = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
 		GameObject(std::string modelPath_);
-		GameObject(PrimitiveMesh::PrimitiveType primitiveType_);
+		GameObject(Mesh::PrimitiveType primitiveType_);
 		~GameObject();
 
 		void update(const float deltaTime) override;
@@ -22,10 +22,10 @@ namespace AEON_ENGINE {
 
 		void attachModel(Entity* model_);
 		void detachModel();
-
 		void attachShader(ShaderManager::HandleType shaderHandle_);
-
 		void attachMaterial(/*Material* mat_*/);
+
+		void setupVolume();
 
 		//Getters
 		Entity* getAttachedModel() const { return m_model; }
@@ -38,6 +38,9 @@ namespace AEON_ENGINE {
 
 		//Transformations
 		Transform transform;
+
+		//Bounding Volume
+		BoundingVolume* boundingVolume;
 
 	private:
 		Entity* m_model = nullptr;

@@ -11,7 +11,7 @@
 #include <glm/glm.hpp>
 
 #include "Entity.h"
-#include "PrimitiveMesh.h"
+#include "Mesh.h"
 #include "../../Camera/Camera.h"
 #include "../../Core/Window.h"
 
@@ -37,7 +37,7 @@ namespace AEON_ENGINE {
 		void unbindBuffer();
 
 	private:
-		PrimitiveMesh* m_mesh;
+		Mesh* m_mesh;
 		unsigned int m_framebuffer;
 		unsigned int m_texColourBuffer;
 		unsigned int m_screenWidth;

@@ -41,8 +41,7 @@
 #include <AeonEngine/Engine/Core/SceneInterface.h>			//SceneInterface is needed to inherit from; explained above
 #include <AeonEngine/Engine/Camera/Camera.h>				//Camera is important for displaying the scene; Can move around like a FPS camera; **CONTAINS VIEW AND PROJECTION MATRIX**
 #include <AeonEngine/Engine/Rendering/3D/Renderer.h>		//Renderer is used to render your objects/models/skybox/etc
-#include <AeonEngine/Engine/Rendering/3D/Model.h>			//Model uses ASSIMP to load more complex models (Like the Nanosuit/Miku)
-#include <AeonEngine/Engine/Rendering/3D/PrimitiveModel.h>	//Loads a primitive cube; main use is for testing... will probably be the most important object
+#include <AeonEngine/Engine/Rendering/3D/Model.h>			//Model uses ASSIMP to load more complex models (Like the Nanosuit/Miku) OR can load a primitive (Like a CUBE or PLANE)
 #include <AeonEngine/Engine/Rendering/3D/Skybox.h>			//Skybox creates the a skybox... yeah
 #include <AeonEngine/Engine/Rendering/3D/GameObject.h>		//Gameobjects are going to be the main focus of everything seen in a scene; They contain models, transforms, (and optionally shaders); Think of them like Unity GameObjects
 
