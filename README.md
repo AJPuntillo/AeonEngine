@@ -72,12 +72,12 @@ Custom C++ engine
 - Finish Documentation
 - Advanced Lighting
 - Scene does not "delete" when switched to another scene
-- Physics (Adid)
-- Math (Adid)
-- ~~Audio~~ (Haifeng)
-- 2D Graphics/HUD (Haifeng)
-- Controller support (Fabio)
+- Grid
+- 2D Graphics/HUD
+- Controller support
 - Particle Engine
+- ~~AABB~~
+- ~~Merged PrimitiveModel and Model~~
 - ~~GameObject class~~
 - ~~Pre/Post Render~~
 - ~~Model Matrix check optimization~~
@@ -86,6 +86,7 @@ Custom C++ engine
 - ~~Most optimal place for processing inputs~~
 - ~~Model Class (Primitive and assimp)~~
 - ~~Lighting~~
+- ~~Audio~~
 - ~~Fix Shader class path~~
 - ~~Timing class~~
 - ~~Engine Core class should only initialize engine specific classes and any other user-specific preferences (eg. window size, which shaders to use) should be created somewhere else~~
