@@ -7,7 +7,6 @@ Window::Window()
 	//Empty
 }
 
-
 Window::~Window()
 {
 	shutdown();
@@ -66,7 +65,7 @@ bool Window::initialize(std::string windowName, int screenWidth, int screenHeigh
 	}
 
 	//Check the OpenGL version
-	std::printf("***     OpenGL Version: %s     ***\n", glGetString(GL_VERSION));
+	printOpenGLInfo();
 
 	//BG colour
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -145,4 +144,21 @@ void Window::setAttributes()
 	//Multisampling
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+}
+
+void Window::printOpenGLInfo()
+{
+	const GLubyte *version = glGetString(GL_VERSION);	
+	const GLubyte *vendor = glGetString(GL_VENDOR);
+	const GLubyte *renderer = glGetString(GL_RENDERER);
+	const GLubyte *glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
+
+	//std::printf("***     OpenGL Version: %s     ***\n", version);
+	std::cout << "###" << std::endl;
+	std::cout << "OpenGL Version: " << version << std::endl;
+	std::cout << "Graphics Card Vendor: " << vendor << std::endl;
+	std::cout << "Graphics Card Name: " << renderer << std::endl;
+	std::cout << "GLSL Version: " << glslVersion << std::endl;
+	std::cout << "###" << std::endl;
+	std::cout << std::endl;
 }

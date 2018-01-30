@@ -49,6 +49,7 @@ namespace AEON_ENGINE {
 
 	private:
 		void setAttributes();
+		void printOpenGLInfo();
 
 		//Window					//Defaults
 		SDL_Window* m_window		= nullptr;
