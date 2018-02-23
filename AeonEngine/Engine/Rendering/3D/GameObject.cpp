@@ -19,6 +19,11 @@ GameObject::GameObject(Mesh::PrimitiveType primitiveType_)
 	m_model = new Model(primitiveType_);
 }
 
+GameObject::GameObject(int amount, float lifespan)
+{
+	m_model = new ParticleEmitter(amount, lifespan);
+}
+
 GameObject::~GameObject()
 {
 

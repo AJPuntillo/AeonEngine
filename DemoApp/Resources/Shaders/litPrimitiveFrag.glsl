@@ -46,9 +46,12 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 vec3 result;
 vec3 primitiveColour;
 
+//Colour
+uniform vec3 colour;
+
 void main()
 {    
-	primitiveColour = vec3(0.3f, 0.3f, 1.0f);
+	primitiveColour = colour;//vec3(0.3f, 0.3f, 1.0f);
 
     //Properties
     vec3 norm = normalize(Normal);

@@ -1,4 +1,5 @@
-﻿  Window.cpp
+﻿  Board.cpp
+c:\users\andrew\documents\projects\c++ projects\aeonengine\aeonengine\engine\rendering\grid\board.cpp(69): warning C4018: '<': signed/unsigned mismatch
 SDL2.lib(SDL2.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR already defined in opengl32.lib(OPENGL32.dll); second definition ignored
 SDL2.lib(SDL2.dll) : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
 SDL2_ttf.lib(SDL2_ttf.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR already defined in opengl32.lib(OPENGL32.dll); second definition ignored

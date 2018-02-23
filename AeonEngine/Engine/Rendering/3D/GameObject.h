@@ -6,6 +6,7 @@
 #include "Transform.h"
 #include "../../DataStructures/ShaderManager.h"
 #include "../../Physics/BoundingVolume.h"
+#include "../Particles/ParticleEngine.h"
 
 namespace AEON_ENGINE {
 
@@ -15,6 +16,7 @@ namespace AEON_ENGINE {
 		GameObject(glm::vec3 pos_ = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 scale_ = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4 rot_ = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
 		GameObject(std::string modelPath_);
 		GameObject(Mesh::PrimitiveType primitiveType_);
+		GameObject(int amount, float lifespan);
 		~GameObject();
 
 		void update(const float deltaTime) override;

@@ -9,6 +9,8 @@
 #include <AeonEngine/Engine/Rendering/3D/Skybox.h>
 #include <AeonEngine/Engine/Rendering/3D/Framebuffer.h>
 #include <AeonEngine/Engine/Rendering/3D/GameObject.h>
+#include <AeonEngine/Engine/Rendering/Grid/Board.h>
+#include <AeonEngine/Engine/Rendering/Particles/ParticleEngine.h>
 
 class DemoScene : public AEON_ENGINE::SceneInterface
 {
@@ -39,6 +41,13 @@ private:
 	//GameObjects
 	AEON_ENGINE::GameObject* model_cube;
 	AEON_ENGINE::GameObject* model_nanosuit;
+	AEON_ENGINE::GameObject* model_nanosuit2;
+	AEON_ENGINE::GameObject* model_nanosuit3;
+	AEON_ENGINE::GameObject* model_nanosuit4;
+	AEON_ENGINE::GameObject* model_nanosuit5;
+	AEON_ENGINE::GameObject* model_nanosuit6;
+	AEON_ENGINE::GameObject* model_nanosuit7;
+	AEON_ENGINE::GameObject* model_nanosuit8;
 	//Light List
 	AEON_ENGINE::Light* dirLight;
 	AEON_ENGINE::Light* pointLight;
@@ -52,6 +61,13 @@ private:
 	std::vector<AEON_ENGINE::GameObject*> objectList;
 	std::vector<AEON_ENGINE::GameObject*> objectList2;
 	std::vector<AEON_ENGINE::Light*> lightList;
+
+	//Board
+	AEON_ENGINE::Board* board;
+
+	//Particles
+	AEON_ENGINE::GameObject* particleObject;
+	AEON_ENGINE::ParticleEmitter* emitter;
 
 	//Timing
 	float m_deltaTime = 0.0f; //Time between current frame and last frame

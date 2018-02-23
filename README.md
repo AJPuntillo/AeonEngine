@@ -66,16 +66,22 @@ Custom C++ engine
 - Removed PrimitiveModel and PrimitiveMesh classes
 - GameObjects now all contain a BoundingVolume that can be set up when a model is attached to it
 
+
+**[02/22/18]**
+- Tile class that hold a mesh
+- Board class that holds tiles and is able to display them in a grid
+- ParticleEngine class that is able to render GL_Points and create simple particle effects on the GPU
+
 ### TO DO
 
 - Optimization
 - Finish Documentation
 - Advanced Lighting
 - Scene does not "delete" when switched to another scene
-- Grid
 - 2D Graphics/HUD
 - Controller support
-- Particle Engine
+- ~~Grid~~
+- ~~Particle Engine~~
 - ~~AABB~~
 - ~~Merged PrimitiveModel and Model~~
 - ~~GameObject class~~
