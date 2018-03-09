@@ -240,6 +240,11 @@ void Mesh::render(Shader* shader_)
 			// and finally bind the texture
 			glBindTexture(GL_TEXTURE_2D, textures[i].id);
 		}
+
+		if (textures.size() == 1) {
+			shader_->setInt("texture_specular1", 0);
+		}
+
 		//Render mesh
 		glBindVertexArray(m_VAO);
 		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);

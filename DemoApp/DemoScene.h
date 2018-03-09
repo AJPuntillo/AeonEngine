@@ -11,6 +11,7 @@
 #include <AeonEngine/Engine/Rendering/3D/GameObject.h>
 #include <AeonEngine/Engine/Rendering/Grid/Board.h>
 #include <AeonEngine/Engine/Rendering/Particles/ParticleEngine.h>
+#include <AeonEngine/Engine/Rendering/Pieces/Piece.h>
 
 class DemoScene : public AEON_ENGINE::SceneInterface
 {
@@ -64,6 +65,9 @@ private:
 
 	//Board
 	AEON_ENGINE::Board* board;
+
+	//Piece
+	AEON_ENGINE::Piece* piece;
 
 	//Particles
 	AEON_ENGINE::GameObject* particleObject;

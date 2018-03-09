@@ -61,13 +61,39 @@ bool DemoScene::initialize()
 	dirLight = new Light(LIGHT_DIRECTIONAL, false);
 	lightList.push_back(dirLight);
 
-	board = new Board();
-	board->translateBoard(-3.85f, -5.0f, -15.0);
+	//Board layout
+	std::vector<char> boardLayout = {
+		0, 0, 1, 0, 0, 0, 0, 0,
+		0, 2, 0, 1, 0, 0, 1, 0,
+		0, 0, 0, 2, 0, 3, 0, 0,
+		0, 3, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 1, 0, 0, 0, 2,
+		0, 0, 0, 0, 0, 0, 3, 0,
+		2, 0, 3, 0, 0, 1, 0, 0,
+		0, 0, 0, 0, 0, 0, 2, 0
+	};
 
-	model_nanosuit = new GameObject("Resources/Models/Nanosuit/nanosuit.obj");
-	model_nanosuit->transform.translateBy(board->getTiles()[2]->m_centerPos);
-	model_nanosuit->transform.scaleBy(0.1f, 0.1f, 0.1f);
-	objectList.push_back(model_nanosuit);
+	//Piece layout
+	std::vector<char> pieceLayout = {
+		0, 0, 0, 0, 0, 0, 0, 0,
+		3, 0, 0, 0, 0, 0, 0, 6,
+		1, 0, 0, 0, 0, 0, 0, 4,
+		1, 0, 0, 0, 0, 0, 0, 4,
+		2, 0, 0, 0, 0, 0, 0, 5,
+		2, 0, 0, 0, 0, 0, 0, 5,
+		3, 0, 0, 0, 0, 0, 0, 6,
+		0, 0, 0, 0, 0, 0, 0, 0
+	};
+
+	board = new Board(8, 8, boardLayout, pieceLayout);
+	board->translateBoard(-4.0f, -5.0f, -15.0);
+
+	std::cout << "CENTER POS AFTER" << board->getBoard()[2]->m_centerPos.x << " " << board->getBoard()[2]->m_centerPos.y << " " << board->getBoard()[2]->m_centerPos.z << std::endl;
+	std::cout << board->getAdjacentTiles(board->getBoard()[2]).size() << std::endl;
+
+	for (auto edge : board->getBoard()[1]->m_edges) {
+		std::cout << "EDGE:" << edge.connectedTo->m_centerPos.x << " " << edge.connectedTo->m_centerPos.y << " " << edge.connectedTo->m_centerPos.z << std::endl;
+	}
 
 	//model_nanosuit2 = new GameObject("Resources/Models/Miku/miku.obj");
 	//model_nanosuit2->transform.translateBy(board->getTiles()[3]->m_centerPos);
@@ -179,22 +205,40 @@ void DemoScene::processInput()
 		pointLight->transform.translateBy(glm::vec3(0.0f, 2.5f, 0.0f) * m_deltaTime);
 
 	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_k))
-		pointLight->transform.translateBy(glm::vec3(-0.0f, -2.5f, 0.0f) * m_deltaTime);
+		pointLight->transform.translateBy(glm::vec3(0.0f, -2.5f, 0.0f) * m_deltaTime);
 	//--
 
-	//Moving the model--
-	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_RIGHT))
-		model_nanosuit->transform.translateBy(glm::vec3(2.5f, 0.0f, 0.0f) * m_deltaTime);
+	////Moving the model--
+	//if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_RIGHT))
+	//	model_nanosuit->transform.translateBy(glm::vec3(2.5f, 0.0f, 0.0f) * m_deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_LEFT))
-		model_nanosuit->transform.translateBy(glm::vec3(-2.5f, 0.0f, 0.0f) * m_deltaTime);
+	//if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_LEFT))
+	//	model_nanosuit->transform.translateBy(glm::vec3(-2.5f, 0.0f, 0.0f) * m_deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_UP))
-		model_nanosuit->transform.translateBy(glm::vec3(0.0f, 2.5f, 0.0f) * m_deltaTime);
+	//if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_UP))
+	//	model_nanosuit->transform.translateBy(glm::vec3(0.0f, 2.5f, 0.0f) * m_deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_DOWN))
-		model_nanosuit->transform.translateBy(glm::vec3(-0.0f, -2.5f, 0.0f) * m_deltaTime);
+	//if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_DOWN))
+	//	model_nanosuit->transform.translateBy(glm::vec3(-0.0f, -2.5f, 0.0f) * m_deltaTime);
+	////--
+
+	//Moving the Selection of the Board--
+	if (EngineCore::getInstance()->getInputManager()->isKeyPressed(SDLK_RIGHT))
+		board->moveHover(Board::MoveDirection::RIGHT);
+
+	if (EngineCore::getInstance()->getInputManager()->isKeyPressed(SDLK_LEFT))
+		board->moveHover(Board::MoveDirection::LEFT);
+
+	if (EngineCore::getInstance()->getInputManager()->isKeyPressed(SDLK_UP))
+		board->moveHover(Board::MoveDirection::UP);
+
+	if (EngineCore::getInstance()->getInputManager()->isKeyPressed(SDLK_DOWN))
+		board->moveHover(Board::MoveDirection::DOWN);
 	//--
+
+	//Select
+	if (EngineCore::getInstance()->getInputManager()->isKeyPressed(SDLK_RETURN))
+		board->selectPiece();
 
 	//Toggle Mouse Capture
 	if (EngineCore::getInstance()->getInputManager()->isKeyPressed(SDLK_ESCAPE))
@@ -215,6 +259,8 @@ void DemoScene::update(float deltaTime_)
 
 	//**Rotation needs to be reset in the model for it to work properly
 	//model_nanosuit->transform.rotateBy((((float)SDL_GetTicks() / 1000) * glm::radians(50.0f)), 0.0f, 1.0f, 0.0f);
+
+	board->update(deltaTime_);
 }
 
 void DemoScene::prerender()
@@ -234,6 +280,7 @@ void DemoScene::render()
 
 	//Renderer
 	m_renderer->render(m_camera, m_shaderLighting, board, lightList);
+	//m_renderer->render(m_camera, m_shaderLighting, piece, lightList);
 	m_renderer->render(m_camera, m_shaderLighting, objectList, lightList);
 	//m_renderer->render(m_camera, m_shaderContainer, objectList2, lightList);
 	m_renderer->renderLightMeshes(m_camera, m_shaderLamp, lightList);

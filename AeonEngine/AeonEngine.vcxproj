@@ -164,9 +164,6 @@
     <ClCompile Include="Engine\Rendering\3D\Skybox.cpp" />
     <ClCompile Include="Engine\Rendering\3D\SkyboxMesh.cpp" />
     <ClCompile Include="Engine\Rendering\3D\Transform.cpp" />
-    <ClCompile Include="Engine\Rendering\Grid\Board.cpp" />
-    <ClCompile Include="Engine\Rendering\Grid\GrassTile.cpp" />
-    <ClCompile Include="Engine\Rendering\Grid\Tile.cpp" />
     <ClCompile Include="Engine\Rendering\Particles\ParticleEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -197,9 +194,6 @@
     <ClInclude Include="Engine\Rendering\3D\Skybox.h" />
     <ClInclude Include="Engine\Rendering\3D\SkyboxMesh.h" />
     <ClInclude Include="Engine\Rendering\3D\Transform.h" />
-    <ClInclude Include="Engine\Rendering\Grid\Board.h" />
-    <ClInclude Include="Engine\Rendering\Grid\GrassTile.h" />
-    <ClInclude Include="Engine\Rendering\Grid\Tile.h" />
     <ClInclude Include="Engine\Rendering\Particles\ParticleEngine.h" />
   </ItemGroup>
   <ItemGroup>

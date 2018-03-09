@@ -60,3 +60,21 @@ void Transform::scaleBy(glm::vec3 scale_)
 
 	transformHasChanged = true;
 }
+
+void Transform::setPosition(float x_, float y_, float z_)
+{
+	position = glm::vec3(x_, y_, z_);
+	translationMatrix = glm::mat4();
+	translationMatrix = glm::translate(translationMatrix, position);
+
+	transformHasChanged = true;
+}
+
+void Transform::setPosition(glm::vec3 pos_)
+{
+	position = pos_;
+	translationMatrix = glm::mat4();
+	translationMatrix = glm::translate(translationMatrix, position);
+
+	transformHasChanged = true;
+}

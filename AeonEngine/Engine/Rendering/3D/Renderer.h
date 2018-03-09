@@ -17,7 +17,6 @@
 #include "Skybox.h"
 #include "Framebuffer.h"
 #include "GameObject.h"
-#include "../Grid/Board.h"
 //Resource Managers
 #include "../../DataStructures/ShaderManager.h"
 #include "../../DataStructures/ModelManager.h"
@@ -35,8 +34,9 @@ namespace AEON_ENGINE {
 
 		void render(Camera* camera_, ShaderManager::HandleType shaderHandle_, std::vector<GameObject*> objects_, std::vector<Light*> lights_);
 
-		void render(Camera* camera_, ShaderManager::HandleType shaderHandle_, Board* board_, std::vector<Light*> lights_);
-		void render(Camera* camera_, ShaderManager::HandleType shaderHandle_, Tile* tile_, std::vector<Light*> lights_);
+		//void render(Camera* camera_, ShaderManager::HandleType shaderHandle_, Board* board_, std::vector<Light*> lights_);
+		//void render(Camera* camera_, ShaderManager::HandleType shaderHandle_, Tile* tile_, std::vector<Light*> lights_);
+		//void render(Camera* camera_, ShaderManager::HandleType shaderHandle_, Piece* piece_, std::vector<Light*> lights_);
 
 		void render(Camera* camera_, ShaderManager::HandleType shaderHandle_, std::vector<GameObject*> objects_);
 		void renderLightMeshes(Camera* camera_, ShaderManager::HandleType shaderHandle_, std::vector<Light*> lights_);

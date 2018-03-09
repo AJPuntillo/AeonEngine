@@ -25,6 +25,9 @@ namespace AEON_ENGINE {
 		void scaleBy		(float x_, float y_, float z_);
 		void scaleBy		(glm::vec3 scale_);
 
+		void setPosition	(float x_, float y_, float z_);
+		void setPosition	(glm::vec3 pos_);
+
 		glm::mat4 modelMatrix	= glm::mat4();
 		glm::vec3 position		= glm::vec3(0.0f, 0.0f, 0.0f);
 		glm::vec3 rotation		= glm::vec3(0.0f, 0.0f, 0.0f);

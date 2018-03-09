@@ -72,6 +72,13 @@ Custom C++ engine
 - Board class that holds tiles and is able to display them in a grid
 - ParticleEngine class that is able to render GL_Points and create simple particle effects on the GPU
 
+**[03/09/18]**
+- Piece class that is instantiated to the Board
+- Board contains pieces for each player
+- Pieces can move and attack on the board
+- Piece layout can be read and placed properly on the board
+- Create the ARCHON Project to be the showcase game for the Engine
+
 ### TO DO
 
 - Optimization
