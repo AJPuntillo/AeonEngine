@@ -9,9 +9,10 @@ in vec2 TexCoords;
 uniform vec3 viewPos;
 
 vec3 primitiveColour;
+uniform vec3 colour;
 
 void main()
 {    
-	primitiveColour = vec3(0.9f, 0.9f, 0.9f);
+	primitiveColour = colour; //vec3(0.9f, 0.9f, 0.9f);
     FragColour = vec4(primitiveColour, 1.0);
 }

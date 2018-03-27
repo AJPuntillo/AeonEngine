@@ -1,2 +1,21 @@
-﻿  Scene_Main.cpp
+﻿  Scene_Menu.cpp
+  Piece.cpp
+c:\users\andrew\documents\projects\c++ projects\aeonengine\archon\gameplay\pieces\piece.cpp(153): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\andrew\documents\projects\c++ projects\aeonengine\archon\gameplay\pieces\piece.cpp(163): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\andrew\documents\projects\c++ projects\aeonengine\archon\gameplay\pieces\piece.cpp(172): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\andrew\documents\projects\c++ projects\aeonengine\archon\gameplay\pieces\piece.cpp(181): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\andrew\documents\projects\c++ projects\aeonengine\archon\gameplay\pieces\piece.cpp(188): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  GameManager.cpp
+  Board.cpp
+c:\users\andrew\documents\projects\c++ projects\aeonengine\archon\gameplay\grid\board.cpp(175): warning C4018: '>': signed/unsigned mismatch
+c:\users\andrew\documents\projects\c++ projects\aeonengine\archon\gameplay\grid\board.cpp(310): warning C4018: '<': signed/unsigned mismatch
+c:\users\andrew\documents\projects\c++ projects\aeonengine\archon\gameplay\grid\board.cpp(323): warning C4018: '<': signed/unsigned mismatch
+c:\users\andrew\documents\projects\c++ projects\aeonengine\archon\gameplay\grid\board.cpp(412): warning C4018: '<': signed/unsigned mismatch
+c:\users\andrew\documents\projects\c++ projects\aeonengine\archon\gameplay\grid\board.cpp(511): warning C4018: '<': signed/unsigned mismatch
+  ArchonGame.cpp
+  Generating Code...
+  Compiling...
+  Scene_Main.cpp
+  Generating Code...
+     Creating library C:\Users\Andrew\Documents\Projects\C++ Projects\AeonEngine\Debug\Debug\Archon\.lib and object C:\Users\Andrew\Documents\Projects\C++ Projects\AeonEngine\Debug\Debug\Archon\.exp
   Archon.vcxproj -> C:\Users\Andrew\Documents\Projects\C++ Projects\AeonEngine\Debug\Debug\Archon\.exe

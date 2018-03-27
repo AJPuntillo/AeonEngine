@@ -39,6 +39,7 @@ namespace AEON_ENGINE {
 		//void render(Camera* camera_, ShaderManager::HandleType shaderHandle_, Piece* piece_, std::vector<Light*> lights_);
 
 		void render(Camera* camera_, ShaderManager::HandleType shaderHandle_, std::vector<GameObject*> objects_);
+		void renderParticles(Camera* camera_, ShaderManager::HandleType shaderHandle_, ParticleEmitter* particles_, std::vector<Light*> lights_);
 		void renderLightMeshes(Camera* camera_, ShaderManager::HandleType shaderHandle_, std::vector<Light*> lights_);
 		void renderSkybox(Camera* camera_, Skybox* skybox_);
 		void renderFramebuffer(ShaderManager::HandleType shaderHandle_, Framebuffer* framebuffer_);

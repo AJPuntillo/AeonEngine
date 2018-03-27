@@ -1,6 +1,7 @@
 #include "ArchonGame.h"
 
 #include "Scenes/Scene_Main.h"
+#include "Scenes/Scene_Menu.h"
 
 using namespace AEON_ENGINE;
 
@@ -18,9 +19,7 @@ ArchonGame::~ArchonGame()
 bool ArchonGame::initialize() {
 
 	//Default scene you want to load
-	//Change TutorialScene() to which ever scene you want/have created
-	//**Remember that it must be included at the top of this file
-	m_currentScene = new Scene_Main();
+	m_currentScene = new Scene_Menu;
 
 	m_currentScene->initialize();
 
@@ -59,6 +58,30 @@ void ArchonGame::draw()
 	m_currentScene->draw();
 }
 
+void ArchonGame::loadScene(int sceneIndex_)
+{
+	switch (sceneIndex_) {
+	case 0:
+		delete m_currentScene;
+		m_currentScene = nullptr;
+
+		m_currentScene = new Scene_Menu();
+		break;
+	case 1:
+		delete m_currentScene;
+		m_currentScene = nullptr;
+
+		m_currentScene = new Scene_Main();
+		break;
+	default:
+		return;
+	}
+
+	m_currentSceneIndex = sceneIndex_;
+
+	m_currentScene->initialize();
+}
+
 void ArchonGame::switchScene(int scene)
 {
 
@@ -68,11 +91,17 @@ void ArchonGame::switchScene(int scene)
 
 	switch (scene) {
 	case 0:
-		break;
+		delete m_currentScene;
+		m_currentScene = nullptr;
 
+		m_currentScene = new Scene_Menu();
+		break;
 	case 1:
-		break;
+		delete m_currentScene;
+		m_currentScene = nullptr;
 
+		m_currentScene = new Scene_Main();
+		break;
 	default:
 		return;
 	}

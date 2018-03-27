@@ -51,6 +51,9 @@ vec3 primitiveColour;
 
 uniform bool hover;
 uniform bool select;
+uniform bool hasAction;
+uniform bool isMoveable;
+uniform bool isUnmoveable;
 
 void main()
 {    
@@ -68,6 +71,7 @@ void main()
     for(int i = 0; i < NumOfLights; i++)
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
     
+	/*
 	//Makeshift hover effect
 	if (hover && !select) {
 		FragColour = vec4(result + vec3(0.4, 0.4, 0.4), 1.0);
@@ -78,8 +82,25 @@ void main()
 	else if (hover && select) {
 		FragColour = vec4(result + vec3(0.7, 0.7, 0.3), 1.0);
 	}
+	else if (!hasAction) {
+		FragColour = vec4(result - vec3(0.4, 0.4, 0.4), 1.0);
+	}
+	else if (isMoveable) {
+		FragColour = vec4(result + vec3(0.0, 0.0, 0.8), 1.0);
+	}
+	else if (isUnmoveable) {
+		FragColour = vec4(result + vec3(0.8, 0.0, 0.0), 1.0);
+	}
 	else {
 		FragColour = vec4(result, 1.0);
+	}
+	*/
+
+	if (!hasAction) {
+		FragColour = vec4(result - vec3(0.4, 0.4, 0.4), 1.0);
+	} else {
+
+	FragColour = vec4(result + colour, 1.0);
 	}
 }
 

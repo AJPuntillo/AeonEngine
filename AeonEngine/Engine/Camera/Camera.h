@@ -50,11 +50,12 @@ namespace AEON_ENGINE {
 		glm::mat4& getProj()	 { return m_projection; }
 
 		//Setters
-		float setYaw(float yaw);
-		float setPitch(float pitch);
-		float setMoveSpeed(float moveSpeed);
-		float setSensitivity(float mouseSensitivity);
-		float setFOV(float fov);
+		void setPos(glm::vec3 pos);
+		void setYaw(float yaw);
+		void setPitch(float pitch);
+		void setMoveSpeed(float moveSpeed);
+		void setSensitivity(float mouseSensitivity);
+		void setFOV(float fov);
 
 	private:
 		void calculateCameraVectors(); // Calculates the front vector from the Camera's (updated) Eular Angles

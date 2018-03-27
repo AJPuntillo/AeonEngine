@@ -26,11 +26,18 @@ ShaderManager* ShaderManager::getInstance()
 ShaderManager::HandleType ShaderManager::addShader(const std::string &name_, const std::string &vertexPath_, const std::string &fragmentPath_)
 {
 	ShaderManager::HandleType result;
+	result = getShader(name_);
 
-	Shader* shader = new Shader(vertexPath_, fragmentPath_);
-	result = storeShader(shader, name_);
+	if (!result.isNull()) {
+		return result;
+	}
+	else {
 
-	return result;
+		Shader* shader = new Shader(vertexPath_, fragmentPath_);
+		result = storeShader(shader, name_);
+
+		return result;
+	}
 }
 
 ShaderManager::HandleType ShaderManager::storeShader(const Shader* shader_, const std::string &name_)

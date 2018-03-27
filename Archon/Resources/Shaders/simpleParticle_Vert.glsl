@@ -10,14 +10,16 @@ uniform mat4 view;
 uniform float time;
 uniform float gravity;
 uniform vec3 speed;
-uniform vec4 colour;
+uniform vec3 colour;
 
 out vec3 col;
 
 void main()
 {
 	float t = time;
-	col = vec3(sin(t), cos(t), sin(t));
+	//col = vec3(sin(t), cos(t), sin(t));
+	//col = vec3(1.0 - (t / 2), 0.5 - t, 0.5 - t);
+	col = vec3(colour - t);
 	//vec4 vert = aPos + vec4(aVel * t, 0.0);
 	vec3 vertPos = ((aVel * t) + (0.5*(vec3(0.0, gravity, 0.0) * (t * t))));
 	gl_Position = projection * view * model * vec4(vertPos, 1.0);

@@ -89,7 +89,7 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_ttf.lib;SDL2_mixer.lib;glew32.lib;glew32s.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_ttf.lib;SDL2_mixer.lib;glew32.lib;glew32s.lib;assimp-vc140-mt.lib;freetyped.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -120,7 +120,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_ttf.lib;SDL2_mixer.lib;glew32.lib;glew32s.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_ttf.lib;SDL2_mixer.lib;glew32.lib;glew32s.lib;assimp-vc140-mt.lib;freetyped.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -143,6 +143,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Camera\Camera.cpp" />
     <ClCompile Include="Engine\Core\EngineCore.cpp" />
     <ClCompile Include="Engine\Core\Timer.cpp" />
@@ -155,6 +156,9 @@
     <ClCompile Include="Engine\Graphics\stb_image.cpp" />
     <ClCompile Include="Engine\Math\Randomizer.cpp" />
     <ClCompile Include="Engine\Physics\BoundingVolume.cpp" />
+    <ClCompile Include="Engine\Physics\Stopwatch.cpp" />
+    <ClCompile Include="Engine\Rendering\2D\Text.cpp" />
+    <ClCompile Include="Engine\Rendering\2D\TextRenderer.cpp" />
     <ClCompile Include="Engine\Rendering\3D\Framebuffer.cpp" />
     <ClCompile Include="Engine\Rendering\3D\GameObject.cpp" />
     <ClCompile Include="Engine\Rendering\3D\Light.cpp" />
@@ -167,6 +171,7 @@
     <ClCompile Include="Engine\Rendering\Particles\ParticleEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Audio\Audio.h" />
     <ClInclude Include="Engine\Camera\Camera.h" />
     <ClInclude Include="Engine\Core\EngineCore.h" />
     <ClInclude Include="Engine\Core\GameInterface.h" />
@@ -184,6 +189,9 @@
     <ClInclude Include="Engine\Graphics\stb_image.h" />
     <ClInclude Include="Engine\Math\Randomizer.h" />
     <ClInclude Include="Engine\Physics\BoundingVolume.h" />
+    <ClInclude Include="Engine\Physics\Stopwatch.h" />
+    <ClInclude Include="Engine\Rendering\2D\Text.h" />
+    <ClInclude Include="Engine\Rendering\2D\TextRenderer.h" />
     <ClInclude Include="Engine\Rendering\3D\Entity.h" />
     <ClInclude Include="Engine\Rendering\3D\Framebuffer.h" />
     <ClInclude Include="Engine\Rendering\3D\GameObject.h" />

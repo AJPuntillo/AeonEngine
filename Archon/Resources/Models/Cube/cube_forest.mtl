@@ -12,5 +12,5 @@ newmtl Material__27
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka forest.png
-	map_Kd forest.png
+	map_Ka lake.png
+	map_Kd lake.png

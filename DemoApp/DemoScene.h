@@ -9,9 +9,10 @@
 #include <AeonEngine/Engine/Rendering/3D/Skybox.h>
 #include <AeonEngine/Engine/Rendering/3D/Framebuffer.h>
 #include <AeonEngine/Engine/Rendering/3D/GameObject.h>
-#include <AeonEngine/Engine/Rendering/Grid/Board.h>
+//#include <AeonEngine/Engine/Rendering/Grid/Board.h>
 #include <AeonEngine/Engine/Rendering/Particles/ParticleEngine.h>
-#include <AeonEngine/Engine/Rendering/Pieces/Piece.h>
+//#include <AeonEngine/Engine/Rendering/Pieces/Piece.h>
+#include <AeonEngine/Engine/Audio/Audio.h>
 
 class DemoScene : public AEON_ENGINE::SceneInterface
 {
@@ -34,6 +35,7 @@ private:
 	AEON_ENGINE::Renderer* m_renderer;
 	//Shader Program
 	AEON_ENGINE::ShaderManager::HandleType m_shaderLighting;
+	AEON_ENGINE::ShaderManager::HandleType m_shaderParticles;
 	AEON_ENGINE::ShaderManager::HandleType m_shaderContainer;
 	AEON_ENGINE::ShaderManager::HandleType m_shaderLamp;
 	AEON_ENGINE::ShaderManager::HandleType m_shaderSkybox;
@@ -42,17 +44,13 @@ private:
 	//GameObjects
 	AEON_ENGINE::GameObject* model_cube;
 	AEON_ENGINE::GameObject* model_nanosuit;
-	AEON_ENGINE::GameObject* model_nanosuit2;
-	AEON_ENGINE::GameObject* model_nanosuit3;
-	AEON_ENGINE::GameObject* model_nanosuit4;
-	AEON_ENGINE::GameObject* model_nanosuit5;
-	AEON_ENGINE::GameObject* model_nanosuit6;
-	AEON_ENGINE::GameObject* model_nanosuit7;
-	AEON_ENGINE::GameObject* model_nanosuit8;
+
 	//Light List
 	AEON_ENGINE::Light* dirLight;
 	AEON_ENGINE::Light* pointLight;
 	AEON_ENGINE::Light* pointLight2;
+	AEON_ENGINE::Light* pointLight3;
+	AEON_ENGINE::Light* pointLight4;
 	//Skybox
 	AEON_ENGINE::Skybox* skybox;
 	std::vector<std::string> skyboxFaces;
@@ -64,10 +62,10 @@ private:
 	std::vector<AEON_ENGINE::Light*> lightList;
 
 	//Board
-	AEON_ENGINE::Board* board;
+	//AEON_ENGINE::Board* board;
 
 	//Piece
-	AEON_ENGINE::Piece* piece;
+	//AEON_ENGINE::Piece* piece;
 
 	//Particles
 	AEON_ENGINE::GameObject* particleObject;
@@ -75,6 +73,10 @@ private:
 
 	//Timing
 	float m_deltaTime = 0.0f; //Time between current frame and last frame
+
+	//Audio
+	AEON_ENGINE::Audio m_audioEngine;
+	AEON_ENGINE::Music m_music;
 };
 
 #endif

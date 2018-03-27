@@ -18,6 +18,7 @@ public:
 	virtual void render() override;
 	virtual void postrender() override;
 	virtual void draw() override;
+	virtual void loadScene(int sceneIndex_) override;
 
 
 private:

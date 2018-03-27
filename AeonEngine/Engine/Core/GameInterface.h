@@ -23,6 +23,7 @@ namespace AEON_ENGINE {
 		virtual void render() = 0;
 		virtual void postrender() = 0;
 		virtual void draw() = 0;
+		virtual void loadScene(int sceneIndex_) = 0;
 	};
 
 }

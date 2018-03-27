@@ -1,0 +1,7 @@
+﻿  DemoGame.cpp
+     Creating library C:\Users\Andrew\Documents\Projects\C++ Projects\AeonEngine\Release\DemoApp.lib and object C:\Users\Andrew\Documents\Projects\C++ Projects\AeonEngine\Release\DemoApp.exp
+  Generating code
+c:\users\andrew\documents\projects\c++ projects\aeonengine\aeonengine\engine\core\enginecore.cpp(22): warning C4722: 'AEON_ENGINE::EngineCore::~EngineCore': destructor never returns, potential memory leak
+  All 2289 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  DemoApp.vcxproj -> C:\Users\Andrew\Documents\Projects\C++ Projects\AeonEngine\Release\DemoApp.exe

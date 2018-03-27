@@ -101,8 +101,10 @@ void Light::render(Shader* shader_)
 	transform.updateModelMatrix();
 	shader_->setMat4("model", transform.modelMatrix);
 
-	if (m_hasMesh)
+	if (m_hasMesh) {
+		shader_->setVec3("colour", m_diffuse);
 		m_mesh->render(shader_);
+	}
 }
 
 void Light::loadMesh()

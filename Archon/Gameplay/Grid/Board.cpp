@@ -18,11 +18,51 @@ Board::Board(int width_, int height_, std::vector<char>& boardLayout_, std::vect
 {
 	initBoard();
 	initPiece();
+	initAudio();
+
+	m_timer = new Stopwatch();
+
+	text_hoverHP = new Text(" ", 20, 70, 0.4f, glm::vec3(1.0f, 1.0f, 1.0f));
+	m_textList.push_back(text_hoverHP);
+	text_hoverDamage = new Text(" ", 20, 50, 0.4f, glm::vec3(1.0f, 1.0f, 1.0f));
+	m_textList.push_back(text_hoverDamage);
+	text_hoverRange = new Text(" ", 20, 30, 0.4f, glm::vec3(1.0f, 1.0f, 1.0f));
+	m_textList.push_back(text_hoverRange);
+	text_hoverEffective = new Text(" ", 20, 10, 0.4f, glm::vec3(1.0f, 1.0f, 1.0f));
+	m_textList.push_back(text_hoverEffective);
+	//text_selectHP = new Text("Selected Piece HP: ", 10, 40, 0.4f, glm::vec3(1.0f, 1.0f, 1.0f));
+	//m_textList.push_back(text_selectHP);
+	text_time = new Text("Time: 45", 710, 10, 0.4f, glm::vec3(1.0f, 1.0f, 1.0f));
+	m_textList.push_back(text_time);
+	text_actionCount = new Text("Actions: ", 710, 30, 0.4f, glm::vec3(1.0f, 1.0f, 1.0f));
+	m_textList.push_back(text_actionCount);
 }
 
 Board::~Board()
 {
+	bg_music.stop();
+	victory_music.stop();
 
+	selectedPiece = nullptr;
+
+	selectedTile = nullptr;
+
+	hoveredTile = nullptr;
+
+	for (Tile* tile : m_board) {
+		delete tile;
+		tile = nullptr;
+	}
+
+	for (Piece* p1 : p1_pieces) {
+		delete p1;
+		p1 = nullptr;
+	}
+
+	for (Piece* p2 : p2_pieces) {
+		delete p2;
+		p2 = nullptr;
+	}
 }
 
 void Board::update(const float deltaTime_)
@@ -30,10 +70,30 @@ void Board::update(const float deltaTime_)
 	for (Tile* tile : m_board)
 		tile->update(deltaTime_);
 
-	//For when you're hovering over a selected tile
-	if (selectedTile == hoveredTile) {
-		hoveredTile->m_colour = glm::vec3(0.0f, 0.8f, 0.8f);
+	for (Piece* p1 : p1_pieces)
+		p1->update(deltaTime_);
+
+	for (Piece* p2 : p2_pieces)
+		p2->update(deltaTime_);
+
+	m_timer->Update(deltaTime_);
+
+	//Turn Timer
+	if (m_gameManager->m_turnTimer->getTimerValue() == m_gameManager->m_turnMaxTime) {
+		endTurn();
 	}
+
+	if (m_gameManager->p1_pieceCount == 0) {
+		GameOver(GameManager::PlayerTurn::P2_turn);
+	}
+	else if (m_gameManager->p2_pieceCount == 0) {
+		GameOver(GameManager::PlayerTurn::P1_turn);
+	}
+
+	if (actions == 0)
+		removeActions();
+
+	updateHUD();
 }
 
 void Board::render(Shader* shader_)
@@ -60,211 +120,294 @@ void Board::render(Shader* shader_)
 
 void Board::moveHover(MoveDirection dir_)
 {
-	//Temp attacking hover
-	if (m_isAttacking) {
-		if (dir_ == RIGHT) {
-			hov--;
-			if (hov < 0)
-				hov = enemyTiles.size() - 1;
-			std::cout << hov << std::endl;
-			hoveredTile->isHovered = false;
-			hoveredTile = enemyTiles[hov];
-			hoveredTile->isHovered = true;
-		}
+	if (gameover)
+		return;
 
-		if (dir_ == LEFT) {
-			hov++;
-			if (hov > enemyTiles.size() - 1)
-				hov = 0;
-			std::cout << hov << std::endl;
-			hoveredTile->isHovered = false;
-			hoveredTile = enemyTiles[hov];
-			hoveredTile->isHovered = true;
-		}
-		//hov = 0;
+	switch (m_boardState) {
+		case BoardState::NONE:
+		case BoardState::SELECTION:
+			if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P1_turn) {
+				if (dir_ == LEFT)
+					if (hoveredTile->m_edges.size() != 0)
+						for (Edge edge : hoveredTile->m_edges)
+							if (edge.connectedTo->m_centerPos.z < hoveredTile->m_centerPos.z)
+								newHover(edge.connectedTo);
+
+				if (dir_ == RIGHT)
+					if (hoveredTile->m_edges.size() != 0)
+						for (Edge edge : hoveredTile->m_edges)
+							if (edge.connectedTo->m_centerPos.z > hoveredTile->m_centerPos.z)
+								newHover(edge.connectedTo);
+
+				if (dir_ == DOWN)
+					if (hoveredTile->m_edges.size() != 0)
+						for (Edge edge : hoveredTile->m_edges)
+							if (edge.connectedTo->m_centerPos.x < hoveredTile->m_centerPos.x)
+								newHover(edge.connectedTo);
+
+				if (dir_ == UP)
+					if (hoveredTile->m_edges.size() != 0)
+						for (Edge edge : hoveredTile->m_edges)
+							if (edge.connectedTo->m_centerPos.x > hoveredTile->m_centerPos.x)
+								newHover(edge.connectedTo);
+			}
+			else if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P2_turn) {
+				if (dir_ == RIGHT)
+					if (hoveredTile->m_edges.size() != 0)
+						for (Edge edge : hoveredTile->m_edges)
+							if (edge.connectedTo->m_centerPos.z < hoveredTile->m_centerPos.z)
+								newHover(edge.connectedTo);
+
+				if (dir_ == LEFT)
+					if (hoveredTile->m_edges.size() != 0)
+						for (Edge edge : hoveredTile->m_edges)
+							if (edge.connectedTo->m_centerPos.z > hoveredTile->m_centerPos.z)
+								newHover(edge.connectedTo);
+
+				if (dir_ == UP)
+					if (hoveredTile->m_edges.size() != 0)
+						for (Edge edge : hoveredTile->m_edges)
+							if (edge.connectedTo->m_centerPos.x < hoveredTile->m_centerPos.x)
+								newHover(edge.connectedTo);
+
+				if (dir_ == DOWN)
+					if (hoveredTile->m_edges.size() != 0)
+						for (Edge edge : hoveredTile->m_edges)
+							if (edge.connectedTo->m_centerPos.x > hoveredTile->m_centerPos.x)
+								newHover(edge.connectedTo);
+			}
+
+			/*if (dir_ == UP)
+				if (hoveredTile->m_edges.size() != 0)
+					for (Edge edge : hoveredTile->m_edges)
+						if (edge.connectedTo->m_centerPos.z < hoveredTile->m_centerPos.z && edge.connectedTo->m_occ != Tile::OccupationType::OBSTACLE)
+							newHover(edge.connectedTo);
+
+			if (dir_ == DOWN)
+				if (hoveredTile->m_edges.size() != 0)
+					for (Edge edge : hoveredTile->m_edges)
+						if (edge.connectedTo->m_centerPos.z > hoveredTile->m_centerPos.z  && edge.connectedTo->m_occ != Tile::OccupationType::OBSTACLE)
+							newHover(edge.connectedTo);
+
+			if (dir_ == LEFT)
+				if (hoveredTile->m_edges.size() != 0)
+					for (Edge edge : hoveredTile->m_edges)
+						if (edge.connectedTo->m_centerPos.x < hoveredTile->m_centerPos.x  && edge.connectedTo->m_occ != Tile::OccupationType::OBSTACLE)
+							newHover(edge.connectedTo);
+
+			if (dir_ == RIGHT)
+				if (hoveredTile->m_edges.size() != 0)
+					for (Edge edge : hoveredTile->m_edges)
+						if (edge.connectedTo->m_centerPos.x > hoveredTile->m_centerPos.x  && edge.connectedTo->m_occ != Tile::OccupationType::OBSTACLE)
+							newHover(edge.connectedTo);*/
+
+			break;
+
+		case BoardState::ATTACKING:
+			if (dir_ == RIGHT) {
+				hov--;
+				if (hov < 0)
+					hov = enemyList.size() - 1;
+				std::cout << hov << std::endl;
+				newHover(enemyList[hov]);
+			}
+
+			if (dir_ == LEFT) {
+				hov++;
+				if (hov > enemyList.size() - 1)
+					hov = 0;
+				std::cout << hov << std::endl;
+				newHover(enemyList[hov]);
+			}
+			break;
 	}
-	else {
 
-		if (dir_ == UP)
-			if (hoveredTile->m_edges.size() != 0) {
-				//***Old way of searching for an appropriate edge, but not sure if this is slower or faster. Will have to test more!***
-				//Tile* toTile = getTile(hoveredTile->m_centerPos - glm::vec3(0.0f, 0.0f, hoveredTile->m_zOffset));
-				//if (toTile != nullptr) {
-				//	std::cout << "THERE IS A TILE THERE" << std::endl;
-				//}
-
-				for (Edge edge : hoveredTile->m_edges) {
-					if (edge.connectedTo->m_centerPos.z < hoveredTile->m_centerPos.z && edge.connectedTo->m_occ != Tile::OccupationType::OBSTACLE) {
-						hoveredTile->isHovered = false;
-						hoveredTile->m_colour = glm::vec3(0.3f, 0.3f, 0.8f);
-						hoveredTile = edge.connectedTo;
-						hoveredTile->isHovered = true;
-						hoveredTile->m_colour = glm::vec3(0.8f, 0.3f, 0.3f);
-						if (m_activeSelection)
-							selectedTile->m_colour = glm::vec3(0.3f, 0.8f, 0.3f);
-					}
-				}
-			}
-
-		if (dir_ == DOWN) {
-			if (hoveredTile->m_edges.size() != 0) {
-				for (Edge edge : hoveredTile->m_edges) {
-					if (edge.connectedTo->m_centerPos.z > hoveredTile->m_centerPos.z  && edge.connectedTo->m_occ != Tile::OccupationType::OBSTACLE) {
-						hoveredTile->isHovered = false;
-						hoveredTile->m_colour = glm::vec3(0.3f, 0.3f, 0.8f);
-						hoveredTile = edge.connectedTo;
-						hoveredTile->isHovered = true;
-						hoveredTile->m_colour = glm::vec3(0.8f, 0.3f, 0.3f);
-						if (m_activeSelection)
-							selectedTile->m_colour = glm::vec3(0.3f, 0.8f, 0.3f);
-					}
-				}
-			}
-		}
-
-		if (dir_ == LEFT) {
-			if (hoveredTile->m_edges.size() != 0) {
-				for (Edge edge : hoveredTile->m_edges) {
-					if (edge.connectedTo->m_centerPos.x < hoveredTile->m_centerPos.x  && edge.connectedTo->m_occ != Tile::OccupationType::OBSTACLE) {
-						hoveredTile->isHovered = false;
-						hoveredTile->m_colour = glm::vec3(0.3f, 0.3f, 0.8f);
-						hoveredTile = edge.connectedTo;
-						hoveredTile->isHovered = true;
-						hoveredTile->m_colour = glm::vec3(0.8f, 0.3f, 0.3f);
-						if (m_activeSelection)
-							selectedTile->m_colour = glm::vec3(0.3f, 0.8f, 0.3f);
-					}
-				}
-			}
-		}
-
-		if (dir_ == RIGHT) {
-			if (hoveredTile->m_edges.size() != 0) {
-				for (Edge edge : hoveredTile->m_edges) {
-					if (edge.connectedTo->m_centerPos.x > hoveredTile->m_centerPos.x  && edge.connectedTo->m_occ != Tile::OccupationType::OBSTACLE) {
-						hoveredTile->isHovered = false;
-						hoveredTile->m_colour = glm::vec3(0.3f, 0.3f, 0.8f);
-						hoveredTile = edge.connectedTo;
-						hoveredTile->isHovered = true;
-						hoveredTile->m_colour = glm::vec3(0.8f, 0.3f, 0.3f);
-						if (m_activeSelection)
-							selectedTile->m_colour = glm::vec3(0.3f, 0.8f, 0.3f);
-					}
-				}
-			}
-		}
-	}
+	//Play move hover sfx
+	sfx_moveHover.play(0, 20);
 }
 
 void Board::selectPiece()
 {
-	if (m_isAttacking) {
-		attackPiece(hoveredTile);
-		m_isAttacking = false;
-		hov = 0;
-		enemyTiles.clear();
+	if (gameover)
 		return;
-	}
 
-	//If there is already an active selection
-	if (m_activeSelection) {
-		//If the selected tile is itself, then unselect it
-		if (selectedTile == hoveredTile) {
-			selectedTile->m_colour = glm::vec3(0.8f, 0.3f, 0.3f);
-			selectedTile->isSelected = false;
-			m_activeSelection = false;
-			selectedTile = nullptr;
-		}
-		else {
-			if (!hoveredTile->isOccupied) {
-				//Check if there are any adjacent pieces to the tiles and push to a vector is there are
-				//std::vector<Tile*> enemyTiles;
-				for (Edge edge : hoveredTile->m_edges) {
-					//Will need to check if piece is enemy
-					if (edge.connectedTo->m_occ == Tile::OccupationType::PIECE && edge.connectedTo != selectedTile)
-						enemyTiles.push_back(edge.connectedTo);
+	switch (m_boardState) {
+		case BoardState::NONE:
+			if (!hoveredTile->IsTileOpen()) { //Might want to check if it's the current player's turn
+				if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P1_turn) {
+					for (Piece* p1 : p1_pieces) {
+						if (p1->currentTile == hoveredTile && p1->hasAction) {
+							selectedPiece = p1;
+							selectedTile = p1->currentTile;
+							selectedTile->isSelected = true;
+							m_boardState = BoardState::SELECTION;
+
+							GetAllPossibleMovement(selectedTile);
+							std::cout << movementList.size() << std::endl;
+						}
+					}
 				}
+				else if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P2_turn) {
+					for (Piece* p2 : p2_pieces) {
+						if (p2->currentTile == hoveredTile && p2->hasAction) {
+							selectedPiece = p2;
+							selectedTile = p2->currentTile;
+							selectedTile->isSelected = true;
+							m_boardState = BoardState::SELECTION;
 
-				//Display playable options
-				int tmp;
-				std::cout << "What would you like to do?" << std::endl;
-				std::cout << "1: Move" << std::endl;
-
-				//If there are any enemies nearby, allow player to attack
-				if (enemyTiles.size() > 0) {
-					std::cout << "2: Attack" << std::endl;
+							GetAllPossibleMovement(selectedTile);
+							std::cout << movementList.size() << std::endl;
+						}
+					}
 				}
+				sfx_select.play(0, 20);
+			}
+			break;
 
-				std::cin >> tmp;
-
-				if (tmp == 1)
+		case BoardState::SELECTION:
+			//If the selected tile is itself, check if there are any enemies to attack
+			if (selectedTile == hoveredTile) {
+				GetAllPossibleTargets(hoveredTile, selectedPiece);
+				if (enemyList.size() > 0) {
+					m_boardState = BoardState::ATTACKING;
+					newHover(enemyList[0]);
+					ClearMovementList();
+					selectedTile->isSelected = false;
+					selectedTile = nullptr;
+				}
+			}
+			else {
+				//if the tile is open AND contained within the pieces's movement (in this case 2 spots)
+				if (hoveredTile->IsTileOpen() && std::find(movementList.begin(), movementList.end(), hoveredTile) != movementList.end() && CanPass(hoveredTile)) {
 					movePiece(hoveredTile);
-				else if (tmp == 2) {
-					movePiece(hoveredTile);
-					m_isAttacking = true;
-					hoveredTile->isHovered = false;
-					hoveredTile = enemyTiles[0];
-					hoveredTile->isHovered = true;
-				}
 
-				selectedTile->m_colour = glm::vec3(0.3f, 0.3f, 0.8f);
-				selectedTile->isSelected = false;
-				m_activeSelection = false;
-				selectedTile = nullptr;
+					GetAllPossibleTargets(hoveredTile, selectedPiece);
+					if (enemyList.size() > 0) {
+						m_boardState = BoardState::ATTACKING;
+						newHover(enemyList[0]);
+					}
+					else {
+						m_boardState = BoardState::NONE;
+					}
+
+					selectedTile->isSelected = false;
+					selectedTile = nullptr;
+				}
 			}
-		}
+			sfx_select.play(0, 20);
+			break;
+
+		case BoardState::ATTACKING:
+			attackPiece(hoveredTile);
+			m_isAttacking = false;
+			m_boardState = BoardState::NONE;
+			hov = 0;
+			ClearEnemyList();
+			ClearMovementList();
+			sfx_select.play(0, 20);
+			break;
 	}
-	else {
-		if (hoveredTile->isOccupied && hoveredTile->m_occ == Tile::OccupationType::PIECE) {
-			for (Piece* p1 : p1_pieces) {
-				if (p1->currentTile == hoveredTile) {
-					selectedPiece = p1;
-					selectedTile = p1->currentTile;
-				}
-			}
+}
 
-			for (Piece* p2 : p2_pieces) {
-				if (p2->currentTile == hoveredTile) {
-					selectedPiece = p2;
-					selectedTile = p2->currentTile;
-				}
-			}
+void Board::newHover(Tile* newTile_)
+{
+	//Reset old tile
+	hoveredTile->isHovered = false;
 
-			//selectedTile = hoveredTile;
-			//Will need to check if the piece is playable (not enemy)
-			selectedTile->isSelected = true;
-			m_activeSelection = true;
-			selectedTile->m_colour = glm::vec3(0.3f, 0.8f, 0.3f);
-		}
-	}
+	//Set new hover tile
+	hoveredTile = newTile_;
+
+	//Give hover tile properties
+	hoveredTile->isHovered = true;
 }
 
 void Board::movePiece(Tile* tile_)
 {
+	//Reset piece
 	selectedPiece->currentTile->m_occ = Tile::OccupationType::NONE;
 	selectedPiece->currentTile->isOccupied = false;
-	selectedPiece->movePiece(tile_);
+
+	//Move the piece to the selected tile
+	//m_timer->StartTimer(selectedPiece->getWalkSpeed());
+	selectedPiece->movePiece(tile_, selectedPiece->getWalkSpeed());
+
+	//Set new tile properties
 	selectedPiece->currentTile->m_occ = Tile::OccupationType::PIECE;
 	selectedPiece->currentTile->isOccupied = true;
-	selectedPiece = nullptr;
+
+	//Selected piece is unselected
+	selectedPiece->hasAction = false;
+	//selectedPiece = nullptr;
+
+	//Clear the movement list
+	ClearMovementList();
+
+	//Play move sound
+	sfx_movePiece.play(0, 100);
+
+	actions--;
 }
 
 void Board::attackPiece(Tile* tile_)
 {
-	for (int i = 0; i < p1_pieces.size(); i++) {
-		if (p1_pieces[i]->currentTile == hoveredTile) {
-			p1_pieces.erase(p1_pieces.begin() + i);
-			hoveredTile->isOccupied = false;
-			hoveredTile->m_occ = Tile::OccupationType::NONE;
+	if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P2_turn) {
+		for (int i = 0; i < p1_pieces.size(); i++) {
+			if (p1_pieces[i]->currentTile == tile_) {
+				float enemyHP = selectedPiece->attackPiece(p1_pieces[i]);
+				if (enemyHP <= 0) {
+					p1_pieces.erase(p1_pieces.begin() + i);
+					tile_->isOccupied = false;
+					tile_->m_occ = Tile::OccupationType::NONE;
+					sfx_killPiece.play(0, 100);
+				}
+			}
+		}
+	}
+	else if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P1_turn) {
+		for (int i = 0; i < p2_pieces.size(); i++) {
+			if (p2_pieces[i]->currentTile == tile_) {
+				float enemyHP = selectedPiece->attackPiece(p2_pieces[i]);
+				if (enemyHP <= 0) {
+					p2_pieces.erase(p2_pieces.begin() + i);
+					tile_->isOccupied = false;
+					tile_->m_occ = Tile::OccupationType::NONE;
+					sfx_killPiece.play(0, 100);
+				}
+			}
 		}
 	}
 
-	for (int i = 0; i < p2_pieces.size(); i++) {
-		if (p2_pieces[2]->currentTile == hoveredTile) {
-			p2_pieces.erase(p2_pieces.begin() + i);
-			hoveredTile->isOccupied = false;
-			hoveredTile->m_occ = Tile::OccupationType::NONE;
-		}
+	m_gameManager->playParticles(selectedPiece->getPieceType(), 100, 3.0f, hoveredTile->m_centerPos);
+
+	//Selected piece is unselected
+	selectedPiece->hasAction = false;
+	//selectedPiece = nullptr;
+
+	updateGameManager();
+
+	sfx_attack.play(0, 100);
+}
+
+void Board::cancel()
+{
+	switch(m_boardState) {
+		case BoardState::NONE:
+			//Do nothing
+			break;
+
+		case BoardState::SELECTION:
+			selectedTile->isSelected = false;
+			selectedTile = nullptr;
+			m_boardState = BoardState::NONE;
+			ClearMovementList();
+			sfx_cancel.play(0, 20);
+			break;
+
+		case BoardState::ATTACKING:
+			m_boardState = BoardState::NONE;
+			ClearEnemyList();
+			sfx_cancel.play(0, 20);
+			break;
 	}
 }
 
@@ -303,12 +446,8 @@ void Board::initBoard()
 		}
 	}
 
-	//Set first tile to be hovered ** possibly change later
 	hoveredTile = m_board[0];
-	hoveredTile->m_occ = Tile::OccupationType::PIECE;
-	hoveredTile->isHovered = true;
-	hoveredTile->isOccupied = true;
-	hoveredTile->m_colour = glm::vec3(0.8f, 0.3f, 0.3f);
+	newHover(m_board[0]);
 }
 
 void Board::initPiece()
@@ -337,6 +476,78 @@ void Board::initPiece()
 			}
 		}
 	}
+}
+
+void Board::endTurn()
+{
+	if (m_boardState == BoardState::ATTACKING || m_boardState == BoardState::SELECTION || m_gameManager->m_isAnimating || gameover)
+		return;
+
+	m_gameManager->nextTurn();
+
+	if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P1_turn) {
+		for (Piece* piece : p1_pieces) {
+			piece->hasAction = true;
+		}
+
+		for (Piece* piece : p2_pieces) {
+			piece->hasAction = false;
+		}
+
+		lastHover_P2 = hoveredTile;
+		newHover(lastHover_P1);
+		
+	}
+	else if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P2_turn) {
+		for (Piece* piece : p1_pieces) {
+			piece->hasAction = false;
+		}
+
+		for (Piece* piece : p2_pieces) {
+			piece->hasAction = true;
+		}
+
+		lastHover_P1 = hoveredTile;
+		newHover(lastHover_P2);
+	}
+
+	sfx_endTurn.play(0, 100);
+
+	actions = 2;
+}
+
+void Board::initGameManager(GameManager* gm_)
+{
+	m_gameManager = gm_;
+	updateGameManager();
+	lastHover_P1 = hoveredTile;
+	endTurn(); //Turn 1
+}
+
+void Board::updateGameManager()
+{
+	m_gameManager->updatePieceCount(p1_pieces.size(), p2_pieces.size());
+}
+
+void Board::initAudio()
+{
+	m_audioEngine.init();
+
+	//Load and play BG music
+	bg_music = m_audioEngine.loadMusic("Resources/Audio/Music/Ove_Earth.ogg");
+	bg_music.play(-1, 40);
+
+	victory_music = m_audioEngine.loadMusic("Resources/Audio/Music/Ove_Drum.ogg");
+
+	sfx_attack = m_audioEngine.loadSoundEffect("Resources/Audio/SFX/attack_fire.ogg");
+	sfx_victory = m_audioEngine.loadSoundEffect("Resources/Audio/SFX/victory.wav");
+	sfx_movePiece = m_audioEngine.loadSoundEffect("Resources/Audio/SFX/move_piece.ogg");
+	sfx_killPiece = m_audioEngine.loadSoundEffect("Resources/Audio/SFX/death.wav");
+	sfx_endTurn = m_audioEngine.loadSoundEffect("Resources/Audio/SFX/end_turn.wav");
+	sfx_moveHover = m_audioEngine.loadSoundEffect("Resources/Audio/SFX/click.wav");
+	sfx_select = m_audioEngine.loadSoundEffect("Resources/Audio/SFX/selection.wav");
+	sfx_cancel = m_audioEngine.loadSoundEffect("Resources/Audio/SFX/cancel.wav");
+
 }
 
 void Board::translateBoard(float x, float y, float z)
@@ -377,4 +588,275 @@ Tile* Board::getTile(glm::vec3 tileCenter_)
 			return tile;
 	}
 	return nullptr;
+}
+
+void Board::GetAllPossibleTargets(Tile* tile_, Piece* piece_)
+{
+	//for (Edge edge : tile_->m_edges) {
+	//	//Too sloppy, can be much more clean
+	//	if (edge.connectedTo->m_occ == Tile::OccupationType::PIECE && edge.connectedTo != selectedTile) {
+	//		if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P1_turn) {
+	//			for (Piece* p2 : p2_pieces) {
+	//				if (p2->currentTile == edge.connectedTo)
+	//					enemyList.push_back(edge.connectedTo);
+	//			}
+	//		}
+	//		else if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P2_turn) {
+	//			for (Piece* p1 : p1_pieces) {
+	//				if (p1->currentTile == edge.connectedTo)
+	//					enemyList.push_back(edge.connectedTo);
+	//			}
+	//		}
+	//	}
+	//}
+
+	for (Edge edge : tile_->m_edges) {
+		if (edge.connectedTo->m_occ == Tile::OccupationType::PIECE && edge.connectedTo != selectedTile) {
+			if (   tile_->m_centerPos + glm::vec3(1.0f, 0.0f, 0.0f) == edge.connectedTo->m_centerPos
+				|| tile_->m_centerPos - glm::vec3(1.0f, 0.0f, 0.0f) == edge.connectedTo->m_centerPos
+				|| tile_->m_centerPos + glm::vec3(0.0f, 0.0f, 1.0f) == edge.connectedTo->m_centerPos
+				|| tile_->m_centerPos - glm::vec3(0.0f, 0.0f, 1.0f) == edge.connectedTo->m_centerPos) {
+				if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P1_turn) {
+					for (Piece* p2 : p2_pieces) {
+						if (p2->currentTile == edge.connectedTo)
+							enemyList.push_back(edge.connectedTo);
+					}
+				}
+				else if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P2_turn) {
+					for (Piece* p1 : p1_pieces) {
+						if (p1->currentTile == edge.connectedTo)
+							enemyList.push_back(edge.connectedTo);
+					}
+				}
+			}
+		}
+
+		//Ranged Attack
+		if (selectedPiece->getAttackRange() == 2) {
+			for (Edge outerEdge : edge.connectedTo->m_edges) {
+				if (outerEdge.connectedTo != selectedPiece->currentTile) {
+					if (!(std::find(enemyList.begin(), enemyList.end(), outerEdge.connectedTo) != enemyList.end()) && outerEdge.connectedTo->m_occ == Tile::OccupationType::PIECE && outerEdge.connectedTo != selectedTile) {
+						if (   tile_->m_centerPos + glm::vec3(2.0f, 0.0f, 0.0f) == outerEdge.connectedTo->m_centerPos
+							|| tile_->m_centerPos - glm::vec3(2.0f, 0.0f, 0.0f) == outerEdge.connectedTo->m_centerPos
+							|| tile_->m_centerPos + glm::vec3(0.0f, 0.0f, 2.0f) == outerEdge.connectedTo->m_centerPos
+							|| tile_->m_centerPos - glm::vec3(0.0f, 0.0f, 2.0f) == outerEdge.connectedTo->m_centerPos) {
+							if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P1_turn) {
+								for (Piece* p2 : p2_pieces) {
+									if (p2->currentTile == outerEdge.connectedTo)
+										enemyList.push_back(outerEdge.connectedTo);
+								}
+							}
+							else if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P2_turn) {
+								for (Piece* p1 : p1_pieces) {
+									if (p1->currentTile == outerEdge.connectedTo)
+										enemyList.push_back(outerEdge.connectedTo);
+								}
+							}
+						}
+					}
+				}
+
+				//When empowered by the River
+				if (selectedPiece->currentTile->getTileType() == Tile::TileType::RIVER) {
+					for (Edge finalEdge : outerEdge.connectedTo->m_edges) {
+						if (finalEdge.connectedTo != selectedPiece->currentTile) {
+							if (!(std::find(enemyList.begin(), enemyList.end(), finalEdge.connectedTo) != enemyList.end()) && finalEdge.connectedTo->m_occ == Tile::OccupationType::PIECE && finalEdge.connectedTo != selectedTile) {
+								if (   tile_->m_centerPos + glm::vec3(3.0f, 0.0f, 0.0f) == finalEdge.connectedTo->m_centerPos
+									|| tile_->m_centerPos - glm::vec3(3.0f, 0.0f, 0.0f) == finalEdge.connectedTo->m_centerPos
+									|| tile_->m_centerPos + glm::vec3(0.0f, 0.0f, 3.0f) == finalEdge.connectedTo->m_centerPos
+									|| tile_->m_centerPos - glm::vec3(0.0f, 0.0f, 3.0f) == finalEdge.connectedTo->m_centerPos) {
+									if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P1_turn) {
+										for (Piece* p2 : p2_pieces) {
+											if (p2->currentTile == finalEdge.connectedTo)
+												enemyList.push_back(finalEdge.connectedTo);
+										}
+									}
+									else if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P2_turn) {
+										for (Piece* p1 : p1_pieces) {
+											if (p1->currentTile == finalEdge.connectedTo)
+												enemyList.push_back(finalEdge.connectedTo);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void Board::ClearEnemyList()
+{
+	enemyList.clear();
+}
+int loopCount = 0;
+int movementLimitCounter = 0;
+void Board::GetAllPossibleMovement(Tile* tile_)
+{
+	for (Edge edge : selectedPiece->currentTile->m_edges) {
+		if (edge.connectedTo->IsTileOpen() && CanPass(edge.connectedTo)) {
+			movementList.push_back(edge.connectedTo);
+			edge.connectedTo->isMoveableTo = true;
+		}
+		else {
+			edge.connectedTo->isUnmoveableTo = true;
+		}
+		if (selectedPiece->getMovement() > 0) {
+			for (Edge outerEdge : edge.connectedTo->m_edges) {
+				if (outerEdge.connectedTo != selectedPiece->currentTile) {
+					if (!(std::find(movementList.begin(), movementList.end(), outerEdge.connectedTo) != movementList.end()) && outerEdge.connectedTo->IsTileOpen() && CanPass(outerEdge.connectedTo)) {
+						movementList.push_back(outerEdge.connectedTo);
+						outerEdge.connectedTo->isMoveableTo = true;
+					}
+					else {
+						outerEdge.connectedTo->isUnmoveableTo = true;
+					}
+				}
+			}
+		}
+	}
+
+	//**May want to revsist, makes the method recursive
+	//if (loopCount < 2) {
+	//	for (Edge edge : tile_->m_edges) {
+	//		if (edge.connectedTo->IsTileOpen()) {
+	//			movementList.push_back(edge.connectedTo);
+	//			edge.connectedTo->isMoveableTo = true;
+	//		}
+	//		else {
+	//			edge.connectedTo->isUnmoveableTo = true;
+	//		}
+	//		if (selectedPiece->getMovement() > 1) {
+	//			for (Edge outerEdge : edge.connectedTo->m_edges) {
+	//				if (!(std::find(movementList.begin(), movementList.end(), outerEdge.connectedTo) != movementList.end()) && outerEdge.connectedTo->IsTileOpen()) {
+	//					movementList.push_back(outerEdge.connectedTo);
+	//					edgeList.push_back(outerEdge);
+	//					outerEdge.connectedTo->isMoveableTo = true;
+	//				} 
+	//				else {
+	//					outerEdge.connectedTo->isUnmoveableTo = true;
+	//				}
+	//			}
+	//		}
+	//	}
+	//	//loopCount++;
+	//	//GetAllPossibleMovement(edgeList);
+	//}
+	//else {
+	//	loopCount = 0;
+	//	std::cout << edgeList.size() << std::endl;
+	//}
+
+
+	//for (Edge edge : tile_->m_edges) {
+	//	if (loopCount < selectedPiece->getMovement()) {
+	//		if (!(std::find(movementList.begin(), movementList.end(), edge.connectedTo) != movementList.end()) && edge.connectedTo->IsTileOpen()) {
+	//			movementList.push_back(edge.connectedTo);
+	//			edge.connectedTo->isMoveableTo = true;
+	//			tmp1.push_back(edge.connectedTo);
+	//		}
+	//		else {
+	//			edge.connectedTo->isUnmoveableTo = true;
+	//		}
+	//	}
+	//}
+	//loopCount++;
+	//for (int i = 0; i < tmp1.size(); i++) {
+	//	GetAllPossibleMovement(tmp1[i]);
+	//}
+}
+
+void Board::ClearMovementList()
+{
+	//Loops through board, but should only loop through possible movement
+	for (Tile* tile : m_board) {
+		tile->isMoveableTo = false;
+		tile->isUnmoveableTo = false;
+	}
+	movementList.clear();
+}
+
+bool Board::CanPass(Tile* tile_)
+{
+	if (tile_->getTileType() == Tile::TileType::MOUNTAIN && selectedPiece->getPieceType() == Piece::PieceType::EARTH) {
+		return true;
+	}
+	else if (tile_->getTileType() != Tile::TileType::MOUNTAIN) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+void Board::GameOver(GameManager::PlayerTurn victor_)
+{
+	if (!gameover) {
+		text_gameover = new Text("", 10, 650, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+
+		if (victor_ == GameManager::PlayerTurn::P1_turn) {
+			text_gameover->setText("PLAYER 1 WINS");
+		}
+		else {
+			text_gameover->setText("PLAYER 2 WINS");
+		}
+
+		m_textList.push_back(text_gameover);
+
+		sfx_victory.play(0, 80);
+		bg_music.stop();
+		victory_music.play(-1, 20);
+
+		gameover = true;
+	}
+}
+
+void Board::updateHUD()
+{
+
+	for (Piece* p1 : p1_pieces) {
+		if (p1->currentTile == hoveredTile) {
+			text_hoverHP->setText("Health: " + std::to_string(p1->getHealth()));
+			text_hoverDamage->setText("Damage: " + std::to_string(p1->getAttackDamage()));
+			text_hoverRange->setText("Range: " + std::to_string(p1->getAttackRange()));
+			text_hoverEffective->setText("Strong: " + p1->getAdv() + "   " + "Weak: " + p1->getWeakness());
+		}
+	}
+
+	for (Piece* p2 : p2_pieces) {
+		if (p2->currentTile == hoveredTile) {
+			text_hoverHP->setText("Health: " + std::to_string(p2->getHealth()));
+			text_hoverDamage->setText("Damage: " + std::to_string(p2->getAttackDamage()));
+			text_hoverRange->setText("Range: " + std::to_string(p2->getAttackRange()));
+			text_hoverEffective->setText("Strong: " + p2->getAdv() + "   " + "Weak: " + p2->getWeakness());
+		}
+	}
+
+	//if (selectedPiece != NULL) {
+	//	text_selectHP->setText("Selected Piece HP: " + std::to_string(selectedPiece->getHealth()));
+	//}
+	//else {
+	//	text_selectHP->setText("Selected Piece HP: ");
+	//}
+
+	int time = (glm::floor(m_gameManager->m_turnTimer->getTimerValue() - 45) * -1);
+	text_time->setText("Time: " + std::to_string(time));
+
+	text_actionCount->setText("Actions: " + std::to_string(actions));
+}
+
+void Board::removeActions()
+{
+	if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P1_turn) {
+		for (Piece* piece : p1_pieces) {
+			piece->hasAction = false;
+		}
+	}
+	else if (m_gameManager->getPlayerTurn() == GameManager::PlayerTurn::P2_turn) {
+		for (Piece* piece : p2_pieces) {
+			piece->hasAction = false;
+		}
+	}
 }

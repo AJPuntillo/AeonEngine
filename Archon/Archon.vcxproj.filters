@@ -33,6 +33,12 @@
     <ClCompile Include="Gameplay\Pieces\Piece.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Gameplay\Manager\GameManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Scene_Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArchonGame.h">
@@ -48,6 +54,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Gameplay\Pieces\Piece.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Manager\GameManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Scene_Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

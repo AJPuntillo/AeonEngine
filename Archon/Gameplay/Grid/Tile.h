@@ -26,7 +26,7 @@ public:
 	{
 		GRASS,
 		MOUNTAIN,
-		FOREST,
+		RIVER,
 		LAVA
 	};
 		
@@ -60,13 +60,19 @@ public:
 	TileType getTileType() { return m_type; }
 
 	//Hover colour
-	glm::vec3 m_colour = glm::vec3(0.3f, 0.3f, 0.8f);
+	glm::vec3 m_colour = glm::vec3(0.0f, 0.0f, 0.0f);
+
+	//Check if the tile is unsuable or not
+	//Returns true if can be moved to
+	bool IsTileOpen();
 
 	//Public Tile properties
 	OccupationType m_occ = OccupationType::NONE;
 	bool isOccupied = false;
 	bool isHovered = false;
 	bool isSelected = false;
+	bool isMoveableTo = false;
+	bool isUnmoveableTo = false;
 
 protected:
 	void setupTile();

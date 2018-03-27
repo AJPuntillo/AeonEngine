@@ -153,16 +153,20 @@
     <ClCompile Include="ArchonGame.cpp" />
     <ClCompile Include="Gameplay\Grid\Board.cpp" />
     <ClCompile Include="Gameplay\Grid\Tile.cpp" />
+    <ClCompile Include="Gameplay\Manager\GameManager.cpp" />
     <ClCompile Include="Gameplay\Pieces\Piece.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scenes\Scene_Main.cpp" />
+    <ClCompile Include="Scenes\Scene_Menu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArchonGame.h" />
     <ClInclude Include="Gameplay\Grid\Board.h" />
     <ClInclude Include="Gameplay\Grid\Tile.h" />
+    <ClInclude Include="Gameplay\Manager\GameManager.h" />
     <ClInclude Include="Gameplay\Pieces\Piece.h" />
     <ClInclude Include="Scenes\Scene_Main.h" />
+    <ClInclude Include="Scenes\Scene_Menu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

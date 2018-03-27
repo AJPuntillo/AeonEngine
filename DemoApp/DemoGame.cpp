@@ -70,6 +70,11 @@ void DemoGame::draw()
 	m_currentScene->draw();
 }
 
+void DemoGame::loadScene(int sceneIndex_)
+{
+
+}
+
 void DemoGame::switchScene(int scene)
 {
 

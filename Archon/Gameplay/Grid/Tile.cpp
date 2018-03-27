@@ -23,16 +23,38 @@ Tile::Tile(int tileType_, bool isPrimitive)
 			break;
 		case 2:
 			m_tile = new Model("Resources/Models/Cube/cube_forest.obj");
-			m_type = TileType::FOREST;
+			m_type = TileType::RIVER;
 			break;
 		case 3:
 			m_tile = new Model("Resources/Models/Cube/cube_mountain.obj");
 			m_type = TileType::MOUNTAIN;
 			m_occ = OccupationType::OBSTACLE;
-			isOccupied = true;
+			//isOccupied = true;
 			m_colour = glm::vec3(0.8f, 0.8f, 0.3f);
 			break;
 		}
+
+		//switch (tileType_) {
+		//case 0:
+		//	m_tile = new Model("Resources/Models/groundEarth/groundEarth_resize.obj");
+		//	m_type = TileType::GRASS;
+		//	break;
+		//case 1:
+		//	m_tile = new Model("Resources/Models/lava/lava_resize.obj");
+		//	m_type = TileType::LAVA;
+		//	break;
+		//case 2:
+		//	m_tile = new Model("Resources/Models/ice/ice_resize.obj");
+		//	m_type = TileType::RIVER;
+		//	break;
+		//case 3:
+		//	m_tile = new Model("Resources/Models/wallBrick/wallBrick_resize.obj");
+		//	m_type = TileType::MOUNTAIN;
+		//	m_occ = OccupationType::OBSTACLE;
+		//	//isOccupied = true;
+		//	m_colour = glm::vec3(0.8f, 0.8f, 0.3f);
+		//	break;
+		//}
 	}
 	setupTile();
 }
@@ -44,12 +66,18 @@ Tile::~Tile()
 
 void Tile::update(const float deltaTime_)
 {
-	//if (isHovered)
-	//	m_colour = glm::vec3(0.8f, 0.3f, 0.3f);
-	// else if (isSelected)
-	//	m_colour = glm::vec3(0.3f, 0.8f, 0.3f);
-	// else
-	//	m_colour = glm::vec3(0.3f, 0.3f, 0.8f);
+	if (isHovered && !isSelected)
+		m_colour = glm::vec3(0.4f, 0.4f, 0.4f);
+	else if (isSelected && !isHovered)
+		m_colour = glm::vec3(0.7f, 0.7f, 0.3f);
+	else if (isHovered && isSelected)
+		m_colour = glm::vec3(0.7f, 0.7f, 0.3f);
+	else if (isMoveableTo)
+		m_colour = glm::vec3(0.0f, 0.0f, 0.8f);
+	else if (isUnmoveableTo)
+		m_colour = glm::vec3(0.8f, 0.0f, 0.0f);
+	else
+		m_colour = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 void Tile::render(Shader* shader_)
@@ -60,8 +88,7 @@ void Tile::render(Shader* shader_)
 	//Must be disabled when parenting the tiles to the Board; This will use the tile's original modelmatrix and not the matrix parented to the board
 	//shader_->setMat4("model", transform.modelMatrix);
 	shader_->setVec3("colour", m_colour);
-	shader_->setBool("hover", isHovered);
-	shader_->setBool("select", isSelected);
+	shader_->setBool("hasAction", true);
 	m_tile->render(shader_);
 }
 
@@ -112,4 +139,12 @@ void Tile::translateTile(float x, float y, float z) {
 
 	//The center position must also be recalculated
 	calcCenterPosition();
+}
+
+bool Tile::IsTileOpen()
+{
+	if (isOccupied || m_occ == OccupationType::PIECE)
+		return false;
+	else
+		return true;
 }

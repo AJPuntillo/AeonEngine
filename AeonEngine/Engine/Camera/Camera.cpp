@@ -41,7 +41,7 @@ Camera::~Camera()
 
 void Camera::createProjectionMatrix(int screenWidth, int screenHeight)
 {
-	m_projection = glm::perspective(getFOV(), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
+	m_projection = glm::perspective(m_fov, (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
 }
 
 void Camera::createViewMatrix()
@@ -130,27 +130,34 @@ void Camera::processMouseScroll(float yoffset)
 		m_fov = 45.0f;
 }
 
-float Camera::setYaw(float yaw)
+void Camera::setPos(glm::vec3 pos)
 {
-	return m_yaw = yaw;
+	m_pos = pos;
 }
 
-float Camera::setPitch(float pitch)
+void Camera::setYaw(float yaw)
 {
-	return m_pitch = pitch;
+	 m_yaw = yaw;
+	 calculateCameraVectors();
 }
 
-float Camera::setMoveSpeed(float moveSpeed)
+void Camera::setPitch(float pitch)
 {
-	return m_movementSpeed = moveSpeed;
+	m_pitch = pitch;
+	calculateCameraVectors();
 }
 
-float Camera::setSensitivity(float mouseSensitivity)
+void Camera::setMoveSpeed(float moveSpeed)
 {
-	return m_mouseSensitivity = mouseSensitivity;
+	m_movementSpeed = moveSpeed;
 }
 
-float Camera::setFOV(float fov)
+void Camera::setSensitivity(float mouseSensitivity)
 {
-	return m_fov = fov;
+	m_mouseSensitivity = mouseSensitivity;
+}
+
+void Camera::setFOV(float fov)
+{
+	m_fov = fov;
 }

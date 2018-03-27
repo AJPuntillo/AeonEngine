@@ -11,11 +11,13 @@ ParticleEmitter::ParticleEmitter(int amount_, float lifetime_) :
 {
 	m_elapsedtime = 0.0f;
 	m_gravity = -9.8f;
-	m_looping = true;
+	m_looping = false;
 	m_vel = glm::vec3(0.0f, 0.0f, 0.0f);
-	m_colour = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	m_colour = glm::vec3(1.0f, 0.0f, 0.0f);
 
 	initParticleSystem(true);
+
+	m_timer = new Stopwatch();
 }
 
 ParticleEmitter::~ParticleEmitter()
@@ -26,31 +28,61 @@ ParticleEmitter::~ParticleEmitter()
 //Updating and rendering
 void ParticleEmitter::update(const float deltaTime_)
 {
-
+	m_timer->Update(deltaTime_);
 }
 
 void ParticleEmitter::render(Shader* shader_)
 {
-	if (m_elapsedtime > m_lifetime)
-		if (!m_looping)
-			return;
-		else if (m_looping)
+	//if (m_elapsedtime > m_lifetime)
+	//	if (!m_looping) {
+	//		isPlaying = false;
+	//		return;
+	//	}
+	//	else if (m_looping)
+	//		m_elapsedtime = 0.0f;
+
+	//if (isPlaying) {
+	//	m_elapsedtime += 0.01f;
+
+	//	std::cout << m_elapsedtime << std::endl;
+	//	shader_->setFloat("time", m_elapsedtime);
+	//	shader_->setFloat("gravity", m_gravity);
+	//	shader_->setVec4("colour", m_colour);
+
+	//	glBindVertexArray(m_VAO);
+	//	glPointSize(5.0f);
+	//	glDrawArrays(GL_POINTS, 0, m_particles.size());
+	//}
+
+	if (isPlaying) {
+		if (m_elapsedtime < m_lifetime) {
+			m_elapsedtime = m_timer->getTimerValue();
+
+			//std::cout << m_elapsedtime << std::endl;
+			transform.updateModelMatrix();
+			shader_->setMat4("model", transform.modelMatrix);
+			shader_->setFloat("time", m_elapsedtime * 1.5f);
+			shader_->setFloat("gravity", m_gravity);
+			shader_->setVec3("colour", m_colour);
+
+			glBindVertexArray(m_VAO);
+			glPointSize(2.5f);
+			glDrawArrays(GL_POINTS, 0, m_particles.size());
+		}
+		else {
 			m_elapsedtime = 0.0f;
 
-	m_elapsedtime += 0.01f;
-
-	std::cout << m_elapsedtime << std::endl;
-	shader_->setFloat("time", m_elapsedtime);
-	shader_->setFloat("gravity", m_gravity);
-	shader_->setVec4("colour", m_colour);
-
-	glBindVertexArray(m_VAO);
-	glPointSize(5.0f);
-	glDrawArrays(GL_POINTS, 0, m_particles.size());
+			if (!m_looping)
+				isPlaying = false;
+			else
+				m_timer->StartTimer(m_lifetime);
+		}
+	}
 
 	//Always good practice to set everything back to defaults once configured
 	glBindVertexArray(0);
 	glActiveTexture(GL_TEXTURE0);
+
 }
 
 void ParticleEmitter::initParticleSystem(bool randomVel)
@@ -73,8 +105,6 @@ void ParticleEmitter::initParticleSystem(bool randomVel)
 		}
 
 		m_particles.push_back(particle);
-
-
 	}
 
 	generateBuffers();
@@ -100,10 +130,22 @@ void ParticleEmitter::generateBuffers() {
 	glBindVertexArray(0);
 }
 
+void ParticleEmitter::play()
+{
+	m_elapsedtime = 0.0f;
+	isPlaying = true;
+	m_timer->StartTimer(m_lifetime);
+}
+
+void ParticleEmitter::stop()
+{
+	isPlaying = false;
+}
+
 void ParticleEmitter::setParticleAmount(int amount_)
 {
 	m_particleAmount = amount_;
-	initParticleSystem(false);
+	initParticleSystem(true);
 }
 
 void ParticleEmitter::setLifetime(float lifetime_)
@@ -116,7 +158,7 @@ void ParticleEmitter::setLooping(bool loop_)
 	m_looping = loop_;
 }
 
-void ParticleEmitter::setColour(glm::vec4 colour_)
+void ParticleEmitter::setColour(glm::vec3 colour_)
 {
 	m_colour = colour_;
 }

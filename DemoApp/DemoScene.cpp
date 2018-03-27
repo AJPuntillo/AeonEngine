@@ -28,7 +28,8 @@ bool DemoScene::initialize()
 	m_renderer = new Renderer();
 
 	//Shaders
-	m_shaderLighting	= ShaderManager::getInstance()->addShader("shader_lighting", "Resources/Shaders/lightingShaderVert.glsl", "Resources/Shaders/lightingShaderFrag.glsl");
+	m_shaderLighting    = ShaderManager::getInstance()->addShader("shader_lighting", "Resources/Shaders/lightingShaderVert.glsl", "Resources/Shaders/lightingShaderFrag.glsl");
+	m_shaderParticles   = ShaderManager::getInstance()->addShader("shader_particles", "Resources/Shaders/simpleParticle_Vert.glsl", "Resources/Shaders/simpleParticle_Frag.glsl");
 	m_shaderContainer	= ShaderManager::getInstance()->addShader("shader_container", "Resources/Shaders/litPrimitiveVert.glsl", "Resources/Shaders/litPrimitiveFrag.glsl");
 	m_shaderLamp		= ShaderManager::getInstance()->addShader("shader_lamp", "Resources/Shaders/lampVert.glsl", "Resources/Shaders/lampFrag.glsl");
 	m_shaderSkybox		= ShaderManager::getInstance()->addShader("shader_skybox", "Resources/Shaders/skyboxVert.glsl", "Resources/Shaders/skyboxFrag.glsl");
@@ -36,27 +37,41 @@ bool DemoScene::initialize()
 	m_shaderInstancing	= ShaderManager::getInstance()->addShader("shader_instance", "Resources/Shaders/instancingModelVert.glsl", "Resources/Shaders/lightingShaderFrag.glsl");
 
 	//GameObjects
-	//model_nanosuit = new GameObject("Resources/Models/Nanosuit/nanosuit.obj");
-	//model_nanosuit->transform.translateBy(-1.0f, -2.5f, 0.0f);
-	//model_nanosuit->transform.scaleBy(0.25f, 0.25f, 0.25f);
-	//model_nanosuit->setupVolume();
-	//objectList.push_back(model_nanosuit);
-	////Testing the bounding volume values of the model
+	model_nanosuit = new GameObject("Resources/Models/Nanosuit/nanosuit.obj");
+	model_nanosuit->transform.translateBy(0.0f, 0.0f, 0.0f);
+	model_nanosuit->transform.scaleBy(0.25f, 0.25f, 0.25f);
+	model_nanosuit->setupVolume();
+	objectList.push_back(model_nanosuit);
+	//Testing the bounding volume values of the model
 	//std::cout << model_nanosuit->boundingVolume->getMaxCorner().x << " " << model_nanosuit->boundingVolume->getMaxCorner().y << " " << model_nanosuit->boundingVolume->getMaxCorner().z << std::endl;
 	//std::cout << model_nanosuit->boundingVolume->getMinCorner().x << " " << model_nanosuit->boundingVolume->getMinCorner().y << " " << model_nanosuit->boundingVolume->getMinCorner().z << std::endl;
 
-	//model_cube = new GameObject(Mesh::PrimitiveType::CUBE);
+	model_cube = new GameObject(Mesh::PrimitiveType::CUBE);
 	//model_cube->transform.translateBy(1.0f, 0.0f, 0.0f);
-	//objectList2.push_back(model_cube);
+	model_cube->transform.translateBy(0.0, -0.5f, 0.0f);
+	model_cube->transform.scaleBy(15.0f, 0.3f, 15.0f);
+	objectList2.push_back(model_cube);
 
 	//Lights
 	pointLight = new Light(LIGHT_POINT, true);
 	pointLight->transform.translateBy(0.0f, 0.0f, 2.0f);
-	//lightList.push_back(pointLight);
+	pointLight->setLightIntensity(glm::vec3(0.05f, 0.05f, 0.8f), glm::vec3(0.2f, 0.2f, 0.8f), glm::vec3(1.0f, 1.0f, 1.0f));
+	lightList.push_back(pointLight);
 
 	pointLight2 = new Light(LIGHT_POINT, true);
 	pointLight2->transform.translateBy(3.0f, 0.0f, 0.0f);
-	//lightList.push_back(pointLight2);
+	pointLight2->setLightIntensity(glm::vec3(0.8f, 0.05f, 0.05f), glm::vec3(0.8f, 0.2f, 0.2f), glm::vec3(1.0f, 1.0f, 1.0f));
+	lightList.push_back(pointLight2);
+
+	pointLight3 = new Light(LIGHT_POINT, true);
+	pointLight3->transform.translateBy(1.0f, 0.0f, 2.0f);
+	//pointLight3->setLightIntensity(glm::vec3(0.8f, 0.05f, 0.05f), glm::vec3(0.8f, 0.2f, 0.2f), glm::vec3(1.0f, 1.0f, 1.0f));
+	lightList.push_back(pointLight3);
+
+	pointLight4 = new Light(LIGHT_POINT, true);
+	pointLight4->transform.translateBy(0.0f, 0.0f, -2.0f);
+	pointLight4->setLightIntensity(glm::vec3(0.05f, 0.8f, 0.05f), glm::vec3(0.2f, 0.8f, 0.2f), glm::vec3(1.0f, 1.0f, 1.0f));
+	lightList.push_back(pointLight4);
 
 	dirLight = new Light(LIGHT_DIRECTIONAL, false);
 	lightList.push_back(dirLight);
@@ -85,61 +100,21 @@ bool DemoScene::initialize()
 		0, 0, 0, 0, 0, 0, 0, 0
 	};
 
-	board = new Board(8, 8, boardLayout, pieceLayout);
-	board->translateBoard(-4.0f, -5.0f, -15.0);
+	//board = new Board(8, 8, boardLayout, pieceLayout);
+	//board->translateBoard(-4.0f, -5.0f, -15.0);
 
-	std::cout << "CENTER POS AFTER" << board->getBoard()[2]->m_centerPos.x << " " << board->getBoard()[2]->m_centerPos.y << " " << board->getBoard()[2]->m_centerPos.z << std::endl;
-	std::cout << board->getAdjacentTiles(board->getBoard()[2]).size() << std::endl;
+	//std::cout << "CENTER POS AFTER" << board->getBoard()[2]->m_centerPos.x << " " << board->getBoard()[2]->m_centerPos.y << " " << board->getBoard()[2]->m_centerPos.z << std::endl;
+	//std::cout << board->getAdjacentTiles(board->getBoard()[2]).size() << std::endl;
 
-	for (auto edge : board->getBoard()[1]->m_edges) {
-		std::cout << "EDGE:" << edge.connectedTo->m_centerPos.x << " " << edge.connectedTo->m_centerPos.y << " " << edge.connectedTo->m_centerPos.z << std::endl;
-	}
+	//for (auto edge : board->getBoard()[1]->m_edges) {
+	//	std::cout << "EDGE:" << edge.connectedTo->m_centerPos.x << " " << edge.connectedTo->m_centerPos.y << " " << edge.connectedTo->m_centerPos.z << std::endl;
+	//}
 
-	//model_nanosuit2 = new GameObject("Resources/Models/Miku/miku.obj");
-	//model_nanosuit2->transform.translateBy(board->getTiles()[3]->m_centerPos);
-	//model_nanosuit2->transform.translateBy(0.0f, 0.8f, 0.0f);
-	//model_nanosuit2->transform.scaleBy(0.0095f, 0.0095f, 0.0095f);
-	//objectList.push_back(model_nanosuit2);
-
-	//model_nanosuit3 = new GameObject("Resources/Models/Miku/miku.obj");
-	//model_nanosuit3->transform.translateBy(board->getTiles()[4]->m_centerPos);
-	//model_nanosuit3->transform.translateBy(0.0f, 0.8f, 0.0f);
-	//model_nanosuit3->transform.scaleBy(0.0095f, 0.0095f, 0.0095f);
-	//objectList.push_back(model_nanosuit3);
-
-	//model_nanosuit4 = new GameObject("Resources/Models/Nanosuit/nanosuit.obj");
-	//model_nanosuit4->transform.translateBy(board->getTiles()[5]->m_centerPos);
-	//model_nanosuit4->transform.scaleBy(0.1f, 0.1f, 0.1f);
-	//objectList.push_back(model_nanosuit4);
-
-	//model_nanosuit5 = new GameObject("Resources/Models/Nanosuit/nanosuit.obj");
-	//model_nanosuit5->transform.translateBy(board->getTiles()[58]->m_centerPos);
-	//model_nanosuit5->transform.scaleBy(0.1f, 0.1f, 0.1f);
-	//model_nanosuit5->transform.rotateBy(180.0f, 0.0f, 1.0f, 0.0f);
-	//objectList.push_back(model_nanosuit5);
-
-	//model_nanosuit6 = new GameObject("Resources/Models/Miku/miku.obj");
-	//model_nanosuit6->transform.translateBy(board->getTiles()[59]->m_centerPos);
-	//model_nanosuit6->transform.translateBy(0.0f, 0.8f, 0.0f);
-	//model_nanosuit6->transform.scaleBy(0.0095f, 0.0095f, 0.0095f);
-	//model_nanosuit6->transform.rotateBy(180.0f, 0.0f, 1.0f, 0.0f);
-	//objectList.push_back(model_nanosuit6);
-
-	//model_nanosuit7 = new GameObject("Resources/Models/Miku/miku.obj");
-	//model_nanosuit7->transform.translateBy(board->getTiles()[60]->m_centerPos);
-	//model_nanosuit7->transform.translateBy(0.0f, 0.8f, 0.0f);
-	//model_nanosuit7->transform.scaleBy(0.0095f, 0.0095f, 0.0095f);
-	//model_nanosuit7->transform.rotateBy(180.0f, 0.0f, 1.0f, 0.0f);
-	//objectList.push_back(model_nanosuit7);
-
-	//model_nanosuit8 = new GameObject("Resources/Models/Nanosuit/nanosuit.obj");
-	//model_nanosuit8->transform.translateBy(board->getTiles()[61]->m_centerPos);
-	//model_nanosuit8->transform.scaleBy(0.1f, 0.1f, 0.1f);
-	//model_nanosuit8->transform.rotateBy(180.0f, 0.0f, 1.0f, 0.0f);
-	//objectList.push_back(model_nanosuit8);
 
 	//Particles
-	//emitter = new ParticleEmitter(10, 3.0f);
+	emitter = new ParticleEmitter(10, 3.0f);
+	emitter->setLooping(true);
+	emitter->play();
 	//particleObject = new GameObject(100, 3.0f);
 	//objectList.push_back(particleObject);
 
@@ -156,6 +131,11 @@ bool DemoScene::initialize()
 
 	//Framebuffer
 	framebuffer = new Framebuffer(EngineCore::getInstance()->getWindow());
+
+	//Audio
+	m_audioEngine.init();
+	m_music = m_audioEngine.loadMusic("Resources/Audio/Ove_Earth.ogg");
+	m_music.play(-1, 100);
 
 	return true;
 }
@@ -223,22 +203,21 @@ void DemoScene::processInput()
 	////--
 
 	//Moving the Selection of the Board--
-	if (EngineCore::getInstance()->getInputManager()->isKeyPressed(SDLK_RIGHT))
-		board->moveHover(Board::MoveDirection::RIGHT);
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_RIGHT))
+		pointLight2->transform.translateBy(glm::vec3(2.5f, 0.0f, 0.0f) * m_deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager()->isKeyPressed(SDLK_LEFT))
-		board->moveHover(Board::MoveDirection::LEFT);
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_LEFT))
+		pointLight2->transform.translateBy(glm::vec3(-2.5f, 0.0f, 0.0f) * m_deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager()->isKeyPressed(SDLK_UP))
-		board->moveHover(Board::MoveDirection::UP);
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_UP))
+		pointLight2->transform.translateBy(glm::vec3(0.0f, 2.5f, 0.0f) * m_deltaTime);
 
-	if (EngineCore::getInstance()->getInputManager()->isKeyPressed(SDLK_DOWN))
-		board->moveHover(Board::MoveDirection::DOWN);
-	//--
+	if (EngineCore::getInstance()->getInputManager()->isKeyDown(SDLK_DOWN))
+		pointLight2->transform.translateBy(glm::vec3(0.0f, -2.5f, 0.0f) * m_deltaTime);
 
 	//Select
-	if (EngineCore::getInstance()->getInputManager()->isKeyPressed(SDLK_RETURN))
-		board->selectPiece();
+	//if (EngineCore::getInstance()->getInputManager()->isKeyPressed(SDLK_RETURN))
+	//	board->selectPiece();
 
 	//Toggle Mouse Capture
 	if (EngineCore::getInstance()->getInputManager()->isKeyPressed(SDLK_ESCAPE))
@@ -260,7 +239,9 @@ void DemoScene::update(float deltaTime_)
 	//**Rotation needs to be reset in the model for it to work properly
 	//model_nanosuit->transform.rotateBy((((float)SDL_GetTicks() / 1000) * glm::radians(50.0f)), 0.0f, 1.0f, 0.0f);
 
-	board->update(deltaTime_);
+	//board->update(deltaTime_);
+
+	emitter->update(deltaTime_);
 }
 
 void DemoScene::prerender()
@@ -279,10 +260,11 @@ void DemoScene::render()
 	m_camera->createProjectionMatrix(EngineCore::getInstance()->getWindow()->getScreenWidth(), EngineCore::getInstance()->getWindow()->getScreenHeight());
 
 	//Renderer
-	m_renderer->render(m_camera, m_shaderLighting, board, lightList);
+	//m_renderer->render(m_camera, m_shaderLighting, board, lightList);
 	//m_renderer->render(m_camera, m_shaderLighting, piece, lightList);
 	m_renderer->render(m_camera, m_shaderLighting, objectList, lightList);
-	//m_renderer->render(m_camera, m_shaderContainer, objectList2, lightList);
+	m_renderer->renderParticles(m_camera, m_shaderParticles, emitter, lightList);
+	m_renderer->render(m_camera, m_shaderContainer, objectList2, lightList);
 	m_renderer->renderLightMeshes(m_camera, m_shaderLamp, lightList);
 	//m_renderer->renderSkybox(m_camera, skybox);
 }

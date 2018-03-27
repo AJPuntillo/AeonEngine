@@ -51,7 +51,7 @@ uniform vec3 colour;
 
 void main()
 {    
-	primitiveColour = colour;//vec3(0.3f, 0.3f, 1.0f);
+	primitiveColour = vec3(0.3f, 0.3f, 1.0f);
 
     //Properties
     vec3 norm = normalize(Normal);
