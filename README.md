@@ -77,16 +77,23 @@ Custom C++ engine
 - Board contains pieces for each player
 - Pieces can move and attack on the board
 - Piece layout can be read and placed properly on the board
-- Create the ARCHON Project to be the showcase game for the Engine
+- Created the ARCHON Project to be the showcase game for the Engine
+
+**[03/27/18]**
+- Archon is now in a playable state
+- Pieces have limited movement and actions
+- Tiles give buffs to certain pieces
+- Pieces now have strengths and weaknesses relative to other pieces
+- Win condition implemented
+- Text HUD to provide stats
+- Menu scene
 
 ### TO DO
 
 - Optimization
-- Finish Documentation
 - Advanced Lighting
-- Scene does not "delete" when switched to another scene
-- 2D Graphics/HUD
 - Controller support
+- ~~2D Graphics/HUD~~
 - ~~Grid~~
 - ~~Particle Engine~~
 - ~~AABB~~
