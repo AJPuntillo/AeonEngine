@@ -222,6 +222,5 @@ float Piece::takeDamage(float damage_)
 	if (health <= 0) {
 		health = 0;
 	}
-	std::cout << "HP: " << health << std::endl;
 	return health;
 }

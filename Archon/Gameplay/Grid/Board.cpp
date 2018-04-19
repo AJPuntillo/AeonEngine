@@ -208,7 +208,6 @@ void Board::moveHover(MoveDirection dir_)
 				hov--;
 				if (hov < 0)
 					hov = enemyList.size() - 1;
-				std::cout << hov << std::endl;
 				newHover(enemyList[hov]);
 			}
 
@@ -216,7 +215,6 @@ void Board::moveHover(MoveDirection dir_)
 				hov++;
 				if (hov > enemyList.size() - 1)
 					hov = 0;
-				std::cout << hov << std::endl;
 				newHover(enemyList[hov]);
 			}
 			break;
@@ -243,7 +241,6 @@ void Board::selectPiece()
 							m_boardState = BoardState::SELECTION;
 
 							GetAllPossibleMovement(selectedTile);
-							std::cout << movementList.size() << std::endl;
 						}
 					}
 				}
@@ -256,7 +253,6 @@ void Board::selectPiece()
 							m_boardState = BoardState::SELECTION;
 
 							GetAllPossibleMovement(selectedTile);
-							std::cout << movementList.size() << std::endl;
 						}
 					}
 				}
@@ -274,6 +270,7 @@ void Board::selectPiece()
 					ClearMovementList();
 					selectedTile->isSelected = false;
 					selectedTile = nullptr;
+					standingAttack = true;
 				}
 			}
 			else {
@@ -386,6 +383,11 @@ void Board::attackPiece(Tile* tile_)
 	updateGameManager();
 
 	sfx_attack.play(0, 100);
+
+	if (standingAttack) {
+		actions--;
+		standingAttack = false;
+	}
 }
 
 void Board::cancel()
@@ -406,6 +408,7 @@ void Board::cancel()
 		case BoardState::ATTACKING:
 			m_boardState = BoardState::NONE;
 			ClearEnemyList();
+			standingAttack = false;
 			sfx_cancel.play(0, 20);
 			break;
 	}

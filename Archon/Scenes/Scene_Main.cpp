@@ -1,5 +1,8 @@
 #include "Scene_Main.h"
 #include <glm/gtx/compatibility.hpp>
+#include <ctime>
+#include <cstdlib>
+
 using namespace AEON_ENGINE;
 
 Scene_Main::Scene_Main()
@@ -98,16 +101,7 @@ bool Scene_Main::initialize()
 	//1: LAVA
 	//2: RIVER
 	//4: MOUNTAIN
-	std::vector<char> boardLayout = {
-		0, 0, 2, 0, 0, 1, 0, 0,
-		0, 0, 3, 0, 2, 3, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 1, 1, 0, 0, 0,
-		0, 0, 0, 1, 1, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 3, 2, 0, 3, 0, 0,
-		0, 0, 1, 0, 0, 2, 0, 0
-	};
+	std::vector<char> boardLayout = ChooseBoardLayout();
 
 	//Piece layout
 	//0: NONE
@@ -274,4 +268,59 @@ void Scene_Main::postrender()
 void Scene_Main::draw()
 {
 	m_textRenderer->RenderText(EngineCore::getInstance()->getWindow(), ShaderManager::getInstance()->getShader("shader_text"), m_board->getHUD());
+}
+
+std::vector<char> Scene_Main::ChooseBoardLayout()
+{
+	std::vector<char> layout;
+	int randNum;
+	srand(time(0));
+
+	randNum = rand() % 3 + 1;
+
+	//0: GRASS
+	//1: LAVA
+	//2: RIVER
+	//4: MOUNTAIN
+
+	switch (randNum) {
+		case 1:
+			layout = {
+				0, 0, 2, 0, 0, 1, 0, 0,
+				0, 0, 3, 0, 2, 3, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 1, 1, 0, 0, 0,
+				0, 0, 0, 1, 1, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 3, 2, 0, 3, 0, 0,
+				0, 0, 1, 0, 0, 2, 0, 0
+			};
+			break;
+		case 2:
+			layout = {
+				0, 0, 1, 0, 0, 1, 0, 0,
+				0, 2, 3, 2, 2, 3, 2, 0,
+				0, 2, 3, 3, 3, 3, 2, 0,
+				0, 2, 1, 0, 0, 1, 2, 0,
+				0, 2, 1, 0, 0, 1, 2, 0,
+				0, 2, 3, 3, 3, 3, 2, 0,
+				0, 2, 3, 2, 2, 3, 2, 0,
+				0, 0, 1, 0, 0, 1, 0, 0
+			};
+			break;
+		case 3:
+			layout = {
+				2, 0, 0, 0, 0, 0, 0, 2,
+				0, 3, 2, 3, 3, 2, 3, 0,
+				0, 0, 0, 1, 1, 0, 0, 0,
+				0, 0, 1, 2, 2, 1, 0, 0,
+				0, 0, 1, 2, 2, 1, 0, 0,
+				0, 0, 0, 1, 1, 0, 0, 0,
+				0, 3, 2, 3, 3, 2, 3, 0,
+				2, 0, 0, 0, 0, 0, 0, 2
+			};
+			break;
+	}
+
+	return layout;
 }

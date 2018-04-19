@@ -41,35 +41,37 @@ bool DemoScene::initialize()
 	model_nanosuit->transform.translateBy(0.0f, 0.0f, 0.0f);
 	model_nanosuit->transform.scaleBy(0.25f, 0.25f, 0.25f);
 	model_nanosuit->setupVolume();
-	objectList.push_back(model_nanosuit);
+	//objectList.push_back(model_nanosuit);
 	//Testing the bounding volume values of the model
 	//std::cout << model_nanosuit->boundingVolume->getMaxCorner().x << " " << model_nanosuit->boundingVolume->getMaxCorner().y << " " << model_nanosuit->boundingVolume->getMaxCorner().z << std::endl;
 	//std::cout << model_nanosuit->boundingVolume->getMinCorner().x << " " << model_nanosuit->boundingVolume->getMinCorner().y << " " << model_nanosuit->boundingVolume->getMinCorner().z << std::endl;
 
 	model_cube = new GameObject(Mesh::PrimitiveType::CUBE);
 	//model_cube->transform.translateBy(1.0f, 0.0f, 0.0f);
-	model_cube->transform.translateBy(0.0, -0.5f, 0.0f);
-	model_cube->transform.scaleBy(15.0f, 0.3f, 15.0f);
+	//model_cube->transform.translateBy(0.0, -0.3f, 0.0f);
+	//model_cube->transform.scaleBy(15.0f, 0.3f, 15.0f);
+	model_cube->transform.rotateBy(45.0f, 0.0f, 1.0f, 0.0f);
+	model_cube->transform.translateBy(0.0, 2.5f, 0.0f);
 	objectList2.push_back(model_cube);
 
 	//Lights
 	pointLight = new Light(LIGHT_POINT, true);
-	pointLight->transform.translateBy(0.0f, 0.0f, 2.0f);
+	pointLight->transform.translateBy(1.0f, 2.5f, 1.0f);
 	pointLight->setLightIntensity(glm::vec3(0.05f, 0.05f, 0.8f), glm::vec3(0.2f, 0.2f, 0.8f), glm::vec3(1.0f, 1.0f, 1.0f));
 	lightList.push_back(pointLight);
 
 	pointLight2 = new Light(LIGHT_POINT, true);
-	pointLight2->transform.translateBy(3.0f, 0.0f, 0.0f);
-	pointLight2->setLightIntensity(glm::vec3(0.8f, 0.05f, 0.05f), glm::vec3(0.8f, 0.2f, 0.2f), glm::vec3(1.0f, 1.0f, 1.0f));
+	pointLight2->transform.translateBy(-1.0f, 2.5f, -1.0f);
+	pointLight2->setLightIntensity(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f));
 	lightList.push_back(pointLight2);
 
 	pointLight3 = new Light(LIGHT_POINT, true);
-	pointLight3->transform.translateBy(1.0f, 0.0f, 2.0f);
+	pointLight3->transform.translateBy(-1.0f, 2.5f, 1.0f);
 	//pointLight3->setLightIntensity(glm::vec3(0.8f, 0.05f, 0.05f), glm::vec3(0.8f, 0.2f, 0.2f), glm::vec3(1.0f, 1.0f, 1.0f));
 	lightList.push_back(pointLight3);
 
 	pointLight4 = new Light(LIGHT_POINT, true);
-	pointLight4->transform.translateBy(0.0f, 0.0f, -2.0f);
+	pointLight4->transform.translateBy(1.0f, 2.5f, -1.0f);
 	pointLight4->setLightIntensity(glm::vec3(0.05f, 0.8f, 0.05f), glm::vec3(0.2f, 0.8f, 0.2f), glm::vec3(1.0f, 1.0f, 1.0f));
 	lightList.push_back(pointLight4);
 
@@ -131,11 +133,6 @@ bool DemoScene::initialize()
 
 	//Framebuffer
 	framebuffer = new Framebuffer(EngineCore::getInstance()->getWindow());
-
-	//Audio
-	m_audioEngine.init();
-	m_music = m_audioEngine.loadMusic("Resources/Audio/Ove_Earth.ogg");
-	m_music.play(-1, 100);
 
 	return true;
 }

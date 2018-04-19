@@ -61,6 +61,8 @@ private:
 	float m_deltaTime = 0.0f; //Time between current frame and last frame
 	//Text Renderer
 	AEON_ENGINE::TextRenderer* m_textRenderer;
+	//Random Board
+	std::vector<char> ChooseBoardLayout();
 };
 
 #endif

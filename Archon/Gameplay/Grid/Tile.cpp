@@ -120,7 +120,7 @@ void Tile::calcCenterPosition()
 	//Add the resulting vector to the Min
 	m_centerPos += m_bound->getMinCorner();
 
-	std::cout << "CenterPos: " << m_centerPos.x << " " << m_centerPos.y << " " << m_centerPos.z << std::endl;
+	//std::cout << "CenterPos: " << m_centerPos.x << " " << m_centerPos.y << " " << m_centerPos.z << std::endl;
 }
 
 void Tile::calcOffsets()
@@ -134,8 +134,8 @@ void Tile::translateTile(float x, float y, float z) {
 	//When the tile is translated, the bounding volume must be translated as well
 	transform.translateBy(x, y, z);
 	m_bound->movedBy(glm::vec3(x, y, z));
-	std::cout << m_bound->getMaxCorner().x << " " << m_bound->getMaxCorner().y << " " << m_bound->getMaxCorner().z << std::endl;
-	std::cout << m_bound->getMinCorner().x << " " << m_bound->getMinCorner().y << " " << m_bound->getMinCorner().z << std::endl;
+	//std::cout << m_bound->getMaxCorner().x << " " << m_bound->getMaxCorner().y << " " << m_bound->getMaxCorner().z << std::endl;
+	//std::cout << m_bound->getMinCorner().x << " " << m_bound->getMinCorner().y << " " << m_bound->getMinCorner().z << std::endl;
 
 	//The center position must also be recalculated
 	calcCenterPosition();

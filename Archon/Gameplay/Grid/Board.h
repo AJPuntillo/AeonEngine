@@ -155,6 +155,7 @@ private:
 	//Action Counter
 	void removeActions();
 	int actions = 2;
+	bool standingAttack = false;
 };
 
 #endif

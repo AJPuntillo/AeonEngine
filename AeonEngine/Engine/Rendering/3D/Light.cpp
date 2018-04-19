@@ -9,7 +9,7 @@ Light::Light(unsigned int type_, bool hasMesh)
 
 	if (m_hasMesh) {
 		loadMesh();
-		transform.scaleBy(0.1f, 0.1f, 0.1f);
+		transform.scaleBy(0.3f, 0.3f, 0.3f);
 	}
 
 }

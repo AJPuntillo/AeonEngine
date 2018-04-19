@@ -71,13 +71,6 @@ void GameManager::updatePieceCount(int p1_, int p2_)
 {
 	p1_pieceCount = p1_;
 	p2_pieceCount = p2_;
-
-	if (p1_pieceCount == 0) {
-		std::cout << "Player 2 Wins!" << std::endl;
-	}
-	else if (p2_pieceCount == 0) {
-		std::cout << "Player 1 Wins!" << std::endl;
-	}
 }
 
 void GameManager::render(Shader* shader_)
